@@ -1,6 +1,8 @@
 Generating a tags file
 ======================
 
+# test de uma modifação
+
 If you need a tags file so that you can jump around Moodle code 
 easily in your editor (eg vim or emacs), you can generate one:
 
