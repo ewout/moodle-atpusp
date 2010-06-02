@@ -3,3 +3,4 @@ config.php
 .*.swp
 *~
 .svn
+.DS_Store
