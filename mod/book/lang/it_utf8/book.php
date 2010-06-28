@@ -1,0 +1,49 @@
+<?PHP // $Id: book.php,v 1.3.2.1 2010/02/25 16:27:12 andreabix Exp $
+
+$string['addafter'] = 'Aggiungi un nuovo capitolo.';
+$string['book:edit'] = 'Modifica capitoli';
+$string['book:exportimscp'] = 'Esportare libro come pacchetto IMS';
+$string['book:import'] = 'Importare capitoli';
+$string['book:print'] = 'Stampare libro';
+$string['book:read'] = 'Leggere libro';
+$string['book:viewhiddenchapters'] = 'Visualizzare capitoli nascosti';
+$string['book_tocwidth'] = 'Larghezza sommario';
+$string['chapterscount'] = 'Capitoli';
+$string['chaptertitle'] = 'Titolo del capitolo';
+$string['confchapterdelete'] = 'Sei sicuro di eliminare questo capitolo?';
+$string['confchapterdeleteall'] = 'Sei sicuro di eliminare questo capitolo e tutti i suoi paragrafi?';
+$string['content'] = 'Contenuto';
+$string['customtitles'] = 'Titoli personalizzati';
+$string['disableprinting'] = 'Disabilita la stampa';
+$string['doexport'] = 'Esporta';
+$string['doimport'] = 'Importa';
+$string['editingchapter'] = 'Modifica capitolo';
+$string['faq'] = 'FAQ Modulo libro';
+$string['fileordir'] = 'Scegli un file o un folder';
+$string['generateimscp'] = 'Genera un pacchetto IMS';
+$string['import'] = 'Importa';
+$string['importinfo'] = 'Importa un file HTML oppure una cartella.<br />I capitoli saranno ordinati alfabeticamente utilizzando i nomi dei file.';
+$string['importing'] = 'Importazione in corso';
+$string['importingchapters'] = 'Importazione dei capitoli';
+$string['maindirectory'] = 'Cartella principale';
+$string['modulename'] = 'Libro';
+$string['modulenameplural'] = 'Libri';
+$string['navexit'] = 'Esci';
+$string['navnext'] = 'Pagina successiva';
+$string['navprev'] = 'Pagina precedente';
+$string['numbering'] = 'Numerazione capitoli';
+$string['numbering0'] = 'Senza numerazione';
+$string['numbering1'] = 'Numeri';
+$string['numbering2'] = 'Elenco puntato';
+$string['numbering3'] = 'Elenco rientrato';
+$string['printbook'] = 'Stampa tutto';
+$string['printchapter'] = 'Stampa capitolo';
+$string['printdate'] = 'Data';
+$string['printedby'] = 'Stampato da';
+$string['relinking'] = 'Elaborazione dei collegamenti';
+$string['subchapter'] = 'Paragrafo';
+$string['toc'] = 'Sommario';
+$string['tocwidth'] = 'Larghezza in pixel del Sommario per i Libri.';
+$string['top'] = 'Ritorna su';
+
+?>
