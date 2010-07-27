@@ -1,0 +1,132 @@
+<?php
+/**
+ * Instance config file
+ *
+ * @author Jason Hardin
+ * @author Sam Chaffee
+ * @version $Id$
+ * @package block_trouble_ticket
+ **/
+
+if (isset($this->config) && isset($this->config->displaytype)) {
+    $selected = $this->config->displaytype;
+} else {
+    if (!isset($CFG->block_trouble_ticket_display_type)) {
+        $CFG->block_trouble_ticket_display_type = '0';
+    }
+    $selected = $CFG->block_trouble_ticket_display_type;
+}
+$options = array('0' => 'Display as a button',
+                 '1' => 'Display as hyperlinked text');
+
+if (!isset($this->config->address)) {
+    if(!isset($CFG->block_trouble_ticket_address)){
+        $admin = get_admin();
+        $this->config->address = $admin->email;
+    } else {
+        $this->config->address = $CFG->block_trouble_ticket_address;
+    }
+}
+
+if (isset($this->config) && isset($this->config->subject_prefix)) {
+    $subject_prefix = $this->config->subject_prefix;
+} else if(isset($CFG->block_trouble_ticket_subject_prefix)){
+    $subject_prefix = $CFG->block_trouble_ticket_subject_prefix;
+} else {
+    $subject_prefix = '';
+}
+
+if (isset($this->config) && isset($this->config->autoreply)) {
+    $autoreply = $this->config->autoreply;
+} else if(!isset($CFG->block_trouble_ticket_autoreply)){
+    $autoreply = get_string('autoreply','block_trouble_ticket');
+} else {
+    $autoreply = $CFG->block_trouble_ticket_autoreply;
+}
+
+if (isset($this->config) && isset($this->config->autoreplyurl)) {
+    $autoreplyurl = $this->config->autoreplyurl;
+} else if(!isset($CFG->block_trouble_ticket_autoreplyurl)){
+    $autoreplyurl = "";
+} else {
+    $autoreplyurl = $CFG->block_trouble_ticket_autoreply_url;
+}
+
+if (isset($this->config) && isset($this->config->autoreplylinktext)) {
+    $autoreplylinktext = $this->config->autoreplylinktext;
+} else if(!isset($CFG->block_trouble_ticket_autoreplylinktext)){
+    $autoreplylinktext = "";
+} else {
+    $autoreplylinktext = $CFG->block_trouble_ticket_autoreply_linktext;
+}
+?>
+<table cellpadding="9" cellspacing="0">
+<tr valign="top">
+    <td align="right">
+        <?php print_string('displaytype', 'block_trouble_ticket') ?>:
+    </td>
+    <td>
+        <?php choose_from_menu($options, 'displaytype', $selected); ?>
+    </td>
+    <td>
+        <?php print_string('displaytypedesc', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">
+        <?php print_string('toaddresslabel', 'block_trouble_ticket') ?>:
+    </td>
+    <td>
+        <input name="address" type="text" size="35" value="<?php p(stripslashes_safe($this->config->address)); ?>" />
+    </td>
+    <td>
+        <?php print_string('addressdesc', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right"><?php print_string('subjectprefixlabel', 'block_trouble_ticket') ?>:</td>
+    <td>
+        <input name="subject_prefix" type="text" size="22" value="<?php p(stripslashes_safe($subject_prefix)); ?>" />
+    </td>
+    <td>
+        <?php print_string('subjectprefix', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right"><?php print_string('autoreplylabel', 'block_trouble_ticket') ?>:</td>
+    <td>
+        <textarea name="autoreply" cols="22" rows="5"/><?php p(stripslashes_safe($autoreply)); ?></textarea>
+    </td>
+    <td>
+        <?php print_string('autoreplydesc', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">
+        <?php print_string('autoreplyurllabel', 'block_trouble_ticket') ?>:
+    </td>
+    <td>
+        <input name="autoreplyurl" type="text" size="35" value="<?php p(stripslashes_safe($autoreplyurl)); ?>" />
+    </td>
+    <td>
+        <?php print_string('autoreplyurl', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">
+        <?php print_string('autoreplylinktextlabel', 'block_trouble_ticket') ?>:
+    </td>
+    <td>
+        <input name="autoreplylinktext" type="text" size="35" value="<?php p(stripslashes_safe($autoreplylinktext)) ?>" />
+    </td>
+    <td>
+        <?php print_string('autoreplylinktext', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr>
+    <td colspan="3" align="center">
+        <input type="hidden" name="sesskey" value="<?php echo sesskey();?>">
+        <input type="submit" value="<?php print_string('savechanges') ?>" />
+    </td>
+</tr>
+</table>

@@ -1,0 +1,19 @@
+// Zipping files issues
+	- unzipping files will overwrite other files in the directory without warning!
+	- zipping a file will overwrite another zip of the same name without warning
+	- 'moodlezip' feature is currently inactive
+	- unzipping large/complex directories may not unzip correctly... 
+	
+
+// Sharing issues	
+	- Shared page will show all shared users...large courses may take a long time to load
+
+// Additional issues
+	- Help file implementation is in the works
+
+------------------------------------------------------
+
+
+// Block issues outside a course (SITE LEVEL)
+to enable file manager in main site, you should have <= 1.6
+otherwise it will show up compatibility errors.

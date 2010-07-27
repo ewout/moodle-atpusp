@@ -1,0 +1,8 @@
+﻿Linking to a block on a course
+
+You can link to a trouble ticket in a course’s course menu even if the trouble ticket hasn’t been added to the course.  The url on the course menu must look like http://url_to_moodle_install/blocks/trouble_ticket/ticket.php?id=<the_course_id>.  An example assuming moodle is installed on localhost, my root www directory is moodle and my course’s id is 2 the url for course_menu would be http://localhost/moodle/blocks/trouble_ticket.php?id=2.  You must install the trouble ticket block in order to customize the ticket to the course.  If the trouble ticket is not added to the block then it will use the site’s trouble ticket configuration.  If the course id is not included in the url then trouble ticket will report that the user’s last visited page is the main site page even if they were actually in a course.
+
+
+Browser information requires Server Administrators to install browscap.ini:
+
+Move browscap.ini to the location of your browscap variable as defined in your servers php.ini file.  You can download a more recent version of the browscap.ini from http://browsers.garykeith.com/downloads.asp.  The browscap.ini provides information to the trouble ticket about the most recent browsers which will make the browser data in the trouble ticket more accurate.

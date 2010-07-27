@@ -1,0 +1,78 @@
+Requirements
+-----------------
+The import functionality needs 'xmlreader' in order to function properly. Please make sure that 'xmlreader' is enabled on your server.
+Please make sure you have the 'php_zip' extension enabled. If it is disabled the presenter mod will try to run linux shell commands with exec to zip/unzip.
+
+
+New install
+-----------
+Put the folder presenter inside your /moodle/mod directory. 
+
+Put the lang files, from /lang directory to the corresponding /moodle/lang directories, for each lang. 
+
+From the admin page, click on the 'Notifications' link (it's in the left side) - all the tables required for this module
+will be created and the module will be installed.
+
+
+
+Update from an older version of Moodle Pesenter
+--------------------------------------------------
+Simply overwrite the files in the /moodle/mod/presenter directory with the new files. 
+
+Overwrite the lang files from /moodle/lang directory with the corespoding file from the /lang directory.
+
+All your old settings will be preserved.
+
+
+
+Installation of Yamdi in Linux and Windows
+------------------------------------------
+
+Yamdi stands for Yet Another MetaData Injector and is a metadata injector for FLV files. It adds the onMetaData event to your FLV files. 
+yamdi runs under *BSD, Linux and Win32 (tested with FreeBSD, MacOSX, Ubuntu and Windows XP) and is published under the BSD license. 
+
+Download the source code from http://yamdi.sourceforge.net
+
+Extract the source:
+
+tar xzf yamdi-1.4.tar.gz  
+
+Change into the yamdi directory and compile the source code with:  
+
+cd yamdi-1.4
+gcc yamdi.c -o yamdi -O2 -Wall 
+
+Copy the file yamdi to /usr/bin/ or any other directory that fits you.
+
+Installation of Yamdi in Linux
+
+Download the Windows executable from http://yamdi.sourceforge.net and place it in a directory that fits you.
+
+Configuring the path, both Linux and Windows
+
+To complete the configuration visit the Site Administration block choose Activities->Presenter and enter the path to Yamdi in the "Path to metadata injector file".
+
+
+
+Reporting bugs
+--------------
+
+Report bugs at:
+
+info@netsapiensis.se
+
+Please send us information about the following:
+
+* Operating system name and version
+* Database name and version
+* PHP version
+* Moodle version
+* Presenter Activity Module version
+* Theme used
+* Steps to reproduce the bug
+* Send a few screenshots
+
+
+
+
+

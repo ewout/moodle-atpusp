@@ -1,0 +1,8 @@
+/* $Id: js-override-weekcoll.css,v 1.1.4.4 2010/01/23 21:24:07 gb2048 Exp $ */
+/*-- This css file differs from topics_collapsed.css because it defines classes that will be
+        manipulated by the JavaScript in lib.js (or its compressed version lib_min.js). -- */
+
+/* -- The class which is used to hide and show the sections underneath their Toggle. -- */
+tr.hid {
+		display: none;
+	  }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/lesson/db" VERSION="20070223" COMMENT="XMLDB file for Moodle mod/lesson"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="presenter" COMMENT="Defines presenter" NEXT="presenter_chapters">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="course"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="course" NEXT="nr_chapters"/>
+        <FIELD NAME="nr_chapters" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" PREVIOUS="name" NEXT="presentation_width1" />
+        <FIELD NAME="presentation_width1" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="nr_chapters" NEXT="presentation_height1"/>
+        <FIELD NAME="presentation_height1" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="presentation_width1" NEXT="presentation_width2"/>
+        <FIELD NAME="presentation_width2" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="presentation_height1" NEXT="presentation_height2"/>
+        <FIELD NAME="presentation_height2" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="presentation_width2" NEXT="player_width1"/>
+        <FIELD NAME="player_width1" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="presentation_height2" NEXT="player_height1"/>
+        <FIELD NAME="player_height1" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="player_width1" NEXT="player_width2"/>
+        <FIELD NAME="player_width2" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="player_height1" NEXT="player_height2"/>
+        <FIELD NAME="player_height2" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="player_width2" NEXT="window"/>
+        <FIELD NAME="window" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="player_height2" NEXT="player_skin"/>
+        <FIELD NAME="player_skin" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="window" NEXT="control_bar"/>
+        <FIELD NAME="control_bar" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="player_skin" NEXT="player_streching"/>
+        <FIELD NAME="player_streching" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="control_bar" NEXT="volume"/>
+        <FIELD NAME="volume" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="player_streching" NEXT="buffer_length"/>
+        <FIELD NAME="buffer_length" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="volume" NEXT="slide_streching"/>
+        <FIELD NAME="slide_streching" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="buffer_length" NEXT="summary_height"/>
+        <FIELD NAME="summary_height"  TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="slide_streching" NEXT="export_file"/>
+        <FIELD NAME="export_file" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="summary_height" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="presenter_chapters" COMMENT="Defines presenter chapters" PREVIOUS="presenter" NEXT="presenter_chapters_users">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="order_id"/>
+        <FIELD NAME="order_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="presenterid"/>
+        <FIELD NAME="presenterid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="order_id" NEXT="chapter_name"/>
+        <FIELD NAME="chapter_name" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="presenterid" NEXT="video_link"/>
+        <FIELD NAME="video_link" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="chapter_name" NEXT="video_start"/>
+        <FIELD NAME="video_start" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="video_link" NEXT="video_end"/>
+        <FIELD NAME="video_end" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="video_start" NEXT="audio_track"/>
+        <FIELD NAME="audio_track" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="video_end" NEXT="audio_start"/>
+        <FIELD NAME="audio_start" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="audio_track" NEXT="audio_end"/>
+        <FIELD NAME="audio_end" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="audio_start" NEXT="slide_image"/>
+        <FIELD NAME="slide_image" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="audio_end" NEXT="summary"/>
+        <FIELD NAME="summary" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="slide_image" NEXT="layout"/>
+        <FIELD NAME="layout" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="summary"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="presenterid"/>
+        <KEY NAME="presenterid" TYPE="foreign" FIELDS="presenterid" REFTABLE="presenter" REFFIELDS="id" PREVIOUS="primary" />
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="presenter_chapters_users" COMMENT="Stores completion factors for different users" PREVIOUS="presenter_chapters">
+       <FIELDS>
+       	<FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="course_id" />
+       	<FIELD NAME="course_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="presenter_id" />
+       	<FIELD NAME="presenter_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="course_id" NEXT="username" />
+       	<FIELD NAME="username" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="presenter_id" NEXT="chapter_id" />
+       	<FIELD NAME="chapter_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="username" />
+       </FIELDS>
+       <KEYS>
+       	<KEY NAME="primary" TYPE="primary" FIELDS="id" />
+       </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

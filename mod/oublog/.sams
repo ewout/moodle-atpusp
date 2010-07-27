@@ -1,0 +1,12 @@
+<Files view.php>
+OPTIONAL_SAMS
+</Files>
+<Files viewpost.php>
+OPTIONAL_SAMS
+</Files>
+<Files search.php>
+OPTIONAL_SAMS
+</Files>
+<Files feed.php>
+OPTIONAL_SAMS
+</Files>

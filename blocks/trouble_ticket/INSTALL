@@ -1,0 +1,19 @@
+Block Installation Instructions:
+1. Unzip torubleticket19.zip
+2. Move the blocks directory to your root moodle directory
+
+Browser Information Installation Instructions:
+note: 
+Browser information requires Server Administrators to install browscap.ini in a location that php can read the file.  
+The browscap.ini is required only if you are not recieving as detailed informaiton as you woud like about each 
+browser.  The browscap.ini provides information to the trouble ticket about the most recent browsers which will 
+make the browser data in the trouble ticket more accurate.
+
+Instructions:
+Move browscap.ini to the location of your browscap variable as defined in your servers php.ini file.   This can be found in your php.ini under
+[browscap]
+browscap = "path to your browsecap.ini"
+
+You can download a more recent version of the browscap.ini from http://browsers.garykeith.com/downloads.asp.  
+
+

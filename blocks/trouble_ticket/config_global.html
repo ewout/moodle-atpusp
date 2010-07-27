@@ -1,0 +1,120 @@
+<?php
+/**
+ * Global configuration file
+ *
+ * @author Jason Hardin
+ * @author Sam Chaffee
+ * @version $Id$
+ * @package block_trouble_ticket
+ **/
+if (isset($CFG->block_trouble_ticket_display_type)) {
+    $selected = $CFG->block_trouble_ticket_display_type;
+} else {
+    $selected = '0';
+}
+$options = array('0' => 'Display button',
+                 '1' => 'Display link' );
+
+if (!isset($CFG->block_trouble_ticket_subject_prefix)) {
+    if ($site = get_site()) {
+        $CFG->block_trouble_ticket_subject_prefix = '['. strip_tags($site->shortname) .']';
+    } else {
+        $CFG->block_trouble_ticket_subject_prefix = '[moodle contact]';
+    }
+}
+
+if (!isset($CFG->block_trouble_ticket_address)) {
+    $admin = get_admin();
+    $CFG->block_trouble_ticket_address = $admin->email;
+}
+
+if (isset($CFG->block_trouble_ticket_profilefields)) {
+    $enabledfields = explode(',', $CFG->block_trouble_ticket_profilefields);
+} else {
+    $enabledfields = array();
+}
+
+if (!isset($CFG->block_trouble_ticket_displaytoaddress)) {
+    $CFG->block_trouble_ticket_displaytoaddress = 1;
+}
+?>
+<table cellpadding="9" cellspacing="0">
+<tr valign="top">
+    <td align="right">
+        block_trouble_ticket_display_type:
+    </td>
+    <td>
+        <?php choose_from_menu($options, 'block_trouble_ticket_display_type', $selected);?>
+    </td>
+    <td>
+        <?php print_string('displaytypedesc', 'block_trouble_ticket'); ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">block_trouble_ticket_address:</td>
+    <td>
+        <input name="block_trouble_ticket_address" type="text" size="22" value="<?php p(stripslashes_safe($CFG->block_trouble_ticket_address)); ?>"/><br />
+        <?php print_checkbox('block_trouble_ticket_displaytoaddress', 1, !empty($CFG->block_trouble_ticket_displaytoaddress), get_string('displayinform', 'block_trouble_ticket'), get_string('displayinform', 'block_trouble_ticket')); ?>
+    </td>
+    <td>
+        <?php print_string('addressdesc', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">block_trouble_ticket_subject_prefix:</td>
+    <td>
+        <input name="block_trouble_ticket_subject_prefix" type="text" size="22" value="<?php p(stripslashes_safe($CFG->block_trouble_ticket_subject_prefix)); ?>" />
+    </td>
+    <td>
+        <?php print_string('subjectprefix', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">block_trouble_ticket_autoreply:</td>
+    <td>
+        <textarea name="block_trouble_ticket_autoreply" cols="22" rows="5"/><?php if (isset($CFG->block_trouble_ticket_autoreply)){p(stripslashes_safe($CFG->block_trouble_ticket_autoreply));} else { p(get_string('autoreply','block_trouble_ticket'));} ?></textarea>
+    </td>
+    <td>
+        <?php print_string('autoreplydesc', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">block_trouble_ticket_autoreply_url:</td>
+    <td>
+        <input name="block_trouble_ticket_autoreply_url" type="text" size="22" value="<?php if (isset($CFG->block_trouble_ticket_autoreply_url)){p(stripslashes_safe($CFG->block_trouble_ticket_autoreply_url));} ?>"/>
+    </td>
+    <td>
+        <?php print_string('autoreplyurl', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">block_trouble_ticket_autoreply_linktext:</td>
+    <td>
+        <input name="block_trouble_ticket_autoreply_linktext" type="text" size="22" value="<?php if (isset($CFG->block_trouble_ticket_autoreply_linktext)){p(stripslashes_safe($CFG->block_trouble_ticket_autoreply_linktext));} ?>"/>
+    </td>
+    <td>
+        <?php print_string('autoreplylinktext', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">block_trouble_ticket_profilefields:</td>
+    <td>
+        <?php
+            $fields = $this->get_profile_fields();
+            foreach ($fields as $fieldname => $fieldstr) {
+                print_checkbox('block_trouble_ticket_profilefields[]', $fieldname, in_array($fieldname, $enabledfields), $fieldstr, $fieldstr);
+                echo "<br />\n";
+            }
+        ?>
+    </td>
+    <td>
+        <?php print_string('profilefields', 'block_trouble_ticket') ?>
+    </td>
+</tr>
+<tr>
+    <td colspan="3" align="center">
+        <input type="hidden" name="sesskey" value="<?php echo sesskey();?>">
+        <input type="submit" value="<?php print_string('savechanges') ?>" />
+    </td>
+</tr>
+</table>

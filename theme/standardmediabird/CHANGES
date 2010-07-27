@@ -1,0 +1,8 @@
+2009-04-26 Sunday 05:55  arborrow
+
+	* config.php, favicon.ico, gradient.jpg, gradients.css, styles.php,
+	footer.html, header.html: 
+	
+	CONTRIB-1144 - adding Mediabird's standardmediabird them
+	contributed by Fabian Gebert (part of package_studynotes)
+
