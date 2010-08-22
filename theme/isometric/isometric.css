@@ -1,0 +1,589 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	background: #FFFFFF url(images/header/img1.gif) repeat-x;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #8F8F8F;
+}
+
+h2, h3, h4, h5, h6 {
+	margin: 0;
+}
+
+h2, h2.headingblock {
+	text-transform: lowercase;
+	letter-spacing: -1px;
+	font-size: 26px;
+	font-weight: normal;
+	color: #31576F;
+}
+
+h2 em {
+	font-weight: bold;
+	font-style: normal;
+}
+
+h3 {
+	height: 25px;
+	background: #0077A7 url(images/header/img3.gif) repeat-x left bottom;
+	padding: 13px 0 0 20px;
+	text-transform: lowercase;
+	font-size: 11px;
+	color: #FFFFFF;
+}
+
+p, ol, ul {
+	line-height: 180%;
+}
+
+ul {
+	margin-left: 0;
+	padding-left: 0;
+	list-style-position: inside;
+}
+
+a {
+	color: #6B6B6B;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.image {
+	float: left;
+	margin: 0 20px 0 0;
+}
+
+.bg1 {
+	padding: 0 20px 20px 20px;
+	border-top: 1px solid #FFFFFF;
+	background: #FFFFFF url(images/sideblock/img4.gif) repeat-x;
+}
+
+.bg2 {
+	padding: 20px;
+	border-top: 1px solid #CBE1EF;
+	background: #FFFFFF url(images/sideblock/img4.gif) repeat-x;
+}
+
+/* Header */
+
+#header {
+	width: 960px;
+	height: 160px;
+	margin: 0 auto;
+}
+
+#header * {
+	margin: 0;
+	padding: 0;
+	text-transform: lowercase;
+	color: #FFFFFF;
+}
+
+#header h1 {
+	float: left;
+	padding: 70px 0 0 10px;
+	font-size: 33px;
+}
+
+#header h2 {
+	float: left;
+	padding: 91px 0 0 10px;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+#header ul {
+	float: right;
+	margin: 0;
+	padding: 82px 0 0 0;
+	list-style: none;
+}
+
+#header li {
+	display: inline;
+}
+
+#header a {
+	display: block;
+	float: left;
+	height: 25px;
+	margin: 0 0 0 8px;
+	padding: 12px 20px 0 20px;
+	background: #ABBA47 url(images/header/img2.gif) repeat-x;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 960px;
+	margin: 0 auto;
+	padding: 30px 0;
+	background: url(images/footer/img7.gif) repeat-x
+}
+
+#footer p {
+	margin: 0;
+	text-align: center;
+	text-transform: lowercase;
+}
+
+/***
+ ***	core: layout
+ ***/
+
+
+a.dimmed:link,
+a.dimmed:visited {
+	color:#aaaaaa;
+	text-decoration: none;
+
+}
+
+#page {
+	border: 0px solid #ffffff;
+	margin-left: auto; 
+	margin-right: auto;
+	width: 95%;
+}
+
+
+#layout-table {
+	margin-top:0;
+	padding-top:10px;
+	width: 100%;
+}
+
+#layout-table #middle-column{
+  vertical-align:top;
+  padding-left:1%;
+  padding-right:1%;
+  width: 98%;
+}
+
+#layout-table #left-column{
+  vertical-align:top;
+  padding-left:0;
+  padding-right:0px;
+}
+
+#layout-table #right-column{
+  vertical-align:top;
+  padding-left:0px;
+  padding-right:0;
+}
+
+
+#content {
+  background: #ffffff; 
+  margin-top:0;
+  padding-top:10px;
+
+}
+
+hr {
+	border-bottom:1px dotted #cccccc;
+	border-top:1px solid #ffffff !important; 
+	border-left:1px solid #ffffff !important; 
+	border-right:1px solid #ffffff !important; 
+}
+
+h1.main,
+h2.main,
+h3.main,
+h4.main,
+h5.main,
+h6.main {
+	text-align: center;
+	margin:0px;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+th.header,
+td.header,
+h1.header,
+h2.header,
+h3.header,
+div.header {     
+	border-left: 0px;
+	border-right: 0px;
+	border-bottom: 0px;
+	color: #505050;
+}
+
+.header {
+	border: none !important;
+	clear: both;
+	}
+
+.generalbox {
+    background: transparent; 
+	border: 0px;
+}
+
+/***
+ ***	php includes: date + language options + profileblock
+ ***/
+#mainmenu-top {height: 30px; margin: 0; padding: 0; width: 100%;}
+#mainmenu-date {float: right; width: 25%; height: 2em; text-align: right;}
+#mainmenu-langopt .chooselang {display: block; width: 50%;}
+#profileoptions .loginform { color: #333!important;}
+#profileoptions ul li label { margin: 0 3px;}
+#profileoptions a:hover, #profilename a:hover { color: #036}
+
+/***
+ ***	core: yui menubar thanks to Patrick Malley
+ ***/
+
+
+.yuimenubar /* entire bar */ {
+	background: #0077a7 url(images/menu/img3.gif) repeat-x left bottom;
+	height:46px;
+	}
+	
+.yuimenubar ul.first-of-type {float: left;}
+
+.yuimenu /* sub container */ {
+	background-color: #dceff3;
+	z-index: 10000;
+	}
+
+.yuimenu a {
+	text-decoration: none;
+	background-color: #dceff3;
+	font-size: 85%;
+	}
+
+a.yuimenubaritemlabel /* bar item link */ {
+	padding: 16px 15px 0px 17px;
+	height:30px;
+	color: #fff;
+	}
+
+a.yuimenuitemlabel /* sub item link */ {
+	padding: 4px 24px;
+	border-bottom:1px solid #a0d1db;
+	border-left:1px solid #a0d1db;
+	border-right:1px solid #a0d1db;
+	}
+
+.yuimenubar li.first-of-type .yuimenubaritemlabel {
+	border-width:0; /* no border on the first bar item link */
+	}
+
+.yuimenuitem-hassubmenu /* add right arrow to sub item */ {
+	background: #fff url(images/menu/menuitem_submenuindicator_selected.png) right center no-repeat;
+	}
+	
+a.yuimenuitemlabel-hassubmenu {
+	background: none;
+	}
+
+/* selected menuitem */
+
+li.yuimenubaritem-selected /* bar menu item */ {
+	background: #acbb48 url(images/menu/img2.gif) repeat-x left bottom;
+	}
+li.yuimenubaritem-selected a:hover {color: #036}
+
+li.yuimenuitem-selected  /* sub menu item */ {
+	color: #036;
+	}
+
+a.yuimenubaritemlabel-selected /* bar menu item link selected */ {
+	text-decoration: none;
+	color: #036;
+	}
+
+a.yuimenuitemlabel-selected  /* sub menu item link selected */ {
+	text-decoration: none;
+	color: #036;
+	background-color: #ffffff;
+	}
+
+.yuimenubaritem-hassubmenu-selected /* change down arrow on bar item */ {
+	}
+
+.yuimenuitem-hassubmenu-selected /* change right arrow on sub item */ {
+	background: #ffffff url(images/menu/menuitem_submenuindicator.png) right center no-repeat;
+	}
+
+a.yuimenuitemlabel-hassubmenu-selected {
+	background: none;
+	color: red;
+	}
+
+/***
+ ***	core: navbar 
+ ***/
+
+.navbar {
+    background:#ffffff;     
+	border-top:0px;
+	border-bottom:solid 1px gray;
+	border-left:0px;
+	border-right:0px;
+}
+
+
+/***
+ ***	core: side block (the left and right bits)
+ ***/
+
+.sideblock {
+        width: 210px;
+        background:url("images/sideblocks/img4.gif") repeat-x scroll 0 0 #fff;
+	padding: 0;
+	margin: 0;
+	border-top: 1px solid #fff;
+	
+	}
+.sideblock a {
+	text-decoration: none;
+	font-size: 12px;
+	}
+	
+.sideblock li,
+.sideblock .admintree .depth0 {
+	padding: 5px 0;
+	background: url(images/sideblocks/img6.gif) repeat-x;
+}
+
+
+	 
+#left-column .sideblock .header {
+	background: url(images/sideblocks/ltwing.png) no-repeat left top;
+	height: 56px;
+	width: 100%;
+	position: relative;
+	right: 20px;
+	top: 10px;
+	padding: 0;
+	margin: 0;
+	}
+	
+#right-column .sideblock .header {
+	background: url(images/sideblocks/rtwing.png) no-repeat right top;
+	height: 56px;
+	width: 100%;
+	position: relative;
+	left: 20px;
+	top: 10px;
+	padding: 0;
+	margin: 0;
+	}
+	
+.sideblock h2 {
+	font-size: 15px;
+	font-weight:normal; 
+	color: #ffffff;
+	padding-top: 12px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+	}
+	
+#left-column .sideblock h2 {
+	padding-left: 7px;
+	}
+	
+#right-column .sideblock h2 {
+	position: relative;
+	text-align: right;
+	right: 10px;
+	}
+	
+.sideblock .content {
+	border: none !important;
+	}
+	 
+.sideblock .header .commands {
+	background: url(images/sideblocks/commandsb.png) !important;
+	border: 1px solid #ddd;
+	}
+
+#right-column .sideblock .header .hide-show-image {
+padding-right:0.5em;
+}
+
+#left-column .sideblock .header .hide-show-image {
+padding-right:1em;
+}
+
+/***
+ ***	core: course (the middle bit)
+ ***/
+
+.coursebox {
+	background: #ffffff;
+	border: 0px;    
+	margin-bottom: 0px;
+	margin-right: 2px;
+}
+
+body#site-index .headingblock,
+body#course-view .headingblock { border: 1px solid red
+	margin-bottom: 0px;
+}
+
+.section {
+	background: #ffffff;
+}
+
+#course-view .section td.content {
+	border-top:0px;
+	border-left:0px;
+	border-right:0px;
+	border-bottom:1px dashed #dfdfdf;
+}
+
+#course-view .section td.side {
+  border-width:0px;
+}
+
+/***
+ ***	modules: forum
+ ***/
+
+.forumpost {
+	border: 0px;    
+	width: auto;
+	overflow: scroll;
+}
+
+.forumpost .left {
+	background:#ffffff url('images/forum/leftpost.png') no-repeat top left;
+}
+
+.forumpost .picture,
+.forumpost .topic {
+	background:#ebebeb url('images/forum/forumheader.png');
+	border:0px;
+}
+
+.forumpost .topic a:link,
+.forumpost .topic a:visited {
+}
+
+.forumpost img {
+  max-width: 100%;
+}
+
+/***
+ ***	modules: calendar
+ ***/
+
+/* colors for calendar events */
+#calendar .event_global,
+.minicalendar .event_global,
+.block_calendar_month .event_global {
+  border-color:#cff689 !important;
+  background-color:#cff689;
+}
+
+#calendar .event_course,
+.minicalendar .event_course,
+.block_calendar_month .event_course {
+  border-color:#c6dfeb !important;
+  background-color:#c6dfeb;
+}
+
+#calendar .event_group,
+.minicalendar .event_group,
+.block_calendar_month .event_group {
+  border-color:#feffc2 !important;
+  background-color:#feffc2;
+}
+
+#calendar .event_user,
+.minicalendar .event_user,
+.block_calendar_month .event_user {
+  border-color:#d9c6e2 !important;
+  background-color:#d9c6e2;
+}
+
+table.minicalendar tr td.weekend {
+  color: red;
+  }
+  
+  #calendar .duration_global,
+.minicalendar .duration_global {
+  border-top-color:#cff689 !important;
+  border-bottom-color:#cff689 !important;
+}
+
+#calendar .duration_course,
+.minicalendar .duration_course {
+  border-top-color:#ff9966 !important;
+  border-bottom-color:#ff9966 !important;
+}
+
+#calendar .duration_course0,
+.minicalendar .duration_course0 {
+  border-top-color:#ff9966 !important;
+  border-bottom-color:#ff9966 !important;
+}
+
+#calendar .duration_course1,
+.minicalendar .duration_course1 {
+  border-top-color:#0099ff !important;
+  border-bottom-color:#0099ff !important;
+}
+
+#calendar .duration_course2,
+.minicalendar .duration_course2 {
+  border-top-color:#ffff00 !important;
+  border-bottom-color:#ffff00 !important;
+}
+
+#calendar .duration_group,
+.minicalendar .duration_group {
+  border-top-color:#fbbb23 !important;
+  border-bottom-color:#fbbb23 !important;
+}
+
+#calendar .duration_user,
+.minicalendar .duration_user {
+  border-top-color:#a1becb !important;
+  border-bottom-color:#a1becb !important;
+}
+
+#calendar .weekend,
+.minicalendar .weekend {
+  color:red;
+}
+
+table.minicalendar {
+border-collapse:separate;
+border-spacing:1px !important;
+border-style:solid;
+border-width:1px;
+margin:10px auto;
+padding:2px;
+width:75%;
+}
+
+.sideblock .calendar-controls { width: 50%; margin: 0 auto;}
+
+#footer-bottom {
+	width: 960px;
+	margin: 0 auto;
+	padding: 0;
+	height: 130px;
+	background: url(images/footer/img8.gif) repeat-x left bottom;
+
+}
