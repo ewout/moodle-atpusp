@@ -112,10 +112,10 @@
 			if (isset($displaysection)) {
 				if ($showsection) {
 					$strsummary = strip_tags(format_string($thissection->summary,true));
-					if (strlen($strsummary) < 57) {
-						$strsummary = ' - '.$strsummary;
+					if (strlen($strsummary) <= 20) { /*se sumario conter mais de 19 caracteres, delimita-se*/
+						$strsummary = ' '.$strsummary;
 					} else {
-						$strsummary = ' - '.substr($strsummary, 0, 60).'...';
+						$strsummary = ' '.substr($strsummary, 0, 20).'...'; /*exibe 19 caracteres + ...*/
 					}
 
 					if ($displaysection != $section) {
@@ -123,7 +123,7 @@
 					}
 					
 					$pestanas[] = new tabobject("tab_topic_" . $section, $CFG->wwwroot.'/course/view.php?id='.$course->id . '&topic='.$section,
-                    '<font style="white-space:nowrap">' . s($section.$strsummary) . "</font>", s($section.$strsummary));
+                    '<font style="white-space:nowrap">' . s($strsummary) . "</font>", s($strsummary));
 				}
 				$section++;
 				continue;
