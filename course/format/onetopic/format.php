@@ -113,7 +113,7 @@
 				if ($showsection) {
 					$strsummary = strip_tags(format_string($thissection->summary,true));
 					if (strlen($strsummary) == 0) { /*se sumario nao conter caracteres*/
-						$strsummary = 'Semana '.$section;
+						$strsummary = $section.' ';
 					} elseif (strlen($strsummary) <= 20) { /*se sumario conter mais de 19 caracteres, delimita-se*/
 						$strsummary = ' '.$strsummary;
 					} else {
