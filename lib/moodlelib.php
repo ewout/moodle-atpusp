@@ -6412,7 +6412,7 @@ function check_php_version($version='4.1.0') {
               }
           }
           break;
-
+      case 'AppleWebKit': /// Safari, Chrome, Konqueror, Symbiam, Palm, etc --> must be return true;
       case 'Safari':  /// Safari
           // Look for AppleWebKit, excluding strings with OmniWeb, Shiira and SimbianOS
           if (strpos($agent, 'OmniWeb')) { // Reject OmniWeb
@@ -6516,6 +6516,8 @@ function can_use_html_editor() {
             return 'MSIE';
         } else if (check_browser_version('Gecko', 20030516)) {
             return 'Gecko';
+        } else if (check_browser_version('AppleWebKit', 528.16)) {
+            return 'AppleWebKit';
         }
     }
     return false;

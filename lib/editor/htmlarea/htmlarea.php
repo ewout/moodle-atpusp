@@ -880,6 +880,7 @@ HTMLArea.prototype.setMode = function(mode) {
     switch (mode) {
         case "textmode":
         this._textArea.value = this.getHTML();
+	    //..GCC window.alert("textArea.value='"+this._textArea.value+"'");
         this._iframe.style.display = "none";
         this._textArea.style.display = "block";
         if (this.config.statusBar) {
@@ -2371,6 +2372,7 @@ HTMLArea.is_mac_ie = (HTMLArea.is_ie && HTMLArea.is_mac);
 HTMLArea.is_win_ie = (HTMLArea.is_ie && !HTMLArea.is_mac);
 HTMLArea.is_gecko  = (navigator.product == "Gecko");
 HTMLArea.is_safari = (HTMLArea.agt.indexOf("safari") != -1);
+HTMLArea.is_webkit = (HTMLArea.agt.indexOf("applewebkit") != -1);
 
 // variable used to pass the object to the popup editor window.
 HTMLArea._object = null;
@@ -2398,6 +2400,9 @@ HTMLArea.cloneObject = function(obj) {
 
 // FIXME!!! this should return false for IE < 5.5
 HTMLArea.checkSupportedBrowser = function() {
+    if (HTMLArea.is_webkit) {
+	return true;
+    }
     if (HTMLArea.is_gecko) {
         if (navigator.productSub < 20021201) {
             alert("You need at least Mozilla-1.3 Alpha.\n" +
@@ -2556,6 +2561,7 @@ HTMLArea.isSingleTag = function (el) {
 };
 // Retrieves the HTML code from the given node.  This is a replacement for
 // getting innerHTML, using standard DOM calls.
+//..(GCC)
 HTMLArea.getHTML = function(root, outputRoot, editor) {
     var html = "";
     switch (root.nodeType) {
@@ -2564,9 +2570,9 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
         var closed;
         var i;
         var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : '';
-	if (HTMLArea.RE_junktag.test(root_tag)) {
-	    return '';
-	}
+		if (HTMLArea.RE_junktag.test(root_tag)) {
+	    	return '';
+		}
         if (HTMLArea.is_ie && root_tag == "head") {
             if (outputRoot)
                 html += "<head>";
@@ -2608,7 +2614,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
                         if (name.toLowerCase() == "href" && name.toLowerCase() == "src") {
                             value = root[a.nodeName];
                         } else {
-                        value = a.nodeValue;
+                        	value = a.nodeValue;
                         }
                         if (HTMLArea.is_ie && (name == "href" || name == "src")) {
                             value = editor.stripBaseURL(value);
@@ -2620,7 +2626,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
                 }
                 if (/(_moz|^$)/.test(value)) {
                     // Mozilla reports some special tags
-                    // here; we don't need them.
+                    // here; we dont need them.
                     continue;
                 }
                 html += " " + name + '="' + value + '"';
@@ -2640,15 +2646,17 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
         break;
         case 3: // Node.TEXT_NODE
         // If a text node is alone in an element and all spaces, replace it with an non breaking one
-        // This partially undoes the damage done by moz, which translates '&nbsp;'s into spaces in the data element
-        if ( !root.previousSibling && !root.nextSibling && root.data.match(/^\s*$/i) && root.data.length > 1 ) html = '&nbsp;';
-        else html = HTMLArea.htmlEncode(root.data);
+        // This partially undoes the damage done by moz, which translates '&nbsp'; s into spaces in the element
+        if (!root.previousSibling && !root.nextSibling && root.data.match(/^\s*$/i) && root.data.length > 1) html = '&nbsp;';
+        else {
+			html = HTMLArea.htmlEncode(root.data);
+		}
         break;
         case 8: // Node.COMMENT_NODE
         html = "<!--" + root.data + "-->";
         break;      // skip comments, for now.
     }
-
+	//window.alert("HTMLArea.indent(html) with html='" + html  + "' return='" + HTMLArea.indent(html)  + "'");
     return HTMLArea.indent(html);
 };
 
@@ -2774,6 +2782,7 @@ HTMLArea.getElementById = function(tag, id) {
     return null;
 };
 // Modified version of GetHtml plugin's indent.
+//..(GCC)
 HTMLArea.indent = function(s, sindentChar) {
     var c = [
     /*0*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area)[^>]*>/g),
