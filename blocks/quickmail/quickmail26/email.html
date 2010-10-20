@@ -98,19 +98,19 @@
         </tr></table></td>
     <td width="75">
 		<div align="center" margin-top="10px">
-          	<p><input type = "button" id="add" onClick="add_user()" style="width:170px;" value="<?php echo $THEME->larrow?> Adicionar Selecionados" title="Adicionar os Usuários Selecionados para a Lista" />
+          	<p><input type = "button" id="add" onClick="add_user()" style="width:100px;" value="<?php echo $THEME->larrow?> Add" title="Add selected user to selected recipients list" />
           	</p>
-          	<p><input type = "button" id="remove" onClick="remove_user()" style="width:170px;" value="Remover Selecionados<?php echo $THEME->rarrow?>" title="Remover usuários selecionados da lista"/>
+          	<p><input type = "button" id="remove" onClick="remove_user()" style="width:100px;" value="Remove <?php echo $THEME->rarrow?>" title="Remove selected users from selected recipients list"/>
           	</p>
-          	<p><input type = "button" id="addall" onClick="addAll()" style="width:170px;" value="<?php echo $THEME->larrow?>  Adicionar Todos" title="Adicionar todos os usuários para a lista"/></p>
-          	<p><input type = "button" id="removeall" onClick="removeAll()" style="width:170px;" value="Remover Todos <?php echo $THEME->rarrow?>" title="Remover todos os usuários da lista"/></p>          	
+          	<p><input type = "button" id="addall" onClick="addAll()" style="width:100px;" value="Add all" title="Add all users from selected recipients list"/></p>
+          	<p><input type = "button" id="removeall" onClick="removeAll()" style="width:100px;" value="Remove all" title="Add all users from selected recipients list"/></p>          	
 		</div></td>
     <td width="300">
     <table width="250">
     
     <!-- Creates sections for role selection-->
-     <tr><td align="right" width="250"><div align="right"><strong><?php print_string('rolefilter', 'block_quickmail'); ?></strong></div></td></tr>
-   <tr>
+    <tr><td align="right" width="250"><div align="right"><strong><?php print_string('rolefilter', 'block_quickmail'); ?></strong></div></td></tr>
+    <tr>
         <td width="250"><div align="right">
             <select id="roles" onchange="special_select_users()" style="width:250px">
             <?php

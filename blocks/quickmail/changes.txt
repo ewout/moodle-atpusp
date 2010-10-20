@@ -1,0 +1,33 @@
+CHANGES
+=======
+Version 2.6.0 (special version for GROUP support: initial released on June 26, 2009)
+ - Added GROUP support
+ - Also added a simple sorting feature so that for potential recipient it will be sorted "alphabetically" by firstname only
+
+Version 2.5.1 (released on Feb 18, 2008)
+
+(Feb 12, 2008)
+ - Added javascript for multiple attachments; also added support in the code
+
+(Feb 5, 2008)
+ - Added a filter for selection by roles. Gave the user the ability to select whether or not they wish to receive receipts
+
+(Jan 15, 2008)
+ - Added support to select by "Groups" or "Sections" of people
+
+Changes made by Philip Cali (pcali1 at lsu dot edu)
+
+Version 2.0.3 (released on Sep 18, 2007)
+----------------------------------------
+
+(Sep 18, 2007)
+ - Added some more language packs from the original quickmail and fix some issues in the /lang
+
+(Jul 24, 2007)
+ - Minor fixed the &lt and &gt (arrows) to use $THEME->larrow and $THEME->rarrow (contributed by Cliff Tham)
+
+(Jul 05, 2007)
+ - Fixed for some browser compatibility issues such as Safari. Problem is in selection.js where it reference listbox elements as selectedList.item(i). Safari doesn't support the "item" property and requires use of the "options" property, as in selectedList.options.item(i) or selectedList.options[i]. Thanks for Slobodan Jovcic pointed this out.
+
+Maintained by Wen-Hao Chuang (whchuang at gmail dot com)
+

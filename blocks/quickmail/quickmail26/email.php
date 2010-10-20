@@ -292,7 +292,7 @@
             if ($form->receive_receipt) {
             if(count($mailedto)>0){
 				$messagetext = $messagetext."----------------------------------------------------\n";
-				$messagetext = $messagetext."O seguinte email foi enviado: \n";
+				$messagetext = $messagetext."Following email was successfully sent to: \n";
 				$messagetext = $messagetext."----------------------------------------------------\n";				
 				foreach($mailedto as $userid){
 					$messagetext = $messagetext.$courseusers[$userid]->firstname." ".$courseusers[$userid]->lastname.";\t";
@@ -302,7 +302,7 @@
 			
 			if(count($blockedTo)>0){
 				$messagetext = $messagetext."\n-------------------------------------------------------------------------------\n";
-				$messagetext = $messagetext."Os seguintes usuários escolheram não receber emails pelo Moodle: \n";
+				$messagetext = $messagetext."Following user(s) have chosen not to recieve any email through Moodle: \n";
 				$messagetext = $messagetext."-------------------------------------------------------------------------------\n";
 				foreach($blockedTo as $userid){
 					$messagetext = $messagetext.$courseusers[$userid]->firstname." ".$courseusers[$userid]->lastname.";\t";
@@ -312,7 +312,7 @@
 			
 			if(count($failedTo)>0){
 				$messagetext = $messagetext."\n---------------------------------------------------------------------------------------------------------------\n";
-				$messagetext = $messagetext."O Moodle não conseguiu enviar email para o(s) seguinte(s) usuário(s), por favor entre em contato com o suporte técnico: \n";
+				$messagetext = $messagetext."Moodle was unable to send email to following user(s), please contact Moodle support to report the error: \n";
 				$messagetext = $messagetext."-----------------------------------------------------------------------------------------------------------------\n";
 				foreach($failedTo as $userid){
 					$messagetext = $messagetext.$courseusers[$userid]->firstname." ".$courseusers[$userid]->lastname.";\t";
@@ -320,10 +320,10 @@
 				$messagetext = $messagetext."\n";
 			}
 			
-			$messagetext = $messagetext."\n==================================\nConteúdo da Mensagem\n----------------------------------\n";
+			$messagetext = $messagetext."\n==================================\nMessage Content\n----------------------------------\n";
 			$messagetext = $messagetext."\n".$form->plaintxt;
 			$messagetext = $messagetext."\n\n=================================\n";
-			$form->subject = "Confirmação de Mensagem: ".$form->subject;
+			$form->subject = "Quickmail dispatch receipt: ".$form->subject;
 			$mailresult = modified_email_to_user($USER, $USER, $form->subject, $messagetext, '', $attachment);
             }
 

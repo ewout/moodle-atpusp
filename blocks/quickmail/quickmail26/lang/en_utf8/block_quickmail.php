@@ -1,6 +1,12 @@
 <?php // $Id: block_quickmail.php,v 1.8.1 2007/09/18 11:33:43 whchuang Exp $
 
 /**
+ *    Edited by: Philip Cali
+ *   Date: 2/15/08
+ *   Louisiana State University
+ */
+
+/**
  * Language entries for Quickmail
  *
  * @author Mark Nielsen, added some strings by Wen Hao Chuang
@@ -12,7 +18,7 @@ $string['composeemail'] = 'Compose Email';
 $string['action'] = 'Action';
 $string['allowstudents'] = 'Allow Students to use Quickmail';
 $string['attachment'] = 'Attachment';
-$string['attachmentoptional'] = 'Attachment (Optional)';
+$string['attachmentoptional'] = 'Attachment';
 $string['attachmenterror'] = 'Not a valid attachment!  The following file does not exist: <strong>$a</strong>';
 $string['attachmentmaxsize'] = 'The attachement file size exceeds the allowed maximum file size';
 $string['blockname'] = 'Quickmail';
