@@ -1,0 +1,76 @@
+Para incluir um novo botão no sumário da aula, inclua uma imagem no diretório BUTTONS, seguindo a regra para o nome do arquivo. Exemplo: chat.png, ouwiki.png, etc. (lembre-se da extensão, por padrão foi adotado .PNG)
+==========================================
+
+attforblock (Attendance)
+
+data (Base de dados)
+
+chat
+
+checklist
+
+dialogue (Diálogo)
+
+questionnaire (Enquete)
+
+choice (Escolha)
+
+forum (Fórum)
+
+glossary (Glossário)
+
+lesson (Lição)
+
+book (Livro)
+
+studynotes (Mediabird Study Notes)
+
+oublog (OU blog)
+
+ouwiki (OU Wiki)
+
+survey (Pesquisa de avaliação)
+
+presenter (Presenter)
+
+quiz (Questionário)
+
+label (Rótulo)
+
+scorm (SCORM/AICC)
+
+wiki
+
+Casos especiais
+================
+
+
+RESOURCES (Recursos que não especificam o tipo, favor colocar como nome da imagem o TYPE. Exemplo: file.png)
+---------
+-Criar uma página de texto simples
+type: text
+
+-Criar uma página web
+type: html
+
+-Link a um arquivo ou site
+type: file
+
+-Visualizar um diretório -Usar um pacote IMS
+type: ims
+
+
+
+ASSIGNMENT (Tarefas que não especificam o tipo, favor colocar como nome da imagem o TYPE. Exemplo: online.png)
+----------
+-Modalidade avançada de carregamento de arquivos
+type: upload
+
+-Texto Online
+type: online
+
+- Envio de arquivo único
+type: uploadsingle
+
+- Atividade Offline
+type: offline
