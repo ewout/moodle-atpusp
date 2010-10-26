@@ -16,7 +16,7 @@ class assignment_online extends assignment_base {
 
         global $USER;
 
-        $edit  = optional_param('edit', 0, PARAM_BOOL);
+        //$edit  = optional_param('edit', 0, PARAM_BOOL); -hds-Incluir/Editar ao acessar a atividade
         $saved = optional_param('saved', 0, PARAM_BOOL);
 
         $context = get_context_instance(CONTEXT_MODULE, $this->cm->id);
@@ -24,15 +24,15 @@ class assignment_online extends assignment_base {
 
         $submission = $this->get_submission();
 
-        //Guest can not submit nor edit an assignment (bug: 4604)
+        //Guest can not submit nor edit an assignment (bug: 4604) -hds
         if (!has_capability('mod/assignment:submit', $context)) {
             $editable = null;
         } else {
             $editable = $this->isopen() && (!$submission || $this->assignment->resubmit || !$submission->timemarked);
         }
-        $editmode = ($editable and $edit);
+        //$editmode = ($editable and $edit); -hds
 
-        if ($editmode) {
+        if ($editable) { //-hds
             //guest can not edit or submit assignment
             if (!has_capability('mod/assignment:submit', $context)) {
                 print_error('guestnosubmit', 'assignment');
@@ -80,46 +80,51 @@ class assignment_online extends assignment_base {
             }
         }
 
-/// print header, etc. and display form if needed
-        if ($editmode) {
-            $this->view_header(get_string('editmysubmission', 'assignment'));
-        } else {
-            $this->view_header(get_string('viewsubmissions', 'assignment'));
-        }
-
+/// hds-Imprime campo para computar textoonline sem precisar trocar de tela.
+        $this->view_header(get_string('viewsubmissions', 'assignment'));
         $this->view_intro();
-
         $this->view_dates();
 
         if ($saved) {
             notify(get_string('submissionsaved', 'assignment'), 'notifysuccess');
         }
 
-        if ($editmode) {
-            print_box_start('generalbox', 'online');
-            $mform->display();
-            print_box_end();
-        } else {
-            print_box_start('generalbox boxwidthwide boxaligncenter', 'online');
-            if ($submission) {
-                echo format_text($submission->data1, $submission->data2);
-            } else if (!has_capability('mod/assignment:submit', $context)) { //fix for #4604
-                if (isguest()) {
-                    echo '<div style="text-align:center">'. get_string('guestnosubmit', 'assignment').'</div>';
-                } else {
-                    echo '<div style="text-align:center">'. get_string('usernosubmit', 'assignment').'</div>';
-                }
-            } else if ($this->isopen()){    //fix for #4206
-                echo '<div style="text-align:center">'.get_string('emptysubmission', 'assignment').'</div>';
+        print_box_start('generalbox boxwidthwide boxaligncenter', 'online');
+        if ($submission) {
+            echo format_text($submission->data1, $submission->data2);
+        } else if (!has_capability('mod/assignment:submit', $context)) { //fix for #4604
+            if (isguest()) {
+                echo '<div style="text-align:center">'. get_string('guestnosubmit', 'assignment').'</div>';
+            } else {
+                echo '<div style="text-align:center">'. get_string('usernosubmit', 'assignment').'</div>';
             }
-            print_box_end();
-            if ($editable) {
-                echo "<div style='text-align:center'>";
-                print_single_button('view.php', array('id'=>$this->cm->id,'edit'=>'1'),
-                        get_string('editmysubmission', 'assignment'));
-                echo "</div>";
-            }
-        }
+        } //else if ($this->isopen()){    //hds-linha 117
+          //  echo '<div style="text-align:center">'.get_string('emptysubmission', 'assignment').'</div>';
+        //}
+
+	if ($submission){ //hds-A configuracao ReSubmit nao permite nem a primeira submissao. Confere se ja submeteu 1 vez.
+	   if ($this->assignment->resubmit && $this->isopen()){
+               print_box_start('generalbox', 'online');
+               $mform->display();
+	   } else if (!$this->isopen()){
+               echo '<div style="text-align:center">Já passou a data de entrega. Você não pode mais alterar o seu trabalho.</div>';
+	   } else {  //!($this->assignment->resubmit)
+               echo '<div style="text-align:center">Não está permitido um novo envio do seu trabalho.</div>';
+	   }
+	} else {
+	   if ($this->isopen()){
+	       if (!$this->assignment->resubmit){
+               echo '<div style="text-align:center">LEMBRE-SE QUE VOCÊ PODE POSTAR UMA ÚNICA VEZ. APÓS SALVAR ESTÁ PÁGINA NÃO É POSSÍVEL ALTERAR; OU MESMO ENVIAR UMA NOVA VERSÃO</div>';
+	       }
+               print_box_start('generalbox', 'online');
+               $mform->display();
+	   } else {
+               echo '<div style="text-align:center">A atividade ainda não está disponível.</div>';
+	   }
+
+	}
+
+        print_box_end();
 
         $this->view_feedback();
 
