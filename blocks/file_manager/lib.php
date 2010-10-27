@@ -89,7 +89,8 @@ function fm_update_link($link, $groupid=0, $linkid = NULL, $id=1, $rootdir=0) {
 		$tmp = get_record('fmanager_link', 'id', $linkid);
 		if ($tmp->type == TYPE_URL) {
 			// Appends any url link with an http:// if it doesnt exist
-			if (! preg_match("/^http:\/\//", $link->url)) {
+                       // hds - Alguns links que nao serao substituidos por HTTP:// na edicao do link
+			if (!preg_match("/^(http|https):\/\//", $link->url)) {
 				$link->url = "http://" . $link->url;
 			} 
 			$link->link = $link->url;
@@ -120,9 +121,10 @@ function fm_update_link($link, $groupid=0, $linkid = NULL, $id=1, $rootdir=0) {
 		} elseif ($link->type != TYPE_ZIP) {
 			$link->type = TYPE_URL;
 			// Appends any url link with an http:// if it doesnt exist
-			if (!preg_match("/^http:\/\//", $link->url)) {
+                       // hds - Alguns links que nao serao substituidos por HTTP:// na criacao do link
+			if (!preg_match("/^(http|https):\/\//", $link->url)) {
 				$link->url = "http://" . $link->url;
-			} 
+			}
 		}
 		if ($groupid == 0){
 			$link->owner = $USER->id; 
