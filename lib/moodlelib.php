@@ -2088,7 +2088,11 @@ function require_login($courseorid=0, $autologinguest=true, $cm=null, $setwantsu
                     print_header_simple('', '',
                             build_navigation(array(array('name' => $strloggedinasguest, 'link' => null, 'type' => 'misc'))));
                     if (empty($USER->access['rsw'][$COURSE->context->path])) {  // Normal guest
-                        notice(get_string('guestsnotallowed', '', format_string($COURSE->fullname)), "$CFG->wwwroot/login/index.php");
+                            $loginurl = "$CFG->wwwroot/login/index.php";
+                            if (!empty($CFG->loginhttps)) {
+                                $loginurl = str_replace('http:','https:', $loginurl);
+                            }
+                        notice(get_string('guestsnotallowed', '', format_string($COURSE->fullname)), $loginurl);
                     } else {
                         notify(get_string('guestsnotallowed', '', format_string($COURSE->fullname)));
                         echo '<div class="notifyproblem">'.switchroles_form($COURSE->id).'</div>';
@@ -2679,7 +2683,6 @@ function ismoving($courseid) {
  * @param bool $override If true then the name will be first name followed by last name rather than adhering to fullnamedisplay setting.
  */
 function fullname($user, $override=false) {
-
     global $CFG, $SESSION;
 
     if (!isset($user->firstname) and !isset($user->lastname)) {
@@ -2699,7 +2702,7 @@ function fullname($user, $override=false) {
         $CFG->fullnamedisplay = $SESSION->fullnamedisplay;
     }
 
-    if ($CFG->fullnamedisplay == 'firstname lastname') {
+    if (!isset($CFG->fullnamedisplay) or $CFG->fullnamedisplay === 'firstname lastname') {
         return $user->firstname .' '. $user->lastname;
 
     } else if ($CFG->fullnamedisplay == 'lastname firstname') {
@@ -3052,9 +3055,10 @@ function truncate_userinfo($info) {
                     );
 
     // apply where needed
+    $textlib = textlib_get_instance();
     foreach (array_keys($info) as $key) {
         if (!empty($limit[$key])) {
-            $info[$key] = trim(substr($info[$key],0, $limit[$key]));
+            $info[$key] = trim($textlib->substr($info[$key],0, $limit[$key]));
         }
     }
 
@@ -6413,6 +6417,15 @@ function check_php_version($version='4.1.0') {
           }
           break;
       case 'AppleWebKit': /// Safari, Chrome, Konqueror, Symbiam, Palm, etc --> must be return true;
+
+      case 'Chrome':
+          if (preg_match("/Chrome\/(.*)[ ]+/i", $agent, $match)) {
+              if (version_compare($match[1], $version) >= 0) {
+                  return true;
+              }
+          }
+          break;
+
       case 'Safari':  /// Safari
           // Look for AppleWebKit, excluding strings with OmniWeb, Shiira and SimbianOS
           if (strpos($agent, 'OmniWeb')) { // Reject OmniWeb
