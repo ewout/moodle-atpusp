@@ -298,7 +298,7 @@
                 if ($n > 1) { // return to dialogue page if more than one recipent 
                     redirect("view.php?id=$cm->id", get_string('numberofentriesadded', 'dialogue', $a));
                 } else { // if only one recipent show the new conversation with them
-                    redirect("dialogues.php?id=$cm->id&amp;action=printdialogue&amp;cid=$conversation->id", get_string('numberofentriesadded', 'dialogue', $a));
+                    redirect("dialogues.php?id=$cm->id&amp;action=printdialogue&amp;cid=$conversation->id", get_string('numberofentriesadded', 'dialogue', $n)); #hds-alterei o parametro de $a para $n, provavelmente o get_string nao estava interpretando o objeto, e quebrava a pagina
                 }
             } else {
                 redirect("view.php?id=$cm->id", get_string('noavailablepeople', 'dialogue'));

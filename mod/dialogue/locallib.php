@@ -222,9 +222,11 @@ function dialogue_get_available_students($dialogue, $context, $editconversationi
             }
         }
     }
-    if (isset($gnames)) {   // group names
-        $list = $gnames;
-    }
+//hds-INATIVO,POIS TUTORES NAO DEVEM DIALOGAR COM TODOS OS ALUNOS DA DISCIPLINA,APENAS UM ALUNO (desativando GRUPOS e TODOS OS PARTICIPANTES)
+//se desejar aumentar performance, comentar linhas que incluem os grupos na Array $gnames (LINHAS 167 ~ 177) 
+//    if (isset($gnames)) {   // group names
+//        $list = $gnames;
+//    }
     if (isset($names)) {
         natcasesort($names);
         if (isset($list)) {
