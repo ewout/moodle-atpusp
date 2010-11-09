@@ -1,10 +1,10 @@
-<?php // $Id$
+<?php // $Id: tinymce.class.php 119 2009-08-07 18:31:51Z dlandau $
 
 /**
  * This file contains the tinymce subclass for moodle editorObject.
  *
  * @author Janne Mikkonen
- * @version  $Id$
+ * @version  $Id: tinymce.class.php 119 2009-08-07 18:31:51Z dlandau $
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
  * @package editorObject
  */
@@ -72,11 +72,11 @@ class tinymce extends editorObject {
     var $printdialogs = false;
 
     /**
-    * PHP4 style class constructor.
+    * PHP5 style class constructor.
     *
     * @param int $courseid
     */
-    function tinymce ($courseid) {
+    function __construct($courseid) {
         parent::editorObject();
         $this->courseid = clean_param($courseid, PARAM_INT);
 
@@ -116,15 +116,6 @@ class tinymce extends editorObject {
     }
 
     /**
-    * PHP5 style class constructor.
-    *
-    * @param int $courseid
-    */
-    function __construct($courseid) {
-        $this->tinymce($courseid);
-    }
-
-    /**
     * Checks configuration key validity.
     * @param string $key Configuration key to check.
     * @return bool Returns true if key is valid. Otherwise false is returned.
@@ -155,7 +146,6 @@ class tinymce extends editorObject {
             }
         }
         return false;
-
     }
 
     /**
@@ -304,7 +294,6 @@ class tinymce extends editorObject {
         if ( !empty($this->cfg->editorsrc) ) {
             unset($this->cfg->editorsrc);
         }
-
     }
 
     /**

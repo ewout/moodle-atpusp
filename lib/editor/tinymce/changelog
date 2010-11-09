@@ -168,7 +168,7 @@ Version 2.0 (2005-12-01)
 	Fixed compatiblity issues with the .NET version of TinyMCE Compressor.
 	Fixed performance issue with fullscreen plugin, it switches back to normal view a lot faster now.
 	Fixed issues with mceSelectList class in advanced theme and compressed it some.
-	Renamed the Norwegian language pack from no to nb since it's "Norwegian Bokmål".
+	Renamed the Norwegian language pack from no to nb since it's "Norwegian BokmÂl".
 Version 2.0RC4 (2005-10-30)
 	Fixed bug with font face/size/color wasn't working correctly in Firefox 1.5b1.
 	Fixed bug where all actions where dispatching the onbeforeunload event.
@@ -278,7 +278,7 @@ Version 2.0RC2 (2005-09-12)
 	Fixed bug issues with paste and noneditable plugin in MSIE 5.01.
 	Fixed bug where dialogs in the search/replace plugin was to small.
 	Fixed bug where about dialog sometimes produced unknown runtime error in MSIE.
-	Fixed bug where é and í characters was converted the wrong entities.
+	Fixed bug where È and Ì characters was converted the wrong entities.
 	Fixed bug where it was possible to click on the disabled link icon when nothing was selected.
 	Fixed bug where autosave plugin wasn't working with JS submit calls or the save plugin.
 	Fixed bug where file/image browser wasn't working with the default link/image dialogs.
@@ -402,8 +402,8 @@ Version 1.45 RC2 (2005-06-15)
 	Fixed bug issue where the close button in dialogs wasn't available on Firefox on MacOSX.
 	Added new pastetext icon contributed by speednet.
 	Added new browsers option that enables you to specify what browsers is to be WYSIWYG enabled or not.
-	Added partial Catalan translation contributed by Marc Bria Ramírez.
-	Added portuguese Brazil translation contributed by João Borges.
+	Added partial Catalan translation contributed by Marc Bria RamÌrez.
+	Added portuguese Brazil translation contributed by Jo“o Borges.
 	Added updated Simplified Chinese language pack contributed by cube316.
 	Added beforeunload handler for fullscreen plugin so contents gets updated when the window is closed.
 	Added a new fullscreen_settings option for the fullscreen plugin contributed by David Glick.
@@ -542,7 +542,7 @@ Version 1.43 (2005-03-06)
 	Added new preview panel to dialog in the advimage plugin, contributed by Virtuelcom.
 	Added element class name to element path in the advanced theme.
 	Updated Canadian French table language pack contributed by Virtuelcom.
-	Updated the swedish language pack, contributed by Mats Löfström, York Consulting AB.
+	Updated the swedish language pack, contributed by Mats L–fstr–m, York Consulting AB.
 Version 1.42 (2005-02-14)
 	Fixed bug with the element path beeing resized if width/height of editor was 100%.
 	Fixed bug with reloading/flicker of all button images in MSIE if browser cache is disabled.
@@ -610,7 +610,7 @@ Version 1.39 (2005-01-04)
 	Added new force_p_newlines option, forces P elements on return/enter key in Mozilla/Firefox.
 	Added new theme_advanced_path_location, adds a element path list.
 	Added new theme_advanced_toolbar_align option, defaults to center.
-	Added new Portuguese translation contributed by José Pedro Pereira.
+	Added new Portuguese translation contributed by JosÈ Pedro Pereira.
 	Added new mceSelectNode and mceSelectNodeDepth commands.
 	Added new add_unload_trigger option, this adds a unload triggerSave call. Enabled by default.
 	Added am/pm time format to the insertdatetime plugin.
@@ -738,7 +738,7 @@ Version 1.32 (2004-09-25)
 	Added new "theme_advanced_buttons<N>_add" option.
 	Added new importPluginLanguagePack function.
 	Added new Danish language pack contributed by Jan Moelgaard.
-	Added updated German language pack contributed by Christopher Müller.
+	Added updated German language pack contributed by Christopher M¸ller.
 	Added new any_selection to handleNodeChange callback.
 	Modified so link/unlink is dimmed if nothing is selected.
 	Fixed bug when deleting images in Firefox.
@@ -857,7 +857,7 @@ Version 1.21 (2004-07-12)
 Version 1.20 (2004-07-05)
 	Fixed bug issue #983257, JS runtime error when template contains no controls.
 	Removed cut/copy/paste commands and icons due to security reasons in Mozilla.
-	Added Czech language pack, thanks goes to "Pavel Novák" for the contribution.
+	Added Czech language pack, thanks goes to "Pavel Nov·k" for the contribution.
 	Fixed minor bug regarding empty attributes.
 	Fixed so the "extended_valid_elements" overrides previous declarations.
 Version 1.19 (2004-06-28)
@@ -914,7 +914,7 @@ Version 1.13 (2004-06-04)
 	Fixed critical bug where the editor didn't work at all in MSIE.
 	Fixed bug where table visual aids didn't work in Mozilla.
 Version 1.12 (2004-06-03)
-	Added updateContent function thanks to "Jürgen Baute" contribution.
+	Added updateContent function thanks to "J¸rgen Baute" contribution.
 	Added documentation of the diffrent public javascript functions of tinyMCE.
 	Fixed bug #965615, Empty editor content returns "<br />" as value after cleanup.
 	Fixed bug where Bold and Italic didn't work correctly in Mozilla.

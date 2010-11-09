@@ -2761,6 +2761,11 @@ function print_header ($title='', $heading='', $navigation='', $focus='',
 
     $bodytags .= ' class="'.$pageclass.'" id="'.$pageid.'"';
 
+    // .. GCC Pacth
+    require_once($CFG->libdir .'/editor/htmlEditor.class.php');
+    $htmlEditorObject = new htmlEditor();
+    $htmlEditor = $htmlEditorObject->configure(NULL, $COURSE->id);
+
     ob_start();
     include($CFG->header);
     $output = ob_get_contents();
@@ -5004,76 +5009,71 @@ function print_recent_activity_note($time, $user, $text, $link, $return=false, $
  * @param int $courseid ?
  * @todo Finish documenting this function
  */
-function print_textarea($usehtmleditor, $rows, $cols, $width, $height, $name, $value='', $courseid=0, $return=false, $id='') {
-/// $width and height are legacy fields and no longer used as pixels like they used to be.
-/// However, you can set them to zero to override the mincols and minrows values below.
-
-    global $CFG, $COURSE, $HTTPSPAGEREQUIRED;
-    static $scriptcount = 0; // For loading the htmlarea script only once.
-
+function print_textarea($usehtmleditor, $rows, $cols, $width, $height, $name, $value='', $obsolete=0, $return=false, $id='',
+$editorclass='form-textarea-advanced') {
+    global $CFG, $COURSE, $HTTPSPAGEREQUIRED, $THEME;
     $mincols = 65;
     $minrows = 10;
     $str = '';
-
     if ($id === '') {
         $id = 'edit-'.$name;
     }
+    if (empty($CFG->editorsrc) && $usehtmleditor) { // for backward compatibility
+//            if (!empty($courseid) and has_capability('moodle/course:managefiles', get_context_instance(CONTEXT_COURSE, $courseid))) {
+//                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '&amp;httpsrequired=1';
+//                // needed for course file area browsing in image insert plugin
+//                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
+//                        $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php?id='.$courseid.$httpsrequired.'"></script>'."\n" : '';
+//            } else {
+//                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '?httpsrequired=1';
+//                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
+//                         $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php'.$httpsrequired.'"></script>'."\n" : '';
+//            }
+//            $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
+//                    $CFG->httpswwwroot .'/lib/editor/htmlarea/lang/en.php?id='.$courseid.'"></script>'."\n" : '';
+//            $scriptcount++;
 
-    if ( empty($CFG->editorsrc) ) { // for backward compatibility.
-        if (empty($courseid)) {
-            $courseid = $COURSE->id;
+        if ($height && ($rows < $minrows)) {
+            $rows = $minrows;
         }
-
-        if ($usehtmleditor) {
-            if (!empty($courseid) and has_capability('moodle/course:managefiles', get_context_instance(CONTEXT_COURSE, $courseid))) {
-                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '&amp;httpsrequired=1';
-                // needed for course file area browsing in image insert plugin
-                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
-                        $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php?id='.$courseid.$httpsrequired.'"></script>'."\n" : '';
-            } else {
-                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '?httpsrequired=1';
-                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
-                         $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php'.$httpsrequired.'"></script>'."\n" : '';
-
-            }
-            $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
-                    $CFG->httpswwwroot .'/lib/editor/htmlarea/lang/en.php?id='.$courseid.'"></script>'."\n" : '';
-            $scriptcount++;
-
-            if ($height) {    // Usually with legacy calls
-                if ($rows < $minrows) {
-                    $rows = $minrows;
-                }
-            }
-            if ($width) {    // Usually with legacy calls
-                if ($cols < $mincols) {
-                    $cols = $mincols;
-                }
-            }
+        if ($width && ($cols < $mincols)) {
+             $cols = $mincols;
         }
     }
-    $str .= '<textarea class="form-textarea" id="'. $id .'" name="'. $name .'" rows="'. $rows .'" cols="'. $cols .'">';
+
+    if ($usehtmleditor) {
+            $THEME->htmleditors[] = $id;
+    } else {
+            $editorclass = '';
+    }
+    $str .= "\n".'<textarea class="form-textarea '.$editorclass.'" id="'. $id .'" name="'. $name .'" rows="'. $rows .'" cols="'. $cols
+    .'">'."\n";
+
     if ($usehtmleditor) {
         $str .= htmlspecialchars($value); // needed for editing of cleaned text!
     } else {
         $str .= s($value);
     }
     $str .= '</textarea>'."\n";
-
     if ($usehtmleditor) {
+        $str_toggle = '<span class="helplink"><a href="javascript:mce_toggleEditor(\''. $id .'\');"><img width="50" height="17" src="'.$CFG->httpswwwroot.'/lib/editor/tinymce/images/toggle.gif" alt="'.get_string('editortoggle').'" title="'.get_string('editortoggle').'" class="icontoggle" /></a></span>';
         // Show shortcuts button if HTML editor is in use, but only if JavaScript is enabled (MDL-9556)
+        $str .= '<div class="textareaicons">';
         $str .= '<script type="text/javascript">
 //<![CDATA[
+mce_saveOnSubmit(\''.addslashes_js($id).'\');
+document.write(\''.addslashes_js($str_toggle).'\');
 document.write(\''.addslashes_js(editorshortcutshelpbutton()).'\');
 //]]>
 </script>';
+$str .= '</div>';
     }
-
     if ($return) {
         return $str;
     }
     echo $str;
 }
+
 
 /**
  * Sets up the HTML editor on textareas in the current page.
