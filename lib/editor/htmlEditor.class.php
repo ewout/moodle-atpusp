@@ -2,8 +2,9 @@
 
 class htmlEditor {
 
-   public function __construct() { }
+    public $configuration = array();
 
+    public function __construct() { }
 
     public function configure($editor = NULL, $courseid = NULL) {
         global $CFG;
@@ -19,18 +20,16 @@ class htmlEditor {
         if (isset($configured[$editor])) {
             return $configured[$editor];
         }
-
-        $configuration = array();
-
+        
         switch ($editor) {
             case 'tinymce':
-                $configuration[] = $CFG->httpswwwroot ."/lib/editor/tinymce/jscripts/tiny_mce/tiny_mce.js";
-                $configuration[] = $CFG->httpswwwroot ."/lib/editor/tinymce.js.php?course=". $courseid;
+                $this->configuration[] = $CFG->httpswwwroot ."/lib/editor/tinymce/jscripts/tiny_mce/tiny_mce.js";
+                $this->configuration[] = $CFG->httpswwwroot ."/lib/editor/tinymce.js.php?course=". $courseid;
                 $configured['tinymce'] = true;
                 break;
             case 'fckeditor':
-                $configuration[] = $CFG->httpswwwroot ."/lib/editor/fckeditor/fckeditor.js";
-                $configuration[] = $CFG->httpswwwroot ."/lib/editor/fckeditor.js.php?course=". $courseid;
+                $this->configuration[] = $CFG->httpswwwroot ."/lib/editor/fckeditor/fckeditor.js";
+                $this->configuration[] = $CFG->httpswwwroot ."/lib/editor/fckeditor.js.php?course=". $courseid;
                 $configured['fckeditor'] = true;
                 break;
             default:
@@ -38,9 +37,9 @@ class htmlEditor {
                 break;
         }
         if (isset($CFG->editorsrc) && is_array($CFG->editorsrc)) {
-            $CFG->editorsrc = $configuration + $CFG->editorsrc;
+            $CFG->editorsrc = $this->configuration + $CFG->editorsrc;
         } else {
-            $CFG->editorsrc = $configuration;
+            $CFG->editorsrc = $this->configuration;
         }
         return $configured[$editor];
     }

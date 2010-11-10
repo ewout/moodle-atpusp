@@ -5,6 +5,25 @@ $SESSION->lang = $editorlanguage;
 $directionality = get_string('thisdirection');
 $courseid = optional_param('course');
 $tinyroot = $CFG->httpswwwroot;
+
+echo "
+tinyMCE.init({
+mode: \"textareas\",
+relative_urls: false,
+editor_selector: \"form-textarea-simple\",
+theme: \"simple\",
+apply_source_formatting: true, 
+remove_script_host: false,
+entity_encoding: \"raw\",
+language: \"$editorlanguage\",
+directionality: \"$directionality\",
+plugins: \"spellchecker,emotions,paste,directionality,contextmenu\",
+content_css : \"{$CFG->httpswwwroot}/lib/editor/tinymce/moodlecontent.css\",
+spellchecker_languages : \"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv\",
+spellchecker_rpc_url : \"{$CFG->httpswwwroot}/lib/editor/tinymce/jscripts/tiny_mce/plugins/spellchecker/rpc.php\"
+});
+";
+
 echo "
 tinyMCE.init({
 mode: \"textareas\",
@@ -130,8 +149,6 @@ file_browser_callback : \"mce_moodlefilemanager\",
     ";
 // the xhtml ruleset must be the last one - no comma at the end of the file
 print <<<EOF
-
-
 
 function mce_toggleEditor(id) {
     if (!tinyMCE.get(id))
