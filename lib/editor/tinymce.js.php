@@ -9,21 +9,6 @@ echo "
 tinyMCE.init({
 mode: \"textareas\",
 relative_urls: false,
-editor_selector: \"form-textarea-simple\",
-theme: \"simple\",
-apply_source_formatting: true, 
-remove_script_host: false,
-entity_encoding: \"raw\",
-language: \"$editorlanguage\",
-directionality: \"$directionality\",
-plugins: \"spellchecker,emotions,paste,directionality,contextmenu\",
-content_css : \"{$CFG->httpswwwroot}/lib/editor/tinymce/moodlecontent.css\",
-spellchecker_languages : \"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv\",
-spellchecker_rpc_url : \"{$CFG->httpswwwroot}/lib/editor/tinymce/jscripts/tiny_mce/plugins/spellchecker/rpc.php\"
-});
-tinyMCE.init({
-mode: \"textareas\",
-relative_urls: false,
 editor_selector: \"form-textarea-advanced\",
 theme : \"advanced\",
 skin: \"o2k7\",skin_variant: \"silver\", forced_root_block : false,
@@ -145,40 +130,45 @@ file_browser_callback : \"mce_moodlefilemanager\",
     ";
 // the xhtml ruleset must be the last one - no comma at the end of the file
 print <<<EOF
+
+
+
 function mce_toggleEditor(id) {
-if (!tinyMCE.get(id))
-tinyMCE.execCommand('mceAddControl', false, id);
-else
-tinyMCE.execCommand('mceRemoveControl', false, id);
+    if (!tinyMCE.get(id))
+        tinyMCE.execCommand('mceAddControl', false, id);
+    else
+        tinyMCE.execCommand('mceRemoveControl', false, id);
 }
+
 function mce_moodlefilemanager(field_name, url, type, win) {
-tinyMCE.activeEditor.windowManager.open({
-file: "{$CFG->httpswwwroot}/lib/editor/tinymce/jscripts/tiny_mce/plugins/moodlelink/link.php?id={$courseid}",    width: 480,  
-height: 380,
-resizable: "yes",
-inline: "yes",  
-close_previous: "no"
-}, {
-window: win,
-input: field_name
-});
-return false;
+    tinyMCE.activeEditor.windowManager.open({
+        file: "{$CFG->httpswwwroot}/lib/editor/tinymce/jscripts/tiny_mce/plugins/moodlelink/link.php?id={$courseid}",    width: 480,  
+        height: 380,
+        resizable: "yes",
+        inline: "yes",  
+        close_previous: "no"
+    }, {
+        window: win,
+        input: field_name
+    });
+    return false;
 }
+
 function mce_saveOnSubmit(id) {
-var prevOnSubmit = document.getElementById(id).form.onsubmit;
-document.getElementById(id).form.onsubmit = function() { 
-tinyMCE.triggerSave(); 
-var ret = true;
-if (prevOnSubmit != undefined) {
-if (prevOnSubmit()) {
-ret = true;
-prevOnSubmit = null;
-} else {
-ret = false;
-}
-}
-return ret;
-};
+    var prevOnSubmit = document.getElementById(id).form.onsubmit;
+    document.getElementById(id).form.onsubmit = function() { 
+        tinyMCE.triggerSave(); 
+        var ret = true;
+        if (prevOnSubmit != undefined) {
+            if (prevOnSubmit()) {
+                ret = true;
+                prevOnSubmit = null;
+            } else {
+                ret = false;
+            }
+        }
+        return ret;
+    };
 }
 EOF;
 ?>
