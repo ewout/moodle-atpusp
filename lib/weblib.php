@@ -3878,6 +3878,15 @@ function build_navigation($extranavlinks, $cm = null) {
                 'type' => 'home');
     }
 
+    //hds-Incluir Categoria no Breadcrumb : http://tracker.moodle.org/browse/MDL-23731
+    if (!empty($COURSE->category) && $COURSE->id != SITEID) {
+        $categoryname = get_field('course_categories', 'name', 'id', $COURSE->category);
+        $navlinks[] = array(
+            'name' => format_string($categoryname),
+            'link' => "$CFG->wwwroot/course/category.php?id={$COURSE->category}",
+            'type' => 'category'); 
+    }
+
     // Course name, if appropriate.
     if (isset($COURSE) && $COURSE->id != SITEID) {
         $navlinks[] = array(
