@@ -196,7 +196,15 @@ class MoodleExcelWorksheet {
         $format = $this->MoodleExcelFormat2PearExcelFormat($format);
     /// Convert the date to Excel format
         $timezone = get_user_timezone_offset();
-        $value =  ((usertime($date) + (int)($timezone * HOURSECS * 2)) / 86400) + 25569;
+        //hds-Exportar relatorio da disciplina em excel,com fuso horario do solicitante: http://tracker.moodle.org/browse/MDL-14934#comment-93308-open
+        if ($timezone == 99) {
+           // system timezone offset in seconds
+           $timezone = (int)date('Z');
+        } else {
+           $timezone = (int)($timezone * HOURSECS * 2);
+        }
+        $value =  ((usertime($date) + $timezone) / 86400) + 25569;
+
     /// Add  the date safely to the PEAR Worksheet
         $this->pear_excel_worksheet->writeNumber($row, $col, $value, $format);
     }
