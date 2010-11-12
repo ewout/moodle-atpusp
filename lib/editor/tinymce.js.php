@@ -1,28 +1,30 @@
 <?php
 require_once('../../config.php');
 $editorlanguage = substr(current_language(), 0, 2);
-$SESSION->lang = $editorlanguage;
 $directionality = get_string('thisdirection');
 $courseid = optional_param('course');
 $tinyroot = $CFG->httpswwwroot;
+
 
 echo "
 tinyMCE.init({
 mode: \"textareas\",
 relative_urls: false,
 editor_selector: \"form-textarea-simple\",
-theme: \"simple\",
-apply_source_formatting: true, 
+theme : \"advanced\",
+skin: \"o2k7\",skin_variant: \"silver\", forced_root_block : false,
+apply_source_formatting: true,
 remove_script_host: false,
 entity_encoding: \"raw\",
+content_css : \"{$CFG->httpswwwroot}/lib/editor/tinymce/moodlecontent.css\",
 language: \"$editorlanguage\",
 directionality: \"$directionality\",
-plugins: \"spellchecker,emotions,paste,directionality,contextmenu\",
-content_css : \"{$CFG->httpswwwroot}/lib/editor/tinymce/moodlecontent.css\",
+plugins: \"emotions,paste,contextmenu,template\",
 spellchecker_languages : \"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv\",
 spellchecker_rpc_url : \"{$CFG->httpswwwroot}/lib/editor/tinymce/jscripts/tiny_mce/plugins/spellchecker/rpc.php\"
 });
-";
+";    // TODO theme:"advanced" must be changed by theme:"simple" but first is necessary create a new theme called simple
+
 
 echo "
 tinyMCE.init({
@@ -36,7 +38,8 @@ remove_script_host: false,
 entity_encoding: \"raw\",
 content_css : \"{$CFG->httpswwwroot}/lib/editor/tinymce/moodlecontent.css\",
 language: \"$editorlanguage\",
-directionality: \"$directionality\",  plugins: \"advimage,media,safari,table,style,layer,advhr,advlink,emotions,inlinepopups,searchreplace,paste,directionality,fullscreen,nonbreaking,contextmenu,insertdatetime,save,iespell,preview,print,noneditable,visualchars,xhtmlxtras,template,pagebreak,spellchecker,moodleimage\",     spellchecker_languages : \"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv\",
+directionality: \"$directionality\",
+plugins: \"advimage,media,safari,table,style,layer,advhr,advlink,emotions,inlinepopups,searchreplace,paste,directionality,fullscreen,nonbreaking,contextmenu,insertdatetime,save,iespell,preview,print,noneditable,visualchars,xhtmlxtras,template,pagebreak,spellchecker,moodleimage\",     spellchecker_languages : \"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv\",
 spellchecker_rpc_url : \"{$CFG->httpswwwroot}/lib/editor/tinymce/jscripts/tiny_mce/plugins/spellchecker/rpc.php\",
 theme_advanced_font_sizes: \"1,2,3,4,5,6,7\",
 theme_advanced_layout_manager: \"SimpleLayout\",
@@ -147,6 +150,9 @@ file_browser_callback : \"mce_moodlefilemanager\",
     +\"var[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title]\"
     });
     ";
+
+echo "\n";
+
 // the xhtml ruleset must be the last one - no comma at the end of the file
 print <<<EOF
 
