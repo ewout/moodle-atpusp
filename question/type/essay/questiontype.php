@@ -62,7 +62,7 @@ class question_essay_qtype extends default_questiontype {
         $readonly      = empty($options->readonly) ? '' : 'disabled="disabled"';
 
         // Only use the rich text editor for the first essay question on a page.
-        $usehtmleditor = can_use_html_editor() && !$htmleditorused;
+        $usehtmleditor = can_use_html_editor(); #hds-retirado este parametro '&& !$htmleditorused', pois ele imprime HTMLAREA somente no 1o Item
 
         $formatoptions          = new stdClass;
         $formatoptions->noclean = true;
