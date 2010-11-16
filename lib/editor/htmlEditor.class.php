@@ -9,13 +9,13 @@ class htmlEditor {
     public function configure($editor = NULL, $courseid = NULL) {
         global $CFG;
         static $configured = Array();
-
+        
         if (!isset($CFG->htmleditor) or (!$CFG->htmleditor)) {
             return;
         }
 
         if ($editor == '') {
-            $editor = (isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor : '');
+            $editor = (isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor : 'htmlarea'); // TODO change html to other default editor
         }
         if (isset($configured[$editor])) {
             return $configured[$editor];
@@ -33,7 +33,10 @@ class htmlEditor {
                 $configured['fckeditor'] = true;
                 break;
             default:
-                $configured[$editor] = false;
+                $this->configuration[] = $CFG->httpswwwroot . '/lib/editor/'.$editor.'/'.$editor.'.php?id='. $courseid;
+                $this->configuration[] = $CFG->httpswwwroot . '/lib/editor/'.$editor.'/lang/en.php?id='.$courseid; // TODO fix-me bug (algem deve criar o arquivo pt.js ou pt.php no fckeditor)
+                $configured[$editor] = true;
+                $CFG->defaulthtmleditor='htmlarea'; //TODO fix-me. To avoid this var this variable must be auto-load in config.php
                 break;
         }
         if (isset($CFG->editorsrc) && is_array($CFG->editorsrc)) {

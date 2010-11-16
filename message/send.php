@@ -117,10 +117,13 @@ if (has_capability('moodle/site:sendmessage', get_context_instance(CONTEXT_SYSTE
         //echo '<input type="submit" value="'.get_string('sendmessage', 'message').'" />';
         //use_html_editor('message', 'formatblock subscript superscript copy cut paste clean undo redo justifyleft justifycenter justifyright justifyfull lefttoright righttoleft insertorderedlist insertunorderedlist outdent indent inserthorizontalrule createanchor nolink inserttable');
         echo '<div class="message-send-box">';
-        print_textarea($usehtmleditor, 5, 34, 0, 0, 'message', '', 0, false, '', 'form-textarea-simple'); 
+        print_textarea($usehtmleditor, 9, 34, 0, 0, 'message', '', 0, false, '', 'form-textarea-simple'); 
         echo '</div>';
         echo '<input class="message-send-button" type="submit" value="'.get_string('sendmessage', 'message').'" />';
         echo '<input type="hidden" name="format" value="'.FORMAT_HTML.'" />';
+        if ($CFG->defaulthtmleditor == 'htmlarea') { // for backwar compatibility
+            use_html_editor('message', 'formatblock subscript superscript copy cut paste clean undo redo justifyleft justifycenter justifyright justifyfull lefttoright righttoleft insertorderedlist insertunorderedlist outdent indent inserthorizontalrule createanchor nolink');
+        }
     } else {
         print_textarea(false, 5, 34, 0, 0, 'message', '');
         echo '<input type="hidden" name="format" value="'.FORMAT_MOODLE.'" />';

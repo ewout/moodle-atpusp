@@ -5011,6 +5011,8 @@ function print_recent_activity_note($time, $user, $text, $link, $return=false, $
  */
 function print_textarea($usehtmleditor, $rows, $cols, $width, $height, $name, $value='', $obsolete=0, $return=false, $id='',
 $editorclass='form-textarea-advanced') {
+    static $scriptcount = 0;
+
     global $CFG, $COURSE, $HTTPSPAGEREQUIRED, $THEME;
     $mincols = 65;
     $minrows = 10;
@@ -5018,20 +5020,24 @@ $editorclass='form-textarea-advanced') {
     if ($id === '') {
         $id = 'edit-'.$name;
     }
-    if (empty($CFG->editorsrc) && $usehtmleditor) { // for backward compatibility
-//            if (!empty($courseid) and has_capability('moodle/course:managefiles', get_context_instance(CONTEXT_COURSE, $courseid))) {
-//                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '&amp;httpsrequired=1';
-//                // needed for course file area browsing in image insert plugin
-//                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
-//                        $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php?id='.$courseid.$httpsrequired.'"></script>'."\n" : '';
-//            } else {
-//                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '?httpsrequired=1';
-//                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
-//                         $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php'.$httpsrequired.'"></script>'."\n" : '';
-//            }
-//            $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
-//                    $CFG->httpswwwroot .'/lib/editor/htmlarea/lang/en.php?id='.$courseid.'"></script>'."\n" : '';
-//            $scriptcount++;
+    
+    if (empty($CFG->editorsrc) && $usehtmleditor) {
+    
+         if ($CFG->defaulthtmleditor == 'htmlarea') { // for backward compatibility
+            if (!empty($courseid) and has_capability('moodle/course:managefiles', get_context_instance(CONTEXT_COURSE, $courseid))) {
+                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '&amp;httpsrequired=1';
+                // needed for course file area browsing in image insert plugin
+                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
+                        $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php?id='.$courseid.$httpsrequired.'"></script>'."\n" : '';
+            } else {
+                $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '?httpsrequired=1';
+                $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
+                $CFG->httpswwwroot .'/lib/editor/htmlarea/htmlarea.php'.$httpsrequired.'"></script>'."\n" : '';
+            }
+            $str .= ($scriptcount < 1) ? '<script type="text/javascript" src="'.
+                    $CFG->httpswwwroot .'/lib/editor/htmlarea/lang/en.php?id='.$courseid.'"></script>'."\n" : '';
+            $scriptcount++;
+        }
 
         if ($height && ($rows < $minrows)) {
             $rows = $minrows;
@@ -5046,8 +5052,7 @@ $editorclass='form-textarea-advanced') {
     } else {
             $editorclass = '';
     }
-    $str .= "\n".'<textarea class="form-textarea '.$editorclass.'" id="'. $id .'" name="'. $name .'" rows="'. $rows .'" cols="'. $cols
-    .'">'."\n";
+    $str .= "\n".'<textarea class="form-textarea'.($CFG->defaulthtmleditor!='htmlarea' ? ' '.$editorclass : '').'" id="'. $id .'" name="'. $name .'" rows="'. $rows .'" cols="'. $cols .'">'."\n";
 
     if ($usehtmleditor) {
         $str .= htmlspecialchars($value); // needed for editing of cleaned text!
@@ -5056,17 +5061,21 @@ $editorclass='form-textarea-advanced') {
     }
     $str .= '</textarea>'."\n";
     if ($usehtmleditor) {
-        $str_toggle = '<span class="helplink"><a href="javascript:mce_toggleEditor(\''. $id .'\');"><img width="50" height="17" src="'.$CFG->httpswwwroot.'/lib/editor/tinymce/images/toggle.gif" alt="'.get_string('editortoggle').'" title="'.get_string('editortoggle').'" class="icontoggle" /></a></span>';
+        if ($CFG->defaulthtmleditor=='tinymce') {
+             $str_toggle = '<span class="helplink"><a href="javascript:mce_toggleEditor(\''. $id .'\');"><img width="50" height="17" src="'.$CFG->httpswwwroot.'/lib/editor/tinymce/images/toggle.gif" alt="'.get_string('editortoggle').'" title="'.get_string('editortoggle').'" class="icontoggle" /></a></span>';
+        }
         // Show shortcuts button if HTML editor is in use, but only if JavaScript is enabled (MDL-9556)
         $str .= '<div class="textareaicons">';
         $str .= '<script type="text/javascript">
-//<![CDATA[
-mce_saveOnSubmit(\''.addslashes_js($id).'\');
-document.write(\''.addslashes_js($str_toggle).'\');
-document.write(\''.addslashes_js(editorshortcutshelpbutton()).'\');
-//]]>
-</script>';
-$str .= '</div>';
+                 //<![CDATA[' . "\n";
+        if ($CFG->defaulthtmleditor=='tinymce') {
+              $str .= "mce_saveOnSubmit('".addslashes_js($id)."');\n";
+              $str .= "document.write('".addslashes_js($str_toggle)."');\n";
+        }
+        $str .= "document.write('".addslashes_js(editorshortcutshelpbutton())."');\n";
+        $str .= "//]]>\n";
+        $str .= "</script>\n";
+        $str .= "</div>";
     }
     if ($return) {
         return $str;
