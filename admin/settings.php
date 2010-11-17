@@ -164,7 +164,7 @@ if (empty($SITE->fullname)) {
 }
 
 if (!empty($CFG->adminusehtmleditor)) {
-    use_html_editor();
+     //use_html_editor(); //TODO disabled to use 
 }
 
 print_footer();

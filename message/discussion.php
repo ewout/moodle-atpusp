@@ -43,7 +43,7 @@
        <title><?php echo get_string('discussion', 'message').': '.fullname($user) ?></title>
        <link rel="shortcut icon" href="<?php echo $CFG->wwwroot.'/theme/'.current_theme() ?>/favicon.ico" />
      </head>
-     <frameset rows="110,*,0,220">
+     <frameset rows="110,*,0,260">
        <noframes><body><?php
            echo '<a href="discussion.php?id='.$userid.'&amp;noframesjs=1">'.get_string('noframesjs', 'message').'</a>';
        ?></body></noframes>
@@ -56,7 +56,7 @@
               scrolling="no"  marginwidth="0" marginheight="0" frameborder="0" />
        
        <frame src="send.php?id=<?php p($user->id)?>"     name="send"
-              scrolling="no"  marginwidth="2" marginheight="2" frameborder="0" />
+              scrolling="no"  marginwidth="2" marginheight="1" frameborder="0" />
      </frameset>
     </html>
 

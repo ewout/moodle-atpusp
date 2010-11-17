@@ -389,6 +389,7 @@ if (file_exists("$CFG->dirroot/lib/setup.php"))  {       // Do not edit
     }
     die;
 }
+
 // MAKE SURE WHEN YOU EDIT THIS FILE THAT THERE ARE NO SPACES, BLANK LINES,
 // RETURNS, OR ANYTHING ELSE AFTER THE TWO CHARACTERS ON THE NEXT LINE.
 ?>
