@@ -44,10 +44,10 @@ class mod_tracker_mod_form extends moodleform_mod {
 
 	  $mform->addElement('text', 'ticketprefix', get_string('ticketprefix', 'tracker'), array('size' => 5));
 
-	  $mform->addElement('checkbox', 'enablecomments', get_string('enablecomments', 'tracker'));
+	  $mform->addElement('selectyesno', 'enablecomments', get_string('enablecomments', 'tracker'));
 	  $mform->setHelpButton('enablecomments', array('enablecomments', get_string('enablecomments', 'tracker'), 'tracker'));
 
-	  $mform->addElement('checkbox', 'allownotifications', get_string('notifications', 'tracker'));
+	  $mform->addElement('selectyesno', 'allownotifications', get_string('notifications', 'tracker'));
 	  $mform->setHelpButton('allownotifications', array('notifications', get_string('notifications', 'tracker'), 'tracker'));
 
       if (isset($this->_cm->id) && $assignableusers = get_users_by_capability(get_context_instance(CONTEXT_MODULE, $this->_cm->id), 'mod/tracker:resolve', 'u.id, firstname,lastname', 'lastname,firstname')){
