@@ -728,9 +728,9 @@ function tracker_searchforissues(&$tracker, $cmid){
     
     if ($success){
         if ($tracker->supportmode == 'bugtracker')
-            redirect ("view.php?id={$cmid}&amp;view=view&amp;page=browse");
+            redirect ("view.php?id={$cmid}&amp;view=view&amp;screen=browse");
         else 
-            redirect ("view.php?id={$cmid}&amp;view=view&amp;page=mytickets");
+            redirect ("view.php?id={$cmid}&amp;view=view&amp;screen=mytickets");
     }
     else{
         error ("Failed to set cookie: " . $cookie . "<br>");
