@@ -5018,7 +5018,7 @@ function print_recent_activity_note($time, $user, $text, $link, $return=false, $
  * @param int $courseid ?
  * @todo Finish documenting this function
  */
-function print_textarea($usehtmleditor, $rows, $cols, $width, $height, $name, $value='', $obsolete=0, $return=false, $id='',
+function print_textarea($usehtmleditor, $rows, $cols, $width=600, $height=100, $name, $value='', $obsolete=0, $return=false, $id='',
 $editorclass='form-textarea-advanced') {
     static $scriptcount = 0;
 
