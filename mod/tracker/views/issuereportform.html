@@ -32,8 +32,29 @@ if (tracker_requiresfile($tracker->id)){
 }
 ?>
 
+<!-- hds - script para validar dados do formulario -->
+<script type="text/javascript">
+// Validação
+function ValidaFormulario () {
+ // Summary
+ if (document.form.summary.value==""){
+ alert("Preencha o campo Sumário");
+ document.form.summary.focus();
+   return false;
+ }
+ // Description
+ if (document.form.description.value==""){
+ alert("Preencha o campo Descrição");
+ document.form.description.focus();
+   return false;
+ }
+
+return true;
+}
+</script>
+
 <!-- Print Bug Form -->
-<form name="form" action="view.php" method="post" <?php echo $enctype ?> >
+<form name="form" action="view.php" onSubmit="return ValidaFormulario();" method="post" <?php echo $enctype ?> >
 <input type="hidden" name="id" value="<?php echo $cm->id ?>" />
 <input type="hidden" name="view" value="view" />
 <input type="hidden" name="screen" value="browse" />
