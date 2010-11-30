@@ -912,8 +912,7 @@ class questionnaire_question {
         //$canusehtmleditor = true;
         if ($canusehtmleditor) {
             echo ('<div style="width:600px">'); // JR to avoid HTMLarea spreading the whole width of window
-            //echo "gcc -> print_textarea($canusehtmleditor, '', '', $cols, $rows, $name, $value);";
-            print_textarea($canusehtmleditor, '', '', $cols, $rows, $name, $value);
+            print_textarea($canusehtmleditor, $rows, $cols, $cols, $rows, $name, $value);
             echo ('</div>');
             use_html_editor($name); //use HTML EDITOR for this textarea only...
         } else {
