@@ -34,7 +34,7 @@ class htmlEditor {
                 break;
             default:
                 $this->configuration[] = $CFG->httpswwwroot . '/lib/editor/'.$editor.'/'.$editor.'.php?id='. $courseid;
-                $this->configuration[] = $CFG->httpswwwroot . '/lib/editor/'.$editor.'/lang/en.php?id='.$courseid; // TODO fix-me bug (algem deve criar o arquivo pt.js ou pt.php no fckeditor)
+                $this->configuration[] = $CFG->httpswwwroot . '/lib/editor/'.$editor.'/lang/en.php?id='.$courseid; // TODO fix-me bug (algem deve criar o arquivo pt.js ou pt.php no textarea)
                 $configured[$editor] = true;
                 $CFG->defaulthtmleditor='htmlarea'; //TODO fix-me. To avoid this var this variable must be auto-load in config.php
                 break;

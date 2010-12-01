@@ -5018,12 +5018,12 @@ function print_recent_activity_note($time, $user, $text, $link, $return=false, $
  * @param int $courseid ?
  * @todo Finish documenting this function
  */
-function print_textarea($usehtmleditor, $rows, $cols, $width=600, $height=100, $name, $value='', $courseid=0, $return=false, $id='',
+function print_textarea($usehtmleditor, $rows, $cols, $width=0, $height=0, $name, $value='', $courseid=0, $return=false, $id='',
 $editorclass='form-textarea-advanced') {
     static $scriptcount = 0;
 
     global $CFG, $COURSE, $HTTPSPAGEREQUIRED, $THEME;
-    $mincols = 65;
+    $mincols = 40;
     $minrows = 10;
     $str = '';
 
@@ -5053,17 +5053,14 @@ $editorclass='form-textarea-advanced') {
             $scriptcount++;
         }
 
-        if ($height && ($rows < $minrows)) {
-            $rows = $minrows;
-        }
-        if ($width && ($cols < $mincols)) {
-             $cols = $mincols;
-        }
     }
 
+    // force to use minrows and mincols to avoid problens in htmlarea
+    if ($rows < $minrows) { $rows = $minrows; }
+    if ($cols = $mincols) { $cols = $mincols; }
+
     if ($usehtmleditor) {
-            //$THEME->htmleditors[] = $id;
-            echo "\n";
+            $THEME->htmleditors[] = $id;
     } else {
             $editorclass = '';
     }
@@ -5098,8 +5095,6 @@ $editorclass='form-textarea-advanced') {
              $str .= "</script>\n";
         }
     }
-
-
 
     if ($return) {
         return $str;

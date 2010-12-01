@@ -892,15 +892,12 @@ class questionnaire_question {
         $cols = $this->length;
         $rows = $this->precise;
         $str = '';
-        // if NO cols or rows specified: use HTML editor (if available in this context)
-        if (!$cols || !$rows) {
+        // default rows and columns is 10 and 60
+        if (!$rows) { $rows = 10; }
+        if (!$cols) {
             $cols = 60;
-            $rows = 5;
             $canusehtmleditor = $this->usehtmleditor;
-
-        // if cols & rows specified, do not use HTML editor but plain text box
-        // use default (60 cols and 5 rows) OR user-specified values
-        } else {
+        } else { // if columns is specified dont use HTML editor use plain text box
             $canusehtmleditor = false;
         }
         $name = 'q'.$this->id;
@@ -912,7 +909,7 @@ class questionnaire_question {
         //$canusehtmleditor = true;
         if ($canusehtmleditor) {
             echo ('<div style="width:600px">'); // JR to avoid HTMLarea spreading the whole width of window
-            print_textarea($canusehtmleditor, $rows, $cols, $cols, $rows, $name, $value);
+            print_textarea($canusehtmleditor, $rows, $cols, 0, 0, $name, $value);
             echo ('</div>');
             use_html_editor($name); //use HTML EDITOR for this textarea only...
         } else {
