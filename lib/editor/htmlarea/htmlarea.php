@@ -125,7 +125,7 @@ HTMLArea.Config = function () {
     this.version = "3.0";
 
     this.width = "auto";
-    this.height = "auto";
+    this.height = "auto";     // forced by gcc to avoid more bugs in fckeditor
 
     // enable creation of a status bar?
     this.statusBar = true;
