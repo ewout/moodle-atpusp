@@ -174,6 +174,17 @@ function useredit_shared_definition(&$mform) {
         $mform->setAdvanced('htmleditor');
     }
 
+    // TODO implementar traduções para usar o método get_string
+    if ($CFG->htmleditor) {        
+        $editor = (isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor : 'htmlarea');
+        $choices = array();
+        $choices['htmlarea'] = "Htmlarea: editor html original de moodle";
+        $choices['tinymce']  = "Tinymce: editor html de moodle 2.0";
+        $mform->addElement('select', 'htmleditorid', "Editor HTML", $choices);
+        $mform->setDefault('htmleditorid', $editor);
+        $mform->setAdvanced('htmleditorid');
+    }
+
     if (empty($CFG->enableajax)) {
         $mform->addElement('static', 'ajaxdisabled', get_string('ajaxuse'), get_string('ajaxno'));
         $mform->setAdvanced('ajaxdisabled');
