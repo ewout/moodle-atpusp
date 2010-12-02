@@ -3351,6 +3351,18 @@ function xmldb_main_upgrade($oldversion=0) {
         set_config('filter_mediaplugin_enable_ogg', 1);
         upgrade_main_savepoint($result, 2007101590.01);
     }
+
+    // GCC-001. add htmleditorid in _user table
+    if ($result && $oldversion < 2007101591.001) {  // valor para pegar outras mudanzas a partir desta data
+       $table = new XMLDBTable('user');
+       $field = new XMLDBField('htmleditorid');
+       $field->setAttributes(XMLDB_TYPE_CHAR, '20', null, null, null, null, null, null, 'screenreader');
+       if (!field_exists($table, $field)) {
+           add_field($table, $field);
+       }
+       upgrade_main_savepoint($result0, 2007101591.001);
+    }
+
     return $result;
 }
 

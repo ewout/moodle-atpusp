@@ -480,7 +480,8 @@
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="trackforums" NEXT="trustbitmask"/>
         <FIELD NAME="trustbitmask" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="timemodified" NEXT="imagealt"/>
         <FIELD NAME="imagealt" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="alt tag for user uploaded image" PREVIOUS="trustbitmask" NEXT="screenreader"/>
-        <FIELD NAME="screenreader" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="flag for determining whehter the user uses a screenreader." PREVIOUS="imagealt"/>
+        <FIELD NAME="screenreader" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="flag for determining whehter the user uses a screenreader." PREVIOUS="imagealt" NEXT="htmleditorid" />
+        <FIELD NAME="htmleditorid" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="screenreader"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
