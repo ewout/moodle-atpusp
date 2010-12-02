@@ -5022,7 +5022,8 @@ function print_textarea($usehtmleditor, $rows, $cols, $width=0, $height=0, $name
 $editorclass='form-textarea-advanced') {
     static $scriptcount = 0;
 
-    global $CFG, $COURSE, $HTTPSPAGEREQUIRED, $THEME;
+    global $CFG, $COURSE, $HTTPSPAGEREQUIRED, $THEME, $USER;
+
     $mincols = 40;
     $minrows = 10;
     $str = '';
@@ -5031,13 +5032,16 @@ $editorclass='form-textarea-advanced') {
         $id = 'edit-'.$name;
     }
 
+    $defaulteditor = isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor  : 'htmlarea' ;
+    $editor = isset($USER->htmleditorid) ? $USER->htmleditorid : $defaulteditor;
+
     if (empty($CFG->editorsrc) && $usehtmleditor) {
          
          if (empty($courseid)) {
              $courseid = $COURSE->id;
          }
     
-         if ($CFG->defaulthtmleditor == 'htmlarea') {    // for backward compatibility
+         if ($editor == 'htmlarea') {    // for backward compatibility
             if (!empty($courseid) and has_capability('moodle/course:managefiles', get_context_instance(CONTEXT_COURSE, $courseid))) {
                 $httpsrequired = empty($HTTPSPAGEREQUIRED) ? '' : '&amp;httpsrequired=1';
                 // needed for course file area browsing in image insert plugin
@@ -5052,7 +5056,7 @@ $editorclass='form-textarea-advanced') {
                     $CFG->httpswwwroot .'/lib/editor/htmlarea/lang/en.php?id='.$courseid.'"></script>'."\n" : '';
             $scriptcount++;
         }
-
+        
     }
 
     // force to use minrows and mincols to avoid problens in htmlarea
@@ -5065,7 +5069,7 @@ $editorclass='form-textarea-advanced') {
             $editorclass = '';
     }
 
-    $str .= "\n".'<textarea class="form-textarea'.($CFG->defaulthtmleditor!='htmlarea' ? ' '.$editorclass : '').'" id="'. $id .'" name="'. $name .'" rows="'. $rows .'" cols="'. $cols .'">'."\n";
+    $str .= "\n".'<textarea class="form-textarea'.($editor!='htmlarea' ? ' '.$editorclass : '').'" id="'. $id .'" name="'. $name .'" rows="'. $rows .'" cols="'. $cols .'">'."\n";
 
     if ($usehtmleditor) {
         $str .= htmlspecialchars($value); // needed for editing of cleaned text!
@@ -5075,7 +5079,7 @@ $editorclass='form-textarea-advanced') {
     $str .= '</textarea>'."\n";
 
     if ($usehtmleditor) {
-        if ($CFG->defaulthtmleditor=='tinymce') {
+        if ($editor=='tinymce') {
              $str_toggle = '<span class="helplink"><a href="javascript:mce_toggleEditor(\''. $id .'\');"><img width="50" height="17" src="'.$CFG->httpswwwroot.'/lib/editor/tinymce/images/toggle.gif" alt="'.get_string('editortoggle').'" title="'.get_string('editortoggle').'" class="icontoggle" /></a></span>';
              // Show shortcuts button if HTML editor is in use, but only if JavaScript is enabled (MDL-9556)
              $str .= '<div class="textareaicons">'."\n";

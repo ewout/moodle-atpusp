@@ -7,7 +7,7 @@ class htmlEditor {
     public function __construct() { }
 
     public function configure($editor = NULL, $courseid = NULL) {
-        global $CFG;
+        global $CFG, $USER;
         static $configured = Array();
         
         if (!isset($CFG->htmleditor) or (!$CFG->htmleditor)) {
@@ -15,8 +15,10 @@ class htmlEditor {
         }
 
         if ($editor == '') {
-            $editor = (isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor : 'htmlarea'); // TODO change html to other default editor
+            $defaulteditor = isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor  : 'htmlarea' ;
+            $editor = isset($USER->htmleditorid) ? $USER->htmleditorid : $defaulteditor;
         }
+
         if (isset($configured[$editor])) {
             return $configured[$editor];
         }

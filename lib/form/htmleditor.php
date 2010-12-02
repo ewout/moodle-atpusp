@@ -60,9 +60,12 @@ class MoodleQuickForm_htmleditor extends MoodleQuickForm_textarea{
     }
 
     function toHtml(){
-        global $CFG;
+        global $CFG, $USER;
+
+        $defaulteditor = isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor  : 'htmlarea' ;
+        $editor = isset($USER->htmleditorid) ? $USER->htmleditorid : $defaulteditor;
         
-        if ($CFG->defaulthtmleditor == 'htmlarea') {  // for backward compatibility with default htmlarea
+        if ($editor == 'htmlarea') {  // for backward compatibility with default htmlarea
              if ($this->_canUseHtmlEditor && !$this->_flagFrozen) {
                   ob_start();
                   use_html_editor($this->getName(), '', $this->getAttribute('id'));
