@@ -121,7 +121,11 @@ if (has_capability('moodle/site:sendmessage', get_context_instance(CONTEXT_SYSTE
         echo '</div>';
         echo '<input class="message-send-button" type="submit" value="'.get_string('sendmessage', 'message').'" />';
         echo '<input type="hidden" name="format" value="'.FORMAT_HTML.'" />';
-        if ($CFG->defaulthtmleditor == 'htmlarea') { // for backwar compatibility
+        
+        $defaulteditor = isset($CFG->defaulthtmleditor) ? $CFG->defaulthtmleditor  : 'htmlarea' ;
+        $editor = isset($USER->htmleditorid) ? $USER->htmleditorid : $defaulteditor;
+
+        if ($editor == 'htmlarea') { // for backwar compatibility
             use_html_editor('message', 'formatblock subscript superscript copy cut paste clean undo redo justifyleft justifycenter justifyright justifyfull lefttoright righttoleft insertorderedlist insertunorderedlist outdent indent inserthorizontalrule createanchor nolink');
         }
     } else {
