@@ -11,7 +11,7 @@
 
     $upload_max_filesize = get_max_upload_file_size($CFG->maxbytes);
 
-    if ($httpsrequired or (!empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] != 'off')) {
+    if (isset($httpsrequired) && ($httpsrequired or (!empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] != 'off'))) {
         $url = preg_replace('|https?://[^/]+|', '', $CFG->wwwroot).'/lib/editor/htmlarea/';
     } else {
         $url = $CFG->wwwroot.'/lib/editor/htmlarea/';
