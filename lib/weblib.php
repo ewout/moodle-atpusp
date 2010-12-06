@@ -5061,7 +5061,7 @@ $editorclass='form-textarea-advanced') {
 
     // force to use minrows and mincols to avoid problens in htmlarea
     if ($rows < $minrows) { $rows = $minrows; }
-    if ($cols = $mincols) { $cols = $mincols; }
+    if ($cols < $mincols) { $cols = $mincols; }
 
     if ($usehtmleditor) {
             $THEME->htmleditors[] = $id;
