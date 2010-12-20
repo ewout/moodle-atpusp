@@ -128,10 +128,12 @@
             $streveryoneisnowsubscribed = get_string('everyoneisnowsubscribed', 'forum');
             $strallowchoice = get_string('allowchoice', 'forum');
             echo '<span class="helplink">' . get_string("forcessubscribe", 'forum') . '</span><br />';
-            helpbutton("subscription", $strallowchoice, "forum");
+            //helpbutton("subscription", $strallowchoice, "forum");
             echo '&nbsp;<span class="helplink">';
             if (has_capability('mod/forum:managesubscriptions', $context)) {
-                echo "<a title=\"$strallowchoice\" href=\"subscribe.php?id=$forum->id&amp;force=no\">$strallowchoice</a>";
+                //Retirado pois esta acao nao gera log e nem pede confirmacao (http://redmine.atp.usp.br/issues/270)
+                //echo "<a title=\"$strallowchoice\" href=\"subscribe.php?id=$forum->id&amp;force=no\">$strallowchoice</a>";
+		echo '&nbsp;';
             } else {
                 echo $streveryoneisnowsubscribed;
             }
@@ -146,11 +148,13 @@
             $strforcesubscribe = get_string("forcesubscribe", "forum");
             $strshowsubscribers = get_string("showsubscribers", "forum");
             echo '<span class="helplink">' . get_string("allowsallsubscribe", 'forum') . '</span><br />';
-            helpbutton("subscription", $strforcesubscribe, "forum");
+            //helpbutton("subscription", $strforcesubscribe, "forum");
             echo '&nbsp;';
 
             if (has_capability('mod/forum:managesubscriptions', $context)) {
-                echo "<span class=\"helplink\"><a title=\"$strforcesubscribe\" href=\"subscribe.php?id=$forum->id&amp;force=yes\">$strforcesubscribe</a></span>";
+                //Retirado pois esta acao nao gera log e nem pede confirmacao (http://redmine.atp.usp.br/issues/270)
+                //echo "<span class=\"helplink\"><a title=\"$strforcesubscribe\" href=\"subscribe.php?id=$forum->id&amp;force=yes\">$strforcesubscribe</a></span>";
+		echo '&nbsp;';
             } else {
                 echo '<span class="helplink">'.$streveryonecannowchoose.'</span>';
             }
