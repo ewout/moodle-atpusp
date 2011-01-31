@@ -304,13 +304,8 @@ class grade_report_grader extends grade_report {
             }
             $SESSION->gradeuserreport->sortitemid = $this->sortitemid;
         } else {
-            // not requesting sort, use last setting (for paging)
-
-            if (isset($SESSION->gradeuserreport->sortitemid)) {
-                $this->sortitemid = $SESSION->gradeuserreport->sortitemid;
-            }else{
-                $this->sortitemid = 'lastname';
-            }
+	    //caso nao passe parametro sortitemid, assume FIRSTNAME. http://redmine.atp.usp.br/issues/289
+            $this->sortitemid = 'firstname';
 
             if (isset($SESSION->gradeuserreport->sort)) {
                 $this->sortorder = $SESSION->gradeuserreport->sort;
