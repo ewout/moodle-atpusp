@@ -182,8 +182,9 @@
                 echo get_string('notavailable');
             } else {
                 echo '<div class="summary">';
-                $summaryformatoptions->noclean = true;
-                echo format_text($thissection->summary, FORMAT_HTML, $summaryformatoptions);
+		//Nao Imprimir Sumario no Formato TABS(ABAS), pois a informacao do sumario aparece na ABA
+                //$summaryformatoptions->noclean = true;
+                //echo format_text($thissection->summary, FORMAT_HTML, $summaryformatoptions);
 
                 if (isediting($course->id) && has_capability('moodle/course:update', get_context_instance(CONTEXT_COURSE, $course->id))) {
                     echo ' <a title="'.$streditsummary.'" href="editsection.php?id='.$thissection->id.'">'.
