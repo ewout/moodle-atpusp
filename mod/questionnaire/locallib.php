@@ -250,7 +250,8 @@ class questionnaire {
                     $questionnaire->grade = $this->grade;
                     $questionnaire->cmidnumber = $this->cm->idnumber;
                     $questionnaire->courseid = $this->course->id;
-                    questionnaire_update_grades($questionnaire, $quser);
+		    //Linha comentada para nao incluir item de nota no quadro de notas do moodle
+                    //questionnaire_update_grades($questionnaire, $quser);
                 }
 
                 add_to_log($this->course->id, "questionnaire", "submit", "view.php?id={$this->cm->id}", "{$this->name}", $this->cm->id, $USER->id);
