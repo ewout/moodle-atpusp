@@ -248,8 +248,9 @@ foreach ($modnames as $id => $value){
 
 echo '</div>';
                    echo '<div class="summary">';
-                   $summaryformatoptions->noclean = true;
-                   echo format_text($thissection->summary, FORMAT_HTML, $summaryformatoptions);
+                   //Nao Imprimir Sumario no Formato TABS(ABAS), pois a informacao do sumario aparece na ABA
+                   //$summaryformatoptions->noclean = true;
+                   //echo format_text($thissection->summary, FORMAT_HTML, $summaryformatoptions);
                    echo ' <a title="'.$streditsummary.'" href="editsection.php?id='.$thissection->id.'">'.
                         '<img src="'.$CFG->pixpath.'/t/edit.gif" alt="'.$streditsummary.'" /></a><br /><br />';
                    echo '</div>';
