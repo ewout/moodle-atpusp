@@ -43,7 +43,8 @@ function checklist_add_instance($checklist) {
 
     $checklist = stripslashes_recursive($checklist);
     $checklist->id = $returnid;
-    checklist_grade_item_update($checklist);
+    //Linha comentada para nao incluir item de nota no quadro de notas do moodle
+    //checklist_grade_item_update($checklist);
 
     return $returnid;
 }
@@ -71,7 +72,8 @@ function checklist_update_instance($checklist) {
     $chk->setallevents();
 
     $checklist = stripslashes_recursive($checklist);
-    checklist_grade_item_update($checklist);
+    //Linha comentada para nao incluir item de nota no quadro de notas do moodle
+    //checklist_grade_item_update($checklist);
 
     return $returnid;
 }
@@ -175,7 +177,8 @@ function checklist_update_grades($checklist, $userid=0) {
 
     $grades = get_records_sql($sql);
 
-    checklist_grade_item_update($checklist, $grades);
+    //Linha comentada para nao incluir item de nota no quadro de notas do moodle
+    //checklist_grade_item_update($checklist, $grades);
 }
 
 function checklist_grade_item_delete($checklist) {
@@ -458,10 +461,11 @@ function checklist_reset_userdata($data) {
         $sql = 'checklist IN ('.$checklistkeys.') AND userid != 0';
         delete_records_select('checklist_item', $sql);
 
+        //Linhas comentadas para nao incluir item de nota no quadro de notas do moodle
         // Reset the grades
-        foreach ($checklists as $checklist) {
-            checklist_grade_item_update($checklist, 'reset');            
-        }
+        //foreach ($checklists as $checklist) {
+        //    checklist_grade_item_update($checklist, 'reset');            
+        //}
     }
 
     return $status;
