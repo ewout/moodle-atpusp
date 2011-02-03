@@ -127,7 +127,7 @@
 //Botao para incluir/alterar texto da aba					
 $btneditsummary='';
 if (isediting($course->id) && has_capability('moodle/course:update', get_context_instance(CONTEXT_COURSE, $course->id)))
-   $btneditsummary='<a id="notab" title="'.get_string('edit').'" href="editsection.php?id='.$thissection->id.'"><img src="'.$CFG->pixpath.'/t/edit.gif" alt="'.$streditsummary.'" /></a>';
+   $btneditsummary='<a id="notab" title="'.get_string('edittab','format_onetopic').' '.$section.'" href="editsection.php?id='.$thissection->id.'"><img src="'.$CFG->pixpath.'/t/edit.gif" alt="'.$streditsummary.'" /></a>';
 
 					$pestanas[] = new tabobject("tab_topic_" . $section, $CFG->wwwroot.'/course/view.php?id='.$course->id . '&topic='.$section,
                     '<font style="white-space:nowrap">'. s($strsummary).'</font>'.$btneditsummary.'', s($strsummary));
