@@ -123,9 +123,14 @@
 					if ($displaysection != $section) {
 						$sectionmenu['topic='.$section] = s($section.$strsummary);
 					}
-					
+
+//Botao para incluir/alterar texto da aba					
+$btneditsummary='';
+if (isediting($course->id) && has_capability('moodle/course:update', get_context_instance(CONTEXT_COURSE, $course->id)))
+   $btneditsummary='<a id="notab" title="'.get_string('edit').'" href="editsection.php?id='.$thissection->id.'"><img src="'.$CFG->pixpath.'/t/edit.gif" alt="'.$streditsummary.'" /></a>';
+
 					$pestanas[] = new tabobject("tab_topic_" . $section, $CFG->wwwroot.'/course/view.php?id='.$course->id . '&topic='.$section,
-                    '<font style="white-space:nowrap">' . s($strsummary) . "</font>", s($strsummary));
+                    '<font style="white-space:nowrap">'. s($strsummary).'</font>'.$btneditsummary.'', s($strsummary));
 				}
 				$section++;
 				continue;
@@ -181,17 +186,6 @@
             if (!has_capability('moodle/course:viewhiddensections', $context) and !$thissection->visible) {   // Hidden for students
                 echo get_string('notavailable');
             } else {
-                echo '<div class="summary">';
-		//Nao Imprimir Sumario no Formato TABS(ABAS), pois a informacao do sumario aparece na ABA
-                //$summaryformatoptions->noclean = true;
-                //echo format_text($thissection->summary, FORMAT_HTML, $summaryformatoptions);
-
-                if (isediting($course->id) && has_capability('moodle/course:update', get_context_instance(CONTEXT_COURSE, $course->id))) {
-                    echo ' <a title="'.$streditsummary.'" href="editsection.php?id='.$thissection->id.'">'.
-                         '<img src="'.$CFG->pixpath.'/t/edit.gif" alt="'.$streditsummary.'" /></a><br /><br />';
-                }
-                echo '</div>';
-
                 print_section($course, $thissection, $mods, $modnamesused);
 
                 if (isediting($course->id)) {
