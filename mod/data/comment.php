@@ -63,7 +63,7 @@
 
 
     if ($mform->is_cancelled()) {
-        redirect('view.php?rid='.$record->id.'&amp;page='.$page);
+        redirect('view.php?d='.$data->id.'&amp;mode=single&amp;page='.$page);
     }
 
     switch ($mode) {
@@ -79,7 +79,7 @@
             $newcomment->content  = $formadata->content;
             $newcomment->recordid = $formadata->rid;
             if (insert_record('data_comments',$newcomment)) {
-                redirect('view.php?rid='.$record->id.'&amp;page='.$page);
+                redirect('view.php?d='.$data->id.'&amp;mode=single&amp;page='.$page);
             } else {
                 error('Error while saving comment.');
             }
@@ -98,7 +98,7 @@
             $updatedcomment->modified = time();
 
             if (update_record('data_comments',$updatedcomment)) {
-                redirect('view.php?rid='.$record->id.'&amp;page='.$page);
+                redirect('view.php?d='.$data->id.'&amp;mode=single&amp;page='.$page);
             } else {
                 error('Error while saving comment.');
             }
