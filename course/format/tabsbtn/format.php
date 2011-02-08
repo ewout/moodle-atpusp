@@ -180,7 +180,7 @@ if (isediting($course->id) && has_capability('moodle/course:update', get_context
             }
 
             echo '<tr id="section-'.$section.'" class="section main'.$sectionstyle.'">';
-            echo '<td class="left side">'.$currenttext.$section.'</td>';
+            echo '<td class="left side"></td>';
 
             echo '<td class="content">';
             if (!has_capability('moodle/course:viewhiddensections', $context) and !$thissection->visible) {   // Hidden for students
