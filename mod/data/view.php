@@ -644,7 +644,7 @@
                         data_generate_default_template($data, 'listtemplate', 0, false, false);
                     }
                     echo $data->listtemplateheader;
-                    data_print_template('listtemplate', $records, $data, $search, $page);
+                    data_print_template('listtemplate', $records, $data, $search, $page, false, $nowperpage);
                     echo $data->listtemplatefooter;
 
                     print_paging_bar($totalcount, $page, $nowperpage, $baseurl, $pagevar='page');

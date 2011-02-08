@@ -918,13 +918,18 @@ function data_get_participants($dataid) {
  *       @param string $template                                        *
  * output null                                                          *
  ************************************************************************/
-function data_print_template($template, $records, $data, $search='', $page=0, $return=false) {
+function data_print_template($template, $records, $data, $search='', $page=0, $return=false, $nowperpage=0) {
     global $CFG;
     $cm = get_coursemodule_from_instance('data', $data->id);
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
     static $fields = NULL;
     static $isteacher;
     static $dataid = NULL;
+
+    $counter=0; //hds-Conta a pagina do post no formato SINGLETEMPLATE.Objetivo:criar links para o post instanciado
+    if ($template == 'listtemplate') //lista de $records
+	$counter = $nowperpage * $page;
+
     if (empty($dataid)) {
         $dataid = $data->id;
     } else if ($dataid != $data->id) {
@@ -992,10 +997,12 @@ function data_print_template($template, $records, $data, $search='', $page=0, $r
         $patterns[]='##comments##';
         if (($template == 'listtemplate') && ($data->comments)) {
             $comments = count_records('data_comments','recordid',$record->id);
-            $replacement[] = '<a href="view.php?rid='.$record->id.'#comments">'.get_string('commentsn','data', $comments).'</a>';
+            $replacement[] = '<a href="view.php?d='.$data->id.'&amp;mode=single&amp;page='.$counter.'#comments">'.get_string('commentsn','data', $comments).'</a>';
         } else {
             $replacement[] = '';
         }
+	//$counter-variavel que guarda $page de cada $record, para instanciar a pagina correta
+	$counter++;
 
         // actual replacement of the tags
         $newtext = str_ireplace($patterns, $replacement, $data->{$template});
