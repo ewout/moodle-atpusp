@@ -4,7 +4,6 @@
 }
 
 .error{
-    font-size: 60%;
     color: red;
 }
 
