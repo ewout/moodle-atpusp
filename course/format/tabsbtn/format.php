@@ -210,6 +210,16 @@ foreach ($modnames as $id => $value){
                   title="'.get_string('addbtn','format_tabsbtn'),' ', get_string('resourcetypefile','resource').'">
                   <img src="'.$CFG->wwwroot.'/course/format/tabsbtn/buttons/file.png" />
               </a>';
+      } if (file_exists($fileprefix.'simplefileupload.png')){
+         echo '<a href="'.$CFG->wwwroot.'/course/modedit.php?add='.$id.'&type=simplefileupload&course='.$course->id.'&section='.$section.'&return=0"
+                  title="'.get_string('resourcetypesimplefileupload','resource').'">
+                  <img src="'.$CFG->wwwroot.'/course/format/tabsbtn/buttons/simplefileupload.png" />
+              </a>';
+      } if (file_exists($fileprefix.'folder.png')){
+         echo '<a href="'.$CFG->wwwroot.'/course/modedit.php?add='.$id.'&type=directory&course='.$course->id.'&section='.$section.'&return=0"
+                  title="'.get_string('resourcetypedirectory','resource').'">
+                  <img src="'.$CFG->wwwroot.'/course/format/tabsbtn/buttons/folder.png" />
+              </a>';
       } if (file_exists($fileprefix.'ims.png')){
          echo '<a href="'.$CFG->wwwroot.'/course/modedit.php?add='.$id.'&type=ims&course='.$course->id.'&section='.$section.'&return=0"
                   title="'.get_string('resourcetypeims','resource').'">
