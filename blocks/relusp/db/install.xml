@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/relusp/db" VERSION="20101122" COMMENT="XMLDB file for Moodle blocks/relusp"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="tutordiary_interactions" COMMENT="List of possible interactions for the tutor diary" NEXT="tutordiary">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="course"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="interaction"/>
+        <FIELD NAME="interaction" TYPE="char" LENGTH="250" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Name for the interaction" PREVIOUS="course"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="interaction_k" UNIQUE="false" FIELDS="interaction" NEXT="course_k"/>
+        <INDEX NAME="course_k" UNIQUE="false" FIELDS="course" PREVIOUS="interaction_k"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="tutordiary" COMMENT="Default comment for the table, please edit me" PREVIOUS="tutordiary_interactions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="tutorid"/>
+        <FIELD NAME="tutorid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timemodified" NEXT="courseid"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="tutorid" NEXT="interactionid"/>
+        <FIELD NAME="interactionid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="courseid" NEXT="timedevoted"/>
+        <FIELD NAME="timedevoted" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="interactionid" NEXT="studentid"/>
+        <FIELD NAME="studentid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="interactionid" NEXT="requestdate"/>
+        <FIELD NAME="requestdate" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="studentid" NEXT="responsedate"/>
+        <FIELD NAME="responsedate" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="requestdate" NEXT="notes"/>
+        <FIELD NAME="notes" TYPE="text" LENGTH="medium" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="responsedate"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="timemodified_k" UNIQUE="false" FIELDS="timemodified" NEXT="tutorid_k"/>
+        <INDEX NAME="tutorid_k" UNIQUE="false" FIELDS="tutorid" PREVIOUS="timemodified_k" NEXT="courseid_k"/>
+        <INDEX NAME="courseid_k" UNIQUE="false" FIELDS="courseid" PREVIOUS="tutorid_k" NEXT="studentid_k"/>
+        <INDEX NAME="studentid_k" UNIQUE="false" FIELDS="studentid" PREVIOUS="courseid_k" NEXT="requestdate_k"/>
+        <INDEX NAME="requestdate_k" UNIQUE="false" FIELDS="requestdate" PREVIOUS="studentid_k"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

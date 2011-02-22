@@ -1,0 +1,442 @@
+<?php
+//	Sistema de Relatórios USP para Moodle
+//	Copyright (C) 2010 Neomundi Internet
+//
+//	This program is free software: you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
+//
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//
+//	You should have received a copy of the GNU General Public License
+//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+// Página responsável pela apresentação dos formulários de parametrização dos relatórios
+
+// Obtem Id do curso
+$id = optional_param('id', SITEID, PARAM_INT);
+
+// Cria uma objeto página para uso nas Tabs
+$page = page_create_object($this->instance->pagetype, $this->instance->pageid);
+
+// Obtem ação corrente
+$currentaction = optional_param('currentaction', '', PARAM_ALPHA);
+
+// Se não está definida, defina a primeira tab por padrão
+if (empty($currentaction)) {
+	$currentaction = 'configstudentrep';
+}
+// Imprime as tabs
+include('config_instance_tabs.html');
+
+// Prepara array de opções com porcentagens
+$perc = array();
+for($i=10; $i<=100; $i+=10)
+	$perc[$i]="$i%";
+
+// Prepara array com opções de função de cálculo
+$functype = array('MEAN' => 'Média', 'MEDIAN' => 'Mediana');
+// Obtem contexto de segurança
+$context = get_context_instance(CONTEXT_BLOCK, $this->instance->id);
+
+// Formulário para parametrização do diário do tutor
+if ($currentaction=='configtutordiary') {
+?>
+<!-- // Formulário para gerenciar interações -->
+<script type="text/javascript" src="<?php print $CFG->wwwroot ?>/blocks/relusp/jquery.js"></script>
+<div style="text-align: center;">
+<b><label for="interactions"><?php print_string('possibleinteractions', 'block_relusp'); ?></label></b><br><br>
+<input type="text" name="newinteraction" id="newinteraction">
+<button id="add"><?php print_string('add', 'block_relusp'); ?>
+</button><br>
+<select name="interactions" id="interactions" size="10">
+</select><br>
+<button id="del"><?php print_string('del', 'block_relusp'); ?>
+</button>
+</div>
+
+<script>
+
+/**
+	* Atualiza lista com as interações
+**/
+function UpdateSelect(j) {
+	options="";
+	if (j!=null) {
+		for (var i = 0; i < j.length; i++) {
+			options += '<option value="' + j[i].id + '">' + j[i].interaction + '</option>';
+		}
+		$("#interactions").html(options);
+		$("#interactions").attr("selectedIndex", 0);
+	} else
+		$("#interactions").html(options);	
+}
+
+/**
+	* Faz uma consulta AJAX para obter a nova lista de interações
+**/
+function CompleteUpdateSelect() {
+	$.getJSON("<?php echo $CFG->wwwroot ?>"+
+			  "/blocks/relusp/ajax_config_global.php?func=list&courseid=<?php echo $this->instance->pageid; ?>",
+		function(j){ UpdateSelect(j); });	
+}
+
+// Bloco executado quando o documento for carregado
+$(document).ready(function(){
+	// Atualiza lista de interações
+	CompleteUpdateSelect();
+});
+
+// Bloco executado quando clica-se no botão de adicionar nova interação
+$("#add").click(function(){
+	// Verifica se há interação
+	if ($("#newinteraction").attr("value").length == 0)
+		alert("<?php print_string('typenewinteraction', 'block_relusp'); ?>");
+	else { // Insere nova interação
+		$.getJSON("<?php echo $CFG->wwwroot ?>"+
+				  "/blocks/relusp/ajax_config_global.php?func=add&courseid=<?php echo $this->instance->pageid; ?>&value="+
+				  encodeURIComponent($("input#newinteraction").val()), function(j){
+			if (j) CompleteUpdateSelect(); 
+		});		
+	}
+	return false;
+});
+
+// Bloco executado quando clica-se no botão de adicionar nova interação
+$("#del").click(function(){
+	// Verifica se a interação está selecionada
+	if ($("#interactions").attr("selectedIndex")==-1)
+		alert("<?php print_string('typeinteractiondel', 'block_relusp'); ?>");
+	else {
+		// Confirma a intenção
+	 	if (confirm("<?php print_string('suredel', 'block_relusp'); ?>"))
+			// Apaga a interação
+			$.getJSON("<?php echo $CFG->wwwroot ?>"+
+					  "/blocks/relusp/ajax_config_global.php?func=delete&id="+
+					  $("#interactions").val(), function(j){
+				if (j) CompleteUpdateSelect(); 
+			});
+	}
+	return false;
+});
+</script>
+<?php 
+} else if ($currentaction=='configtutorrep') {
+// Imprime o formulário com as parametrizações do relatório de tutores
+
+	// Verifica se tem permissão
+	if (has_capability('block/relusp:reptutorconfig', $context)) { 
+?>
+<table cellpadding="9" cellspacing="0" class="blockconfigtable">
+<tr valign="top">
+    <td class="label">
+    	<?php print_string('functiontype', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($functype, 't_func', $this->config->t_func, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('maxtime', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_maxtime" id="t_maxtime" value="<?php print $this->config->t_maxtime ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_access_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_d_access_min" id="t_d_access_min" value="<?php print $this->config->t_d_access_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_access_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 't_d_access_min_per', $this->config->t_d_access_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_access_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_p_access_min" id="t_p_access_min" value="<?php print $this->config->t_p_access_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_access_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 't_p_access_min_per', $this->config->t_p_access_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_permancence_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_d_permancence_min" id="t_d_permancence_min" value="<?php print $this->config->t_d_permancence_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_permancence_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 't_d_permancence_min_per', $this->config->t_d_permancence_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_permancence_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_p_permancence_min" id="t_p_permancence_min" value="<?php print $this->config->t_p_permancence_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_permancence_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 't_p_permancence_min_per', $this->config->t_p_permancence_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_activity_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_d_activity_min" id="t_d_activity_min" value="<?php print $this->config->t_d_activity_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_activity_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 't_d_activity_min_per', $this->config->t_d_activity_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_activity_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_p_activity_min" id="t_p_activity_min" value="<?php print $this->config->t_p_activity_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_activity_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 't_p_activity_min_per', $this->config->t_p_activity_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('reqsonschedule_perc', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 't_reqsonschedule_perc', $this->config->t_reqsonschedule_perc, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('daystoreply', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="t_daystoreply" id="t_daystoreply" value="<?php print $this->config->t_daystoreply ?>">
+	</td>
+</tr>
+<tr>
+    <td colspan="2" class="submit">
+        <input type="submit" value="<?php print_string('savechanges') ?>" />
+    </td>
+</tr>    
+</table>
+<input type="hidden" name="s_func" value="<?php print $this->config->s_func ?>">
+<input type="hidden" name="s_maxtime" value="<?php print $this->config->s_maxtime ?>">
+<input type="hidden" name="s_d_access_min" value="<?php print $this->config->s_d_access_min ?>">
+<input type="hidden" name="s_d_access_min_per" value="<?php print $this->config->s_d_access_min_per ?>">
+<input type="hidden" name="s_p_access_min" value="<?php print $this->config->s_p_access_min ?>">
+<input type="hidden" name="s_p_access_min_per" value="<?php print $this->config->s_p_access_min_per ?>">
+<input type="hidden" name="s_d_permancence_min" value="<?php print $this->config->s_d_permancence_min ?>">
+<input type="hidden" name="s_d_permancence_min_per" value="<?php print $this->config->s_d_permancence_min_per ?>">
+<input type="hidden" name="s_p_permancence_min" value="<?php print $this->config->s_p_permancence_min ?>">
+<input type="hidden" name="s_p_permancence_min_per" value="<?php print $this->config->s_p_permancence_min_per ?>">
+<input type="hidden" name="s_d_activity_min" value="<?php print $this->config->s_d_activity_min ?>">
+<input type="hidden" name="s_d_activity_min_per" value="<?php print $this->config->s_d_activity_min_per ?>">
+<input type="hidden" name="s_p_activity_min" value="<?php print $this->config->s_p_activity_min ?>">
+<input type="hidden" name="s_p_activity_min_per" value="<?php print $this->config->s_p_activity_min_per ?>">
+<!-- hds- retirado alerta de porcentagem de atividades postadas /facilitar interpretacao de tutores
+<input type="hidden" name="s_minactivitycompl_perc" value="<?php print $this->config->s_minactivitycompl_perc ?>">
+-->
+<?php
+} else { print_string('nopermition', 'block_relusp'); }
+} else { 
+// Imprime o formulário com as parametrizações do relatório de alunos
+
+	// Verifica se tem permissão
+	if (has_capability('block/relusp:repstudentsconfig', $context)) { 
+?>
+<table cellpadding="9" cellspacing="0" class="blockconfigtable">
+<tr valign="top">
+    <td class="label">
+    	<?php print_string('functiontype', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($functype, 's_func', $this->config->s_func, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('maxtime', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="s_maxtime" id="s_maxtime" value="<?php print $this->config->s_maxtime ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_access_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="s_d_access_min" id="s_d_access_min" value="<?php print $this->config->s_d_access_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_access_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 's_d_access_min_per', $this->config->s_d_access_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_access_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="s_p_access_min" id="s_p_access_min" value="<?php print $this->config->s_p_access_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_access_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 's_p_access_min_per', $this->config->s_p_access_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_permancence_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="s_d_permancence_min" id="s_d_permancence_min" value="<?php print $this->config->s_d_permancence_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_permancence_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 's_d_permancence_min_per', $this->config->s_d_permancence_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_permancence_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="s_p_permancence_min" id="s_p_permancence_min" value="<?php print $this->config->s_p_permancence_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_permancence_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 's_p_permancence_min_per', $this->config->s_p_permancence_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_activity_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="s_d_activity_min" id="s_d_activity_min" value="<?php print $this->config->s_d_activity_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('d_activity_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 's_d_activity_min_per', $this->config->s_d_activity_min_per, '');?>
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_activity_min', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<input type="text" name="s_p_activity_min" id="s_p_activity_min" value="<?php print $this->config->s_p_activity_min ?>">
+	</td>
+</tr>
+<tr valign="top">
+    <td class="label">
+        <?php print_string('p_activity_min_per', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 's_p_activity_min_per', $this->config->s_p_activity_min_per, '');?>
+	</td>
+</tr>
+<!-- hds- retirado alerta de porcentagem de atividades postadas /facilitar interpretacao de tutores
+<tr valign="top">
+    <td class="label">
+        <?php print_string('minactivitycompl_perc', 'block_relusp'); ?>
+    </td>
+    <td class="value">
+		<?php choose_from_menu ($perc, 's_minactivitycompl_perc', $this->config->s_minactivitycompl_perc, '');?>
+	</td>
+</tr>
+-->
+<tr>
+    <td colspan="2" class="submit">
+        <input type="submit" value="<?php print_string('savechanges') ?>" />
+    </td>
+</tr>    
+</table>
+<input type="hidden" name="t_func" value="<?php print $this->config->t_func ?>">
+<input type="hidden" name="t_maxtime" value="<?php print $this->config->t_maxtime ?>">
+<input type="hidden" name="t_d_access_min" value="<?php print $this->config->t_d_access_min ?>">
+<input type="hidden" name="t_d_access_min_per" value="<?php print $this->config->t_d_access_min_per ?>">
+<input type="hidden" name="t_p_access_min" value="<?php print $this->config->t_p_access_min ?>">
+<input type="hidden" name="t_p_access_min_per" value="<?php print $this->config->t_p_access_min_per ?>">
+<input type="hidden" name="t_d_permancence_min" value="<?php print $this->config->t_d_permancence_min ?>">
+<input type="hidden" name="t_d_permancence_min_per" value="<?php print $this->config->t_d_permancence_min_per ?>">
+<input type="hidden" name="t_p_permancence_min" value="<?php print $this->config->t_p_permancence_min ?>">
+<input type="hidden" name="t_p_permancence_min_per" value="<?php print $this->config->t_p_permancence_min_per ?>">
+<input type="hidden" name="t_d_activity_min" value="<?php print $this->config->t_d_activity_min ?>">
+<input type="hidden" name="t_d_activity_min_per" value="<?php print $this->config->t_d_activity_min_per ?>">
+<input type="hidden" name="t_p_activity_min" value="<?php print $this->config->t_p_activity_min ?>">
+<input type="hidden" name="t_p_activity_min_per" value="<?php print $this->config->t_p_activity_min_per ?>">
+<input type="hidden" name="t_reqsonschedule_perc" value="<?php print $this->config->t_reqsonschedule_perc ?>">
+<input type="hidden" name="t_daystoreply" value="<?php print $this->config->t_daystoreply ?>">
+<?php
+} else { print_string('nopermition', 'block_relusp'); }
+}
+?>
