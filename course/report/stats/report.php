@@ -178,7 +178,7 @@
                         }
                     }
                     if (!array_key_exists($stat->timeend,$times)) {
-                        $times[$stat->timeend] = userdate($stat->timeend,get_string('strftimedate'),$CFG->timezone);
+                        $times[$stat->timeend] = userdate($stat->timeend - 1,get_string('strftimedate'),$CFG->timezone);//hds-http://redmine.atp.usp.br/issues/317
                     }
                 }
 
