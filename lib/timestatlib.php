@@ -1,4 +1,4 @@
-<?
+<?php
 //PLIK odpowiedzialny za osadzenie skryptu w portalu Moodle
 if(isloggedin()){	//skrypt dolaczany jest wylacznie w przypadku zalogowanych uzytkowników
       
