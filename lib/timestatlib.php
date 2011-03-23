@@ -14,6 +14,7 @@ if(isloggedin()){	//skrypt dolaczany jest wylacznie w przypadku zalogowanych uzy
 	 //obliczonej wartosci czasu
 	 //Drugi parametr isPopup informuje czy skrypt ma byc uruchomiony w wersji standardowej czy w wersji
 	 //dla czas uruchomionego w wersji z ramkami i JavaScript
+	  //echo "<h1 id=\"timer\">DEBUG TIME</h1>";
 	  echo "	<script type='text/javascript'>
 	            var start_of_url='$CFG->wwwroot/blocks/timestat/update_register.php?id=$register_id&time=';
 				var isPopup=".isPopupWindow().";
