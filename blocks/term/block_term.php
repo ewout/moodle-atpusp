@@ -2,37 +2,49 @@
 class block_term extends block_base {
     function init() {
 	$this->title = get_string('titleblock', 'block_term');
-	$this->version = 2011032500;
+	$this->version = 2011032903;
     }
 
     function get_content() {
         global $CFG, $COURSE, $USER;
 
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $this->content = new stdClass;
+	$context = get_context_instance(CONTEXT_BLOCK, $this->instance->id);
 
-        if ($this->content !== NULL) {
+        if (!isloggedin() or isguestuser() or !has_capability('block/term:viewblock', $context, NULL, false)) {
+            $this->content = NULL;
             return $this->content;
         }
-
-        $this->content = new stdClass;
-
-	$context = get_context_instance(CONTEXT_BLOCK, $this->instance->id);
 	
-	$this->content->text .='<a href></a>';
-	include('view_term.php'); //Formulario do TERMO (AJAX)
+	// Link para relatorio
+	if (has_capability('block/term:viewreport', $context, NULL, false)) {
+		$this->content->footer .=  '<a href=\''.$CFG->wwwroot.'/blocks/term/export.php?id='.$this->instance->pageid.'&instanceid='.$this->instance->id.'\'>'.get_string('export', 'block_term').'<br></a>';
+	}
+
+	// Verificar se usuario respondeu
+	$termuser = get_record('block_term','user', $USER->id);
+	if (!$termuser && has_capability('block/term:enableterm', $context, NULL, false)){ //nao respondeu ainda e tem permissao, exibe termo
+	   include('view_term.php'); //Formulario do TERMO (AJAX)
+	} //caso respondeu e nao tem permissao para content->footer e content->text o bloco nao aparece
 
         return $this->content;
     }
 
-    function applicable_formats() {
-        return array('site' => true, 'course' => true);
-    }
+/**
+	* Informa onde o bloco pode aparecer. Sobreescreve método da classe base.
+**/
+	function applicable_formats() {
+		// Pode aparecer em qualquer lugar.
+		return array('all' => true);
+	}
 
-    //disponibiliza opcao editar bloco
-    function instance_allow_config() {
-       return true;
-    }
+/**
+	* Informa que o bloco possui configuração de instância. Sobreescreve método da classe base.
+**/
+	function instance_allow_config() {
+		return true;
+	}	
+	
 
-}   // Here's the closing curly bracket for the class definition
-    // and here's the closing PHP tag from the section above.
+}
 ?>

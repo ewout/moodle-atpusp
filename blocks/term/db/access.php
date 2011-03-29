@@ -12,18 +12,37 @@
 //	You should have received a copy of the GNU General Public License
 //	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// Esta pagina exporta as capabilities (permissões) do sistema de relatórios
-// para o Moodle. 
-
 $block_term_capabilities = array(
     'block/term:viewblock' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
             'guest' => CAP_PREVENT,
+            'student' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW
+        )
+   ),
+    'block/term:enableterm' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'guest' => CAP_PREVENT,
+            'student' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_PREVENT
+        )
+   ),
+    'block/term:viewreport' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_PREVENT,
-            'editingteacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW
         )
    ));

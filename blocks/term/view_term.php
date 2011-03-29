@@ -14,21 +14,7 @@
 
 // Página responsável pela apresentação do TERMO
 
-//require_once('../../config.php' );
 require_once('lib.php');
-
-
-// Dados do Aluno para o BLOCKTERM
-$termuser = get_record('block_term','user', $USER->id);
-//Criar usuario no block_term
-if ($termuser){ //ja respondeu
-   //Buscar resposta
-   break;
-   //Possibilidade de expansao dos eventos
-   //$respuser = $termuser->response; //resposta do aluno: 0(nao respondeu), 1(aceitou, sim), 2(nao aceitou, nao)
-} else { //nao respondeu ainda
-   $respuser=0; //aparece dialogo para responder
-}
 
 $courseid = $this->instance->pageid;
 $course = get_record('course','id', $courseid);
@@ -37,6 +23,7 @@ $course = get_record('course','id', $courseid);
 $id = $this->instance->pageid;
 $instanceid = $this->instance->id;
 $titleterm = $this->config->titleterm;
+$bodyterm = $this->config->bodyterm;
 $institution = $this->config->institution;
 $city = $this->config->city;
 $day = date('d');$month = date('F');$year = date('Y');
@@ -49,7 +36,7 @@ $courses = prepCourseCategories($courses);//informacoes de cursos e categorias
 
 //FUNCTIONS *********************************************************
 
-//Lista com Cursos e Categorias
+//Lista com Cursos e Categorias do usuario
 function prepCourseCategories($arCourses) {
 	$cats = get_records('course_categories');
 	$arCats= array();
@@ -78,6 +65,7 @@ function prepCourseCategories($arCourses) {
 $processing = get_string('processing', 'block_term');
 $yes = get_string('yes', 'block_term');
 $no = get_string('no', 'block_term');
+$newentryerror = get_string('newentryerror', 'block_term');
 
 // JAVASCRIPT
 $this->content->text .='
@@ -142,17 +130,92 @@ jQuery(function($){
 
 
 /**
-	* Salva opcao selecionada pelo usuario via AJAX
+	* VALIDAR O CPF
 **/
-function updateterm(dlg,res) {
-   // Salvar no BD: 1=yes e 2=no, possibilidade de controles sob outros eventos, default=0 o aluno nao leu ainda
-   if (res==2){
-      $dialogterm.dialog("close");
+
+function validarCPF(cpf){
+   var filtro = /^\d{3}.\d{3}.\d{3}-\d{2}$/i;
+   if(!filtro.test(cpf)){
+     window.alert("CPF inválido. Tente novamente.");
+	 return false;
+   }
+   
+   cpf = remove(cpf, ".");
+   cpf = remove(cpf, "-");
+    
+   if(cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111" ||
+	  cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" ||
+	  cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" ||
+	  cpf == "88888888888" || cpf == "99999999999"){
+	  window.alert("CPF inválido. Tente novamente.");
+	  return false;
    }
 
+   soma = 0;
+   for(i = 0; i < 9; i++)
+   	 soma += parseInt(cpf.charAt(i)) * (10 - i);
+   resto = 11 - (soma % 11);
+   if(resto == 10 || resto == 11)
+	 resto = 0;
+   if(resto != parseInt(cpf.charAt(9))){
+	 window.alert("CPF inválido. Tente novamente.");
+	 return false;
+   }
+   soma = 0;
+   for(i = 0; i < 10; i ++)
+	 soma += parseInt(cpf.charAt(i)) * (11 - i);
+   resto = 11 - (soma % 11);
+   if(resto == 10 || resto == 11)
+	 resto = 0;
+   if(resto != parseInt(cpf.charAt(10))){
+     window.alert("CPF inválido. Tente novamente.");
+	 return false;
+   }
+   return true;
+ }
+ 
+ function remove(str, sub) {
+   i = str.indexOf(sub);
+   r = "";
+   if (i == -1) return str;
+   r += str.substring(0,i) + remove(str.substring(i + sub.length), sub);
+   return r;
+ }
+
+
+
+/**
+	* Salva opcao selecionada pelo usuario via AJAX, cria um registro no BD
+**/
+function addterm(dlg,data_response) {
+   // Salvar no BD: RESPONSE 1=yes e 2=no, possibilidade de controles sob outros eventos, default=0 o aluno nao leu ainda
+   // Obtem dados
+   data_rg = $("#rg").val();
+   data_cpf = $("#cpf").val();
+
+   if (validarCPF(data_cpf)){
+	//Tira "-" e "." dos campos RG e CPF
+	data_rg = data_rg.replace(/[^0-9]/g, "");
+	data_cpf = data_cpf.replace(/[^0-9]/g, "");
+
+	// Prepara URL para AJAX
+	url="'.$CFG->wwwroot.'/blocks/term/ajax_libterm.php?func=addterm&id='.$id.'&instanceid='.$instanceid.'&response="+data_response+"&rg="+data_rg+"&cpf="+data_cpf;
+
+	$waitdlg.dialog("open");
+	// Invoca via AJAX a criação de uma nova entrada
+	$.getJSON(url, function(j){
+		if (j) {
+			$waitdlg.dialog("close");
+			$dialogterm.dialog("close");
+		} else {
+			$waitdlg.dialog("close");
+			alert("'.$newentryerror.'");
+		}
+	});			
+   }
 }
 
-var formhtml = "<div id=\"paragraphterm\"><p>Eu, <b>'.$USER->firstname .' '. $USER->lastname.'</b>, portador(a) do RG ou RNE n°<input type=\"text\" name=\"rg\" id=\"rg\" size=\"10\"> e do CPF n°<input type=\"text\" name=\"cpf\" id=\"cpf\" size=\"12\">, tutor do Curso <b>'.$courses[0]['categoryname'].' '.$institution.'</b>, declaro para os devidos fins concordar com a utilização, para fins acadêmicos, das informações contidas no ambiente virtual de aprendizagem. Tenho ciência que os responsáveis pela condução da pesquisa asseguram o anonimato dos alunos e dos tutores por meio da supressão do nome e/ou qualquer sinal identificador dos participantes. Declaro compreender que as informações obtidas só podem ser usadas para fins científicos, de acordo com a ética da academia e que a participação nessa pesquisa não comporta qualquer remuneração.</p><p><i>'.$city.', '.$day.' de '.$month.' de '.$year.'</i></p></div>";
+var formhtml = "<div id=\"paragraphterm\"><p>Eu, <b>'.$USER->firstname .' '. $USER->lastname.'</b>, portador(a) do RG ou RNE n°<input type=\"text\" name=\"rg\" id=\"rg\" size=\"13\"> e do CPF n°<input type=\"text\" name=\"cpf\" id=\"cpf\" size=\"15\">, tutor do Curso <b>'.$courses[0]['categoryname'].' '.$institution.'</b>, '.$bodyterm.'</p><p><i>'.$city.', '.$day.' de '.$month.' de '.$year.'</i></p></div>";
 
 
 var $dialogterm = $(formhtml)
@@ -166,10 +229,10 @@ var $dialogterm = $(formhtml)
 		height: 500,
 		buttons: [
 		{	text: "'.$yes.'",
-			click: function() { updateterm(this,1); }
+			click: function() { addterm(this,1); }
 		}, 
 		{	text: "'.$no.'",
-			click: function() { updateterm(this,2); }
+			click: function() { addterm(this,2); }
 		}, 
 		]		
 	});
@@ -177,10 +240,7 @@ var $dialogterm = $(formhtml)
 
 //EVENTOS do BlockTERM
 // ABRE a JANELA caso o usuario nao tenha respondido
-if ('.$respuser.' == 0){
-   $dialogterm.dialog("open");
-}
-
+$dialogterm.dialog("open");
 
 </script>
 ';
