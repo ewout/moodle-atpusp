@@ -30,8 +30,8 @@ $block_term_capabilities = array(
         'legacy' => array(
             'guest' => CAP_PREVENT,
             'student' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_PREVENT,
             'admin' => CAP_PREVENT
         )
    ),

@@ -2,7 +2,7 @@
 class block_term extends block_base {
     function init() {
 	$this->title = get_string('titleblock', 'block_term');
-	$this->version = 2011032903;
+	$this->version = 2011033000;
     }
 
     function get_content() {
@@ -11,6 +11,9 @@ class block_term extends block_base {
         $this->content = new stdClass;
 	$context = get_context_instance(CONTEXT_BLOCK, $this->instance->id);
 
+	$this->content->text .='';
+	$this->content->footer .= '';
+
         if (!isloggedin() or isguestuser() or !has_capability('block/term:viewblock', $context, NULL, false)) {
             $this->content = NULL;
             return $this->content;
@@ -18,14 +21,14 @@ class block_term extends block_base {
 	
 	// Link para relatorio
 	if (has_capability('block/term:viewreport', $context, NULL, false)) {
-		$this->content->footer .=  '<a href=\''.$CFG->wwwroot.'/blocks/term/export.php?id='.$this->instance->pageid.'&instanceid='.$this->instance->id.'\'>'.get_string('export', 'block_term').'<br></a>';
+		$this->content->footer .=  '<a href="#">'.get_string('export', 'block_term').'<br></a>';
 	}
 
 	// Verificar se usuario respondeu
 	$termuser = get_record('block_term','user', $USER->id);
 	if (!$termuser && has_capability('block/term:enableterm', $context, NULL, false)){ //nao respondeu ainda e tem permissao, exibe termo
 	   include('view_term.php'); //Formulario do TERMO (AJAX)
-	} //caso respondeu e nao tem permissao para content->footer e content->text o bloco nao aparece
+	}
 
         return $this->content;
     }

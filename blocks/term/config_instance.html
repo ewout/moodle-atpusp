@@ -1,6 +1,18 @@
+<?php
+    $usehtmleditor = can_use_html_editor();
+
+    $bodyterm = isset($this->config->bodyterm) ? $this->config->bodyterm : '';
+    $moretermbody = isset($this->config->moretermbody) ? $this->config->moretermbody : '';
+    $oktermbody = isset($this->config->oktermbody) ? $this->config->oktermbody : '';
+    if (empty($this->instance->pinned) and $this->instance->pagetype !== 'course-view') {
+        $bodyterm = clean_text($bodyterm, FORMAT_HTML);
+        $moretermbody = clean_text($moretermbody, FORMAT_HTML);
+        $oktermbody = clean_text($oktermbody, FORMAT_HTML);
+    }
+?>
 <table cellpadding="9" cellspacing="0">
 
-<tr valign="top">
+<tr>
   <td align="right"><p>
     <?php print_string('titleterm', 'block_term'); ?>:</p>
   </td>
@@ -9,37 +21,59 @@
   </td>
 </tr>
 
-<tr valign="top">
-  <td align="right"><p>
-    <?php print_string('institution', 'block_term'); ?>:</p>
-  </td>
-  <td>
-    <input type="text" name="institution" size="60" value="<?php echo $this->config->institution; ?>" />
-  </td>
-</tr>
-
-<tr valign="top">
-  <td align="right"><p>
-    <?php print_string('city', 'block_term'); ?>:</p>
-  </td>
-  <td>
-    <input type="text" name="city" size="30" value="<?php echo $this->config->city; ?>" />
-  </td>
-</tr>
-
-<tr valign="top">
+<tr>
   <td align="right"><p>
     <?php print_string('bodyterm', 'block_term'); ?>:</p>
   </td>
   <td>
-    <input type="text" name="bodyterm" size="60" value="<?php echo $this->config->bodyterm; ?>" />
+    <?php print_textarea($usehtmleditor, 25, 50, 0, 0, 'bodyterm', $bodyterm) ?>
   </td>
 </tr>
 
-  <tr>
-    <td colspan="2" align="center">
-      <input type="submit" value="<?php print_string('savechanges') ?>" />
+<tr>
+  <td align="right"><p>
+    <?php print_string('moretermtitle', 'block_term'); ?>:</p>
+  </td>
+  <td>
+    <input type="text" name="moretermtitle" size="60" value="<?php echo $this->config->moretermtitle; ?>" />
+  </td>
+</tr>
+
+<tr>
+    <td align="right"><p>
+	<?php print_string('moretermbody', 'block_term'); ?>:</p>
     </td>
-  </tr>
+    <td>
+	<?php print_textarea($usehtmleditor, 25, 50, 0, 0, 'moretermbody', $moretermbody) ?>
+    </td>
+</tr>
+
+<tr>
+  <td align="right"><p>
+    <?php print_string('oktermtitle', 'block_term'); ?>:</p>
+  </td>
+  <td>
+    <input type="text" name="oktermtitle" size="60" value="<?php echo $this->config->oktermtitle; ?>" />
+  </td>
+</tr>
+
+<tr>
+    <td align="right"><p>
+	<?php print_string('oktermbody', 'block_term'); ?>:</p>
+    </td>
+    <td>
+	<?php print_textarea($usehtmleditor, 25, 50, 0, 0, 'oktermbody', $oktermbody) ?>
+    </td>
+</tr>
+
+<tr>
+   <td colspan="2" align="center">
+     <input type="submit" value="<?php print_string('savechanges') ?>" />
+   </td>
+</tr>
 </table>
+<?php if ($usehtmleditor) {
+          use_html_editor(); 
+      }
+?>
 

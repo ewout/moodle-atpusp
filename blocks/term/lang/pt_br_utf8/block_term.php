@@ -5,13 +5,17 @@
 $string['titleblock'] = 'TermoAVA';
 $string['titleterm'] = 'Título do Termo';
 $string['bodyterm'] = 'Conteúdo do Termo';
-$string['institution'] = 'A quem refere-se o Termo';
-$string['city'] = 'Cidade';
+$string['moretermtitle'] = 'Título do box Saiba Mais';
+$string['moretermbody'] = 'Conteúdo do box Saiba Mais';
+$string['oktermtitle'] = 'Título do box OK';
+$string['oktermbody'] = 'Conteúdo do box OK';
+$string['okterm'] = 'Continuar';
 
 $string['processing'] = 'Processando';
 $string['yes'] = 'Aceito';
 $string['no'] = 'Não Aceito';
 $string['newentryerror'] = 'Erro ao inserir novo registro';
 $string['export'] = 'Exportar dados';
-
+$string['more'] = 'Saiba mais';
+$string['close'] = 'Voltar';
 ?>

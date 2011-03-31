@@ -23,49 +23,30 @@ $course = get_record('course','id', $courseid);
 $id = $this->instance->pageid;
 $instanceid = $this->instance->id;
 $titleterm = $this->config->titleterm;
+$moretermtitle = $this->config->moretermtitle;
+$oktermtitle = $this->config->oktermtitle;
+
+// Tirar espacos entre linhas dos campos que permitemo HTML-EDITOR
+$order = array("\r\n", "\n", "\r");
+$replace = '';
 $bodyterm = $this->config->bodyterm;
-$institution = $this->config->institution;
-$city = $this->config->city;
-$day = date('d');$month = date('F');$year = date('Y');
+$bodyterm = str_replace($order, $replace, $bodyterm);
+$moretermbody = $this->config->moretermbody;
+$moretermbody = str_replace($order, $replace, $moretermbody);
+$oktermbody = $this->config->oktermbody;
+$oktermbody = str_replace($order, $replace, $oktermbody);
 
-// Obtem todos os cursos e categorias, do aluno
-$courses = get_my_courses($USER->id, 'category DESC, fullname ASC');
-$courses = prepCourseCategories($courses);//informacoes de cursos e categorias
-
-
-
-//FUNCTIONS *********************************************************
-
-//Lista com Cursos e Categorias do usuario
-function prepCourseCategories($arCourses) {
-	$cats = get_records('course_categories');
-	$arCats= array();
-	foreach ($cats as $cat) {
-		$arCats[$cat->id] = array($cat->name, $cat->depth, $cat->sortorder);
-	}
-	foreach ($arCourses as $course) {
-		$arListing['id'] = $course->id;
-		$arListing['visible'] = $course->visible;
-		$arListing['shortname'] = $course->shortname;
-		$arListing['fullname'] = $course->fullname;
-		$arListing['category'] = $course->category;
-		$arListing['categoryname'] = $arCats[$course->category][0];
-		$arListing['categorydepth'] = $arCats[$course->category][1];
-		$arListing['categorysortorder'] = $arCats[$course->category][2];
-		
-		$arListings[] = $arListing;
-	}
-
-	usort($arListing, array(&$this, "listingCmp"));
-
-	return $arListings;
-}
+//Obtem ip do usuario
+$ip = $_SERVER['REMOTE_ADDR'];
 
 //DEFINE PRINT STRINGS
 $processing = get_string('processing', 'block_term');
 $yes = get_string('yes', 'block_term');
 $no = get_string('no', 'block_term');
+$okterm = get_string('okterm', 'block_term');
 $newentryerror = get_string('newentryerror', 'block_term');
+$more = get_string('more', 'block_term');
+$close = get_string('close', 'block_term');
 
 // JAVASCRIPT
 $this->content->text .='
@@ -82,7 +63,6 @@ $this->content->text .='
 <link href="'.$CFG->wwwroot.'/blocks/term/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="'.$CFG->wwwroot.'/blocks/term/jquery.js"></script>
 <script type="text/javascript" src="'.$CFG->wwwroot.'/blocks/term/jquery-ui.js"></script>
-<script src="'.$CFG->wwwroot.'/blocks/term/jquery.maskedinput-1.2.2.min.js" type="text/javascript"></script>
 
 <script>
 
@@ -119,106 +99,32 @@ var $waitdlg = $(\'<div></div>\')
 
 
 /**
-	* Mascarar CAMPO
-**/
-jQuery(function($){
-   $("#cpf").mask("999.999.999-99",{placeholder:"0"});
-   $("#rg").mask("99.999.999-9",{placeholder:"0"});
-});
-
-
-
-
-/**
-	* VALIDAR O CPF
-**/
-
-function validarCPF(cpf){
-   var filtro = /^\d{3}.\d{3}.\d{3}-\d{2}$/i;
-   if(!filtro.test(cpf)){
-     window.alert("CPF inválido. Tente novamente.");
-	 return false;
-   }
-   
-   cpf = remove(cpf, ".");
-   cpf = remove(cpf, "-");
-    
-   if(cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111" ||
-	  cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" ||
-	  cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" ||
-	  cpf == "88888888888" || cpf == "99999999999"){
-	  window.alert("CPF inválido. Tente novamente.");
-	  return false;
-   }
-
-   soma = 0;
-   for(i = 0; i < 9; i++)
-   	 soma += parseInt(cpf.charAt(i)) * (10 - i);
-   resto = 11 - (soma % 11);
-   if(resto == 10 || resto == 11)
-	 resto = 0;
-   if(resto != parseInt(cpf.charAt(9))){
-	 window.alert("CPF inválido. Tente novamente.");
-	 return false;
-   }
-   soma = 0;
-   for(i = 0; i < 10; i ++)
-	 soma += parseInt(cpf.charAt(i)) * (11 - i);
-   resto = 11 - (soma % 11);
-   if(resto == 10 || resto == 11)
-	 resto = 0;
-   if(resto != parseInt(cpf.charAt(10))){
-     window.alert("CPF inválido. Tente novamente.");
-	 return false;
-   }
-   return true;
- }
- 
- function remove(str, sub) {
-   i = str.indexOf(sub);
-   r = "";
-   if (i == -1) return str;
-   r += str.substring(0,i) + remove(str.substring(i + sub.length), sub);
-   return r;
- }
-
-
-
-/**
 	* Salva opcao selecionada pelo usuario via AJAX, cria um registro no BD
 **/
 function addterm(dlg,data_response) {
    // Salvar no BD: RESPONSE 1=yes e 2=no, possibilidade de controles sob outros eventos, default=0 o aluno nao leu ainda
-   // Obtem dados
-   data_rg = $("#rg").val();
-   data_cpf = $("#cpf").val();
 
-   if (validarCPF(data_cpf)){
-	//Tira "-" e "." dos campos RG e CPF
-	data_rg = data_rg.replace(/[^0-9]/g, "");
-	data_cpf = data_cpf.replace(/[^0-9]/g, "");
+   // Prepara URL para AJAX
+   url="'.$CFG->wwwroot.'/blocks/term/ajax_libterm.php?func=addterm&id='.$id.'&instanceid='.$instanceid.'&response="+data_response+"&ip='.$ip.'";
 
-	// Prepara URL para AJAX
-	url="'.$CFG->wwwroot.'/blocks/term/ajax_libterm.php?func=addterm&id='.$id.'&instanceid='.$instanceid.'&response="+data_response+"&rg="+data_rg+"&cpf="+data_cpf;
-
-	$waitdlg.dialog("open");
-	// Invoca via AJAX a criação de uma nova entrada
-	$.getJSON(url, function(j){
-		if (j) {
-			$waitdlg.dialog("close");
-			$dialogterm.dialog("close");
-		} else {
-			$waitdlg.dialog("close");
-			alert("'.$newentryerror.'");
-		}
-	});			
-   }
+	
+   $waitdlg.dialog("open");
+   // Invoca via AJAX a criação de uma nova entrada
+   $.getJSON(url, function(j){
+      if (j) {
+	$waitdlg.dialog("close");
+	$dialogterm.dialog("close");
+	$dialogmore.dialog("close");
+	$dialogok.dialog("open");
+      } else {
+	$waitdlg.dialog("close");
+	alert("'.$newentryerror.'");
+      }
+   });			
 }
 
-var formhtml = "<div id=\"paragraphterm\"><p>Eu, <b>'.$USER->firstname .' '. $USER->lastname.'</b>, portador(a) do RG ou RNE n°<input type=\"text\" name=\"rg\" id=\"rg\" size=\"13\"> e do CPF n°<input type=\"text\" name=\"cpf\" id=\"cpf\" size=\"15\">, tutor do Curso <b>'.$courses[0]['categoryname'].' '.$institution.'</b>, '.$bodyterm.'</p><p><i>'.$city.', '.$day.' de '.$month.' de '.$year.'</i></p></div>";
-
-
-var $dialogterm = $(formhtml)
+var $dialogterm = $(\'<div></div>\')
+	.html(\'<div>'.$bodyterm.'</div>\')
 	.dialog({
 		autoOpen: false,  // Oculto inicialmente
 		title: "'.$titleterm.'",
@@ -233,8 +139,42 @@ var $dialogterm = $(formhtml)
 		}, 
 		{	text: "'.$no.'",
 			click: function() { addterm(this,2); }
-		}, 
-		]		
+		},
+		{	text: "'.$more.'",
+			click: function() { $dialogmore.dialog("open"); }
+		},
+		]
+	});
+
+var $dialogmore = $(\'<div></div>\')
+	.html(\'<div>'.$moretermbody.'</div>\')
+	.dialog({
+		autoOpen: false,
+		title: "'.$moretermtitle.'",
+		resizable: false,
+		width: 750,
+		height: 600,
+		buttons: [
+		{	text: "'.$close.'",
+			click: function() { $dialogmore.dialog("close"); }
+		},
+		]
+	});
+
+var $dialogok = $(\'<div></div>\')
+	.html(\'<div>'.$oktermbody.'</div>\')
+	.dialog({
+		autoOpen: false,
+		title: "'.$oktermtitle.'",
+		modal: true, //habilitar fundo transparente
+		resizable: false,
+		width: 600,
+		height: 180,
+		buttons: [
+		{	text: "'.$okterm.'",
+			click: function() { $dialogok.dialog("close"); }
+		},
+		]
 	});
 
 

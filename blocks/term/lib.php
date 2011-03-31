@@ -22,11 +22,9 @@ require_once($CFG->libdir.'/blocklib.php');
 
 class libTerm
 {
-	private $id = 0;			// Id do curso atual
+	private $id = 0;		// Id do curso atual
 	private $instanceid = 0;	// Id da instância do bloco no curso
-	private $from = 0;			// Data de início do relatório
-	private $to = 0;			// Data de fim do relatório
-	private $userid = 0;		// Id to tutor para gerar o diário
+	private $userid = 0;		// Id do usuário
 	private $instance = null;	// Objeto instância do bloco
 	private $block = null;		// Objeto bloco do bloco
 	private $context = null;	// Objeto contexto do bloco
@@ -55,7 +53,6 @@ class libTerm
 	public function process($func) {
 		switch($func) {
 			case 'addterm' : $this->proc_addterm(); break;
-			//case 'updateterm' : $this->proc_updateterm(); break;
 		}
 	}
 
@@ -73,8 +70,7 @@ class libTerm
 		$termentry->user=$this->userid;
 		$termentry->course=$this->id;
 		$termentry->response=required_param('response', PARAM_INT);
-		$termentry->rg=required_param('rg', PARAM_INT);
-		$termentry->cpf=required_param('cpf', PARAM_INT);
+		$termentry->ip=required_param('ip', PARAM_TEXT);
 		$termentry->timemodified=time();
 
 		// Insere novo registro
