@@ -360,7 +360,40 @@ class TutorDiary
 		else
 			echo('<script>var canPost=false;</script>');
 	}
-	
+
+/**
+	* Verifica se o usuário pode Editar as entradas do diário do tutor.
+	* Gera uma variável Javascript para representar essa condição.
+**/
+	public function canEdit() {
+		if (has_capability('block/relusp:reptutoredit', $this->context, NULL, false))
+			echo('<script>var canEdit=true;</script>');
+		else
+			echo('<script>var canEdit=false;</script>');
+	}
+
+/**
+	* Verifica se o usuário pode trocar o tutor das entradas no diário do tutor.
+	* Gera uma variável Javascript para representar essa condição.
+**/
+	public function canChangeTutor() {
+		if (has_capability('block/relusp:reptutorchangetutor', $this->context, NULL, false))
+		   print 'checked';
+		else
+		   print 'disabled';
+	}
+
+/**
+	* Verifica se o usuário pode Excluir as entradas do diário do tutor.
+	* Gera uma variável Javascript para representar essa condição.
+**/
+	public function canDelete() {
+		if (has_capability('block/relusp:reptutordelete', $this->context, NULL, false))
+			echo('<script>var canDelete=true;</script>');
+		else
+			echo('<script>var canDelete=false;</script>');
+	}
+
 /**
 	* Obtem a lista de estudantes de cada grupo que o tutor pertence.
 	* Gera uma variável Javascript para representar essa condição.
@@ -454,9 +487,10 @@ class TutorDiary
 		$diaryentry->responsedate=required_param('respdate', PARAM_INT);
 		$diaryentry->notes=required_param('obs', PARAM_TEXT);
 		// Insere novo registro
-		if (insert_record('tutordiary', $diaryentry))
+		if (insert_record('tutordiary', $diaryentry)){
 			$result = true;
-		else
+		        add_to_log($this->id, 'BlockRELUSP', 'add', "blocks/relusp/tutordiary.php?id=$this->id",'ADD entry in TUTORDIARY');
+		} else
 			$result = false;
 		// Codifica resultado em JSON
 		echo($ajax->encode($result));
@@ -543,7 +577,7 @@ class TutorDiary
 		// Prenche dados da entrada
 		$diaryentry->id=required_param('identry', PARAM_INT);;
 		$diaryentry->timemodified=time();
-		$diaryentry->tutorid=$this->userid;
+		$diaryentry->tutorid=required_param('tutor', PARAM_INT);
 		$diaryentry->courseid=$this->id;
 		$diaryentry->interactionid=required_param('interac', PARAM_INT);
 		$diaryentry->timedevoted=required_param('timedevoted', PARAM_INT);
@@ -552,9 +586,10 @@ class TutorDiary
 		$diaryentry->responsedate=required_param('respdate', PARAM_INT);
 		$diaryentry->notes=required_param('obs', PARAM_TEXT);
 		// Atualiza o registro
-		if (update_record('tutordiary', $diaryentry))
+		if (update_record('tutordiary', $diaryentry)){
 			$result = true;
-		else
+		        add_to_log($this->id, 'BlockRELUSP', 'edit', "blocks/relusp/tutordiary.php?id=$this->id",'EDIT entry(#'.$diaryentry->id.') in TUTORDIARY',$diaryentry->id);
+		} else
 			$result = false;
 		// Codifica resultado em JSON
 		echo($ajax->encode($result));
@@ -573,9 +608,10 @@ class TutorDiary
 		$diaryentry=new object();
 		$identry=required_param('identry', PARAM_INT);;
 		// Exclui o registro
-		if (delete_records_select('tutordiary', 'id='.$identry))
+		if (delete_records_select('tutordiary', 'id='.$identry)){
 			$result = true;
-		else
+		        add_to_log($this->id, 'BlockRELUSP', 'delete', "blocks/relusp/tutordiary.php?id=$this->id",'DELETE entry(#'.$identry.') in TUTORDIARY',$identry);
+		} else
 			$result = false;
 		// Codifica resultado em JSON
 		echo($ajax->encode($result));

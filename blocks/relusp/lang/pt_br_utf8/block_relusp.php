@@ -13,6 +13,9 @@ $string['relusp:reptutorallview'] = 'Visualizar todos os diários de tutores';
 $string['relusp:reptutorpost'] = 'Publicar no seu diário de tutor';
 $string['relusp:reptutorlist'] = 'Aparecer no Relatório de Tutores';
 $string['relusp:tutordiarysubject'] = 'Aparecer na lista de estudantes do diário do tutor';
+$string['relusp:reptutoredit'] = 'Editar entradas no diário do tutor';
+$string['relusp:reptutordelete'] = 'Excluir entradas no diário do tutor';
+$string['relusp:reptutorchangetutor'] = 'Alterar tutor ao editar uma entrada';
 
 
 $string['add'] = 'Adicionar';

@@ -27,7 +27,7 @@ class block_relusp extends block_base {
 	function init() {
 		// Informa no e versão do bloco.
 		$this->title = get_string('relusp', 'block_relusp');
-		$this->version = 2011020901;
+		$this->version = 2011030115;
 		// Inicializa variáveis necessárias ao bloco.
 		// Cria paramemetrizações padrão para o relatório de tutores
 		$this->config->t_func = 'MEAN';

@@ -3018,7 +3018,6 @@ function print_header_simple($title='', $heading='', $navigation='', $focus='', 
  */
 function print_footer($course=NULL, $usercourse=NULL, $return=false) {
     global $USER, $CFG, $THEME, $COURSE;
-    require_once('timestatlib.php');
 
     if (defined('ADMIN_EXT_HEADER_PRINTED') and !defined('ADMIN_EXT_FOOTER_PRINTED')) {
         admin_externalpage_print_footer();

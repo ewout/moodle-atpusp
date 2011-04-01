@@ -119,6 +119,45 @@ $block_relusp_capabilities = array(
             'coursecreator' => CAP_PREVENT,
             'admin' => CAP_PREVENT
         )
+   ),
+    //Habilitar edicao das entradas no diario do tutor
+    'block/relusp:reptutoredit' => array(
+        'captype' => 'view',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'guest' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'admin' => CAP_ALLOW
+        )
+   ),
+    //Habilitar exclusao das entradas no diario do tutor
+    'block/relusp:reptutordelete' => array(
+        'captype' => 'view',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'guest' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'admin' => CAP_ALLOW
+        )
+   ),
+   //Habilitar troca de tutor de uma entrada
+    'block/relusp:reptutorchangetutor' => array(
+        'captype' => 'view',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'guest' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'admin' => CAP_ALLOW
+        )
    ));
   
 ?>
