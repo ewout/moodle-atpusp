@@ -55,6 +55,8 @@ $tutordiary->getTutors();
 // Obtem permissões de segurança
 $tutordiary->canViewAll();
 $tutordiary->canPost();
+$tutordiary->canEdit();
+$tutordiary->canDelete();
 ?>
 <p>
 <!-- // Bloco para botão de adicionar entrada no diário -->
@@ -143,7 +145,8 @@ formhtml+='</table></div>';
 
 // Formulário para adicionar/editar entradas no diário do tutor
 var formhtml2 = '<div><table id="editreporttutor">';
-formhtml2+='<tr><td><span id="debugtst"></span><label><?php print_string('group', 'block_relusp');?>:</label><span id="grp2"></span></td>';
+formhtml2+='<tr><td><label><?php print_string('tutor', 'block_relusp');?>:</label><span id="tutoredit"></span></td></tr>';
+formhtml2+='<tr><td><label><?php print_string('group', 'block_relusp');?>:</label><span id="grp2"></span></td>';
 formhtml2+='<td align="right"><label><?php print_string('student', 'block_relusp');?>:</label><span id="std2"></span></td></tr>';
 formhtml2+='<tr><td><label><?php print_string('interaction', 'block_relusp');?>:</label><span id="ite2"></span></td>';
 formhtml2+='<td align="right"><label><?php print_string('timedevotedadd', 'block_relusp');?>:</label><input type="text" name="timedevoted2" id="timedevoted2" size="5"></td></tr>';
@@ -204,6 +207,7 @@ function EditTutorDiaryEntry(dlg) {
 	if (t_reqdate != null) {
 		t_reqdate = encodeURIComponent(t_reqdate.getTime()/1000);
 		t_respdate = encodeURIComponent(t_respdate.getTime()/1000);
+		t_tutor = encodeURIComponent($('#tutor2').val());
 		t_student = encodeURIComponent($('#student2').val());
 		t_interac = encodeURIComponent($('#interac2').val());
 		t_timedevoted = encodeURIComponent($('#timedevoted2').val());
@@ -211,7 +215,7 @@ function EditTutorDiaryEntry(dlg) {
 		// Prepara URL para AJAX
 		url='<?php echo $CFG->wwwroot ?>'+'/blocks/relusp/ajax_tutordiary.php?func=editdiaryentry2'+
 		'&id=<?php print $id; ?>&instanceid=<?php print $instanceid; ?>'+
-		'&reqdate='+t_reqdate+'&respdate='+t_respdate+'&student='+t_student+'&interac='+t_interac+'&timedevoted='+t_timedevoted+'&obs='+t_obs+'&identry='+$identry;
+		'&reqdate='+t_reqdate+'&respdate='+t_respdate+'&tutor='+t_tutor+'&student='+t_student+'&interac='+t_interac+'&timedevoted='+t_timedevoted+'&obs='+t_obs+'&identry='+$identry;
 
 		$waitdlg.dialog('open');
 		// Invoca via AJAX a edicao de uma nova entrada
@@ -527,7 +531,16 @@ function UpdateTutors() {
 	}
 	$('#tut').html('<br>Tutor: <select name="tutor" id="tutor">'+options+'</select><br><br>');
 }
-
+/**
+	* Gera ou atualiza a lista de tutores para caixa de edicao das Entradas
+**/
+function UpdateTutors2() {
+	var options='';
+	for (var i=0; i<tutors.length; i++) {
+		options+='<option value="'+tutors[i].id+'">'+tutors[i].name+'</option>';
+	}
+	$('#tutoredit').html('<select name="tutor2" id="tutor2" <?php $tutordiary->canChangeTutor(); ?>>'+options+'</select>');
+}
 /**
 	* Gera ou atualiza a lista de interações
 **/
@@ -548,6 +561,7 @@ function EditEntry(identry) {
 	$identry=identry; 
 
 	closedialog('personPopupContainer'); //fecha box onmouseover
+	UpdateTutors2();
 	UpdateGroups2();
 	UpdateStudents2();
 	$('#group2').attr("selectedIndex", lastgroup2);
@@ -570,6 +584,9 @@ function EditEntry(identry) {
 
 		   //Plotar no formulario resultado deste IDentry
 		   for (var i=0; i<j.length; i++) {
+
+			//Tutor que incluiu a entrada, manter o tutor na edicao
+			$('#tutor2').attr("value",j[i].tutorid);
 
 			//GROUP
 			for (var z=0; z<groups.length; z++) {
@@ -600,7 +617,7 @@ function EditEntry(identry) {
 			$('#respdate2').attr("value",FormatDate(j[i].responsedate));
 
 			$('#timedevoted2').attr("value",j[i].timedevoted);
-			$('#obs2').html(j[i].notes);
+			$('#obs2').attr("value",j[i].notes);
 		   }
 		} else
 		   alert('<?php print_string('newentryerror', 'block_relusp');?>');	
@@ -685,7 +702,9 @@ $("#generate").click(function() {
 			reptable+='<th><?php print_string('interaction', 'block_relusp');?></th>';
 			reptable+='<th><?php print_string('timedevotedview', 'block_relusp');?></th>';
 			reptable+='<th><?php print_string('notes', 'block_relusp');?></th>';
-			reptable+='<th><?php print_string('actions', 'block_relusp');?></th></tr></thead><tbody>';
+			if (canEdit || canDelete)
+ 			   reptable+='<th><?php print_string('actions', 'block_relusp');?></th>';
+			reptable+='</tr></thead><tbody>';
 
 			// Totalizador de tempo dedicado
 			var counter=0;
@@ -705,14 +724,15 @@ $("#generate").click(function() {
 				reptable+='<td>'+j[i].interaction+'</td>';
 				reptable+='<td>'+j[i].timedevoted+'</td>';
 				reptable+='<td class="notes">'+j[i].notes+'</td>';
-				reptable+='<td><div id="actionbox" style="display:block; cursor:pointer;text-align:center;background:#FFF;" class="acts" i="'+i+'"><img src="<?php echo $CFG->pixpath; ?>/t/preview.gif"></div></td>';
+				if (canEdit || canDelete)
+				   reptable+='<td><div id="actionbox" style="display:block; cursor:pointer;text-align:center;background:#FFF;" class="acts" i="'+i+'"><img src="<?php echo $CFG->pixpath; ?>/t/preview.gif"></div></td>';
 				reptable+='</tr>';
 				timedevotedcount= parseFloat(j[i].timedevoted);
 				counter= parseFloat(counter + timedevotedcount);
 			}
 			reptable+='</tbody><tfooter><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>';
 			reptable+='<b>'+counter+'(min)</b>'; //totalizador de tempo dedicado
-			reptable+='</td><td></td><td></td></tr></tfooter></table>';
+			reptable+='</td><td></td></tr></tfooter></table>';
 			// Escreve tabela
 			$('#report').html(reptable);
 			// Ordena dados
@@ -743,8 +763,12 @@ $("#generate").click(function() {
 				res+='<?php print_string('lastmodified', 'moodle');?>: <b>'+FormatDate($Z[i].timemodified)+'</b><br>';
 				//actions
 				res+='<table id="tableactions">';
-				res+='<tr><td><a style="cursor:pointer" onclick="javascript:EditEntry('+$Z[i].id+');"><img src="<?php echo $CFG->pixpath; ?>/t/edit.gif"> <?php print_string('edit', 'moodle');?></a></td>';
-				res+='<td><a style="cursor:pointer" onclick="javascript:DeleteEntry('+$Z[i].id+');"><img src="<?php echo $CFG->pixpath; ?>/t/delete.gif"> <?php print_string('delete', 'moodle');?></a></td><td></td></tr></table>';
+				res+='<tr>';
+				if (canEdit)
+				   res+='<td><a style="cursor:pointer" onclick="javascript:EditEntry('+$Z[i].id+');"><img src="<?php echo $CFG->pixpath; ?>/t/edit.gif"> <?php print_string('edit', 'moodle');?></a></td>';
+				if (canDelete)
+				   res+='<td><a style="cursor:pointer" onclick="javascript:DeleteEntry('+$Z[i].id+');"><img src="<?php echo $CFG->pixpath; ?>/t/delete.gif"> <?php print_string('delete', 'moodle');?></a></td>';
+				res+='</tr></table>';
 				res+='<div id="closeactions"><a style="cursor:pointer" onclick="javascript:closedialog(\'personPopupContainer\');">Fechar</a></div>';
 
 				$('#personPopupContent').html(res);
