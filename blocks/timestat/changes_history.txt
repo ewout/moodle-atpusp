@@ -1,8 +1,0 @@
-10.02.2011
-Spanish language file, created by Jon Duenas, added.
-
-08.03.2011
-Configuration button is disabled.
-
-11.02.2011
-Php starting tags changed to '<?PHP'
