@@ -119,6 +119,8 @@ function addterm(dlg,data_response) {
       } else {
 	$waitdlg.dialog("close");
 	alert("'.$newentryerror.'");
+	$dialogterm.dialog("close");
+	$dialogmore.dialog("close");
       }
    });			
 }
