@@ -2,7 +2,7 @@
 class block_term extends block_base {
     function init() {
 	$this->title = get_string('titleblock', 'block_term');
-	$this->version = 2011033000;
+	$this->version = 2011040502;
 	$this->config->titleterm = 'TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO – ALUNO REDEFOR';
 	$this->config->moretermtitle = 'SAIBA MAIS';
 	$this->config->oktermtitle = 'Congratulações';
