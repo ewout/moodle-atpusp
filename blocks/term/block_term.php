@@ -27,7 +27,15 @@ class block_term extends block_base {
 	
 	// Link para relatorio
 	if (has_capability('block/term:viewreport', $context, NULL, false)) {
-		$this->content->footer .=  '<a href="#">'.get_string('export', 'block_term').'<br></a>';
+		$this->content->footer .= '
+<form name="csv_form" id="csv_form" target="_blank" method="post" enctype="application/x-www-form-urlencoded;charset=UTF-8" action="'.$CFG->wwwroot.'/blocks/term/csv_processor.php">
+<input type="hidden" name="csv" id="csv" value="" />
+<input type="hidden" name="name" id="name" value="" />
+<input type="submit" value="'.get_string('export', 'block_term').'" />
+</form>
+';
+		include('view_report.php');
+
 	}
 
 	// Verificar se usuario respondeu

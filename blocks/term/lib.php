@@ -53,6 +53,7 @@ class libTerm
 	public function process($func) {
 		switch($func) {
 			case 'addterm' : $this->proc_addterm(); break;
+			case 'searchterm' : $this->proc_searchterm(); break;
 		}
 	}
 
@@ -79,6 +80,26 @@ class libTerm
 		else
 			$result = false;
 		// Codifica resultado em JSON
+		echo($ajax->encode($result));
+	}
+
+/**
+	* Consulta respostas no BD mdl_block_term
+**/
+	public function proc_searchterm() {
+		global $CFG;
+		$ajax = new HTML_AJAX_JSON();
+		$result = array();
+
+		// Obtem Respostas
+		if ($records = get_records('block_term', 'course', $this->id, $sort='id ASC')) {
+			foreach ($records as $record) {
+				// Preenche entradas na variável de resultados
+				$result[]=array('id' => $record->id, 'user' => $record->user, 'course' => $record->course, 'response' => $record->response, 'ip' => $record->ip, 'timemodified' => $record->timemodified); 
+			}
+		}
+
+		// Codifica e retorna os resultados em JSON
 		echo($ajax->encode($result));
 	}
 	

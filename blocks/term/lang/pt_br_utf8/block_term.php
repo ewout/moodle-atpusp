@@ -15,7 +15,11 @@ $string['processing'] = 'Processando';
 $string['yes'] = 'Aceito';
 $string['no'] = 'Não Aceito';
 $string['newentryerror'] = 'Erro ao inserir novo registro';
+$string['searcherror'] = 'Erro ao consultar respostas do termo no Banco de Dados';
 $string['export'] = 'Exportar dados';
 $string['more'] = 'Saiba mais';
 $string['close'] = 'Voltar';
+
+$string['headercsv'] = '\"id\";\"user\";\"course\";\"response\";\"ip\";\"timemodified\"';
+
 ?>
