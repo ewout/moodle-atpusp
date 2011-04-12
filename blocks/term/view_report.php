@@ -27,6 +27,8 @@ $instanceid = $this->instance->id;
 $searcherror = get_string('searcherror', 'block_term');
 $processing = get_string('processing', 'block_term');
 $headercsv = get_string('headercsv', 'block_term');
+$close = get_string('close', 'block_term');
+$titleexportgraph = get_string('titleexportgraph', 'block_term');
 
 // JAVASCRIPT
 $this->content->text .='
@@ -78,6 +80,7 @@ var $waitdlg = $(\'<div></div>\')
 	});
 
 
+
 /**
 	* Formata data na forma brasileira
 **/
@@ -85,6 +88,17 @@ function FormatDate(ts) {
 	var newdate=new Date(ts*1000);
 	return newdate.getDate()+"/"+(newdate.getMonth()+1)+"/"+newdate.getFullYear();
 }
+
+/**
+	* Formata o valor numérico para ndigits casas decimal convertendo ponto para vírgula.
+**/
+function CstFmt(value, ndigits) {
+  if(ndigits==null) {
+    ndigits=2;
+  }
+  return (""+value.toFixed(ndigits)).replace(\'.\',\',\');
+}
+
 
 /**
 	* Gera o arquivo CSV numa string para exportação
@@ -108,16 +122,26 @@ function GenerateCSV(data) {
 /**
 	* Obtem respostas
 **/
-function searchterm(dlg) {
+function searchterm(opt) {
    // Prepara URL para AJAX
    url="'.$CFG->wwwroot.'/blocks/term/ajax_libterm.php?func=searchterm&id='.$id.'&instanceid='.$instanceid.'";
 
    $waitdlg.dialog("open");
-   // Invoca via AJAX a criação de uma nova entrada
+   // Invoca via AJAX a criacao de uma nova entrada
    $.getJSON(url, function(j){
       if (j) {
-	$("#csv").val(GenerateCSV(j));
-	$("#name").val("report-blockterm.csv");
+        if (opt==1) { //Gerar CSV
+  	   $("#csv").val(GenerateCSV(j.responses));
+	   $("#name").val("report-blockterm.csv");
+	   document.csv_form.submit();
+        }
+        if (opt==2) { //Gerar GOOGLE GRAPH
+	   total = j.totals.total;
+	   yes = (j.totals.yes / total) * 100; no= (j.totals.no / total) * 100;
+
+	   $graphdlg.html(\'<div align="center"><p><img style="vertical-align:middle;" src="https://chart.googleapis.com/chart?cht=p&chd=t:\'+yes+\',\'+no+\'&chs=300x150&chl=Aceito|NãoAceito"></p><p><b>Amostra: \'+j.totals.total+\' respostas <br><br> Aceito: \'+CstFmt(yes,2)+\' % | \'+j.totals.yes+\' respostas<br>Não Aceito:  \'+CstFmt(no,2)+\' % | \'+j.totals.no+\' respostas</b></p></div>\')
+	   $graphdlg.dialog("open");
+        }
 	$waitdlg.dialog("close");
       } else {
 	$waitdlg.dialog("close");
@@ -127,9 +151,21 @@ function searchterm(dlg) {
 }
 
 
-// Ao carregar a pagina, realizar a consulta de dados - somente usuarios que tem permissao para ver relatorios
-searchterm();
-
+var $graphdlg = $(\'<div></div>\')
+	.dialog({
+		autoOpen: false,
+		modal: false,
+		title: "'.$titleexportgraph.'",
+		closeOnEscape: true,
+		resizable: false,
+		height: 400,
+		width: 400,
+		buttons: [
+		{	text: "'.$close.'",
+			click: function() { $graphdlg.dialog("close"); }
+		},
+		]
+	});
 </script>
 ';
 

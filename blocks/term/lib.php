@@ -90,13 +90,19 @@ class libTerm
 		global $CFG;
 		$ajax = new HTML_AJAX_JSON();
 		$result = array();
+		$yes = 0;$no = 0; //ResponseCounter, response=1 (yes), response=2(no)
 
 		// Obtem Respostas
 		if ($records = get_records('block_term', 'course', $this->id, $sort='id ASC')) {
 			foreach ($records as $record) {
-				// Preenche entradas na variável de resultados
-				$result[]=array('id' => $record->id, 'user' => $record->user, 'course' => $record->course, 'response' => $record->response, 'ip' => $record->ip, 'timemodified' => $record->timemodified); 
+			   if ($record->response==1)
+				$yes++;
+			   elseif ($record->response==2)
+				$no++;
+			   // Preenche entradas na variável de resultados
+			   $result['responses'][]=array('id' => $record->id, 'user' => $record->user, 'course' => $record->course, 'response' => $record->response, 'ip' => $record->ip, 'timemodified' => $record->timemodified); 
 			}
+			$result['totals']=array('yes' => $yes, 'no' => $no, 'total' => $yes + $no);
 		}
 
 		// Codifica e retorna os resultados em JSON
