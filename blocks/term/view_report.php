@@ -137,12 +137,12 @@ function searchterm(opt,opt2) {
    // Invoca via AJAX a criacao de uma nova entrada
    $.getJSON(url, function(j){
       if (j) {
-        if (opt2==1) { //Gerar CSV
+        if (opt2==1 && j.responses) { //Gerar CSV
   	   $("#csv").val(GenerateCSV(j.responses));
 	   $("#name").val("report-blockterm.csv");
 	   document.csv_form.submit();
         }
-        if (opt2==2) { //Gerar GOOGLE GRAPH
+        if (opt2==2 && j.totals) { //Gerar GOOGLE GRAPH
 	   total = j.totals.total;
 	   yes = (j.totals.yes / total) * 100; no= (j.totals.no / total) * 100;
 
