@@ -45,6 +45,17 @@ $block_term_capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW
         )
+   ),
+    'block/term:viewreportall' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'guest' => CAP_PREVENT,
+            'student' => CAP_PREVENT,
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW
+        )
    ));
   
 ?>

@@ -19,9 +19,15 @@ $string['searcherror'] = 'Erro ao consultar respostas do termo no Banco de Dados
 $string['more'] = 'Saiba mais';
 $string['close'] = 'Voltar';
 
-$string['exportcsv'] = 'Exportar dados (CSV)';
-$string['exportgraph'] = 'Exportar dados (Gráfico)';
+$string['export'] = 'Exportar respostas desta disciplina:';
+$string['exportcsv'] = '- Exportar em CSV';
+$string['exportgraph'] = '- Visualizar Gráfico';
+
+$string['exportall'] = 'Exportar todas as respostas:';
+$string['exportcsvall'] = '- Exportar em CSV';
+$string['exportgraphall'] = '- Visualizar Gráfico';
+
 $string['titleexportgraph'] = 'Gráfico com resultados do Termo de Consentimento';
-$string['headercsv'] = '\"id\";\"user\";\"course\";\"response\";\"ip\";\"timemodified\"';
+$string['headercsv'] = '\"ID da Resposta\";\"ID do Usuario\";\"Nome\";\"Sobrenome\";\"E-mail\";\"ID da Disciplina\";\"Sigla da Disciplina\";\"RESPOSTA\";\"IP do computador\";\"Horario da Resposta\"';
 
 ?>

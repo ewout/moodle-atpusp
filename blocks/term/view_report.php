@@ -29,6 +29,8 @@ $processing = get_string('processing', 'block_term');
 $headercsv = get_string('headercsv', 'block_term');
 $close = get_string('close', 'block_term');
 $titleexportgraph = get_string('titleexportgraph', 'block_term');
+$yes = get_string('yes', 'block_term');
+$no = get_string('no', 'block_term');
 
 // JAVASCRIPT
 $this->content->text .='
@@ -86,7 +88,7 @@ var $waitdlg = $(\'<div></div>\')
 **/
 function FormatDate(ts) {
 	var newdate=new Date(ts*1000);
-	return newdate.getDate()+"/"+(newdate.getMonth()+1)+"/"+newdate.getFullYear();
+	return newdate.getDate()+"/"+(newdate.getMonth()+1)+"/"+newdate.getFullYear()+" - "+newdate.getHours()+":"+newdate.getMinutes()+":"+newdate.getSeconds();
 }
 
 /**
@@ -108,9 +110,13 @@ function GenerateCSV(data) {
 	result.push(\''.$headercsv.'\');
 	result.push("\n");
 	for (var i=0; i<data.length; i++) {
-		result.push(\'"\'+data[i].id+\'";\');
-		result.push(\'"\'+data[i].user+\'";\');
-		result.push(\'"\'+data[i].course+\'";\');
+		result.push(\'"\'+data[i].termid+\'";\');
+		result.push(\'"\'+data[i].userid+\'";\');
+		result.push(\'"\'+data[i].firstname+\'";\');
+		result.push(\'"\'+data[i].lastname+\'";\');
+		result.push(\'"\'+data[i].email+\'";\');
+		result.push(\'"\'+data[i].courseid+\'";\');
+		result.push(\'"\'+data[i].shortname+\'";\');
 		result.push(\'"\'+data[i].response+\'";\');
 		result.push(\'"\'+data[i].ip+\'";\');
 		result.push(\'"\'+FormatDate(data[i].timemodified)+\'";\n\');
@@ -120,26 +126,27 @@ function GenerateCSV(data) {
 
 
 /**
-	* Obtem respostas
+	* Obtem respostas, opt= 1(consulta todas as disciplinas) ou 2(consulta somente disciplina instanciada)
+			   opt2= 1(exporta em CSV) ou 2(visualizar o Grafico)
 **/
-function searchterm(opt) {
+function searchterm(opt,opt2) {
    // Prepara URL para AJAX
-   url="'.$CFG->wwwroot.'/blocks/term/ajax_libterm.php?func=searchterm&id='.$id.'&instanceid='.$instanceid.'";
+   url="'.$CFG->wwwroot.'/blocks/term/ajax_libterm.php?func=searchterm&id='.$id.'&instanceid='.$instanceid.'&optsearch="+opt+"";
 
    $waitdlg.dialog("open");
    // Invoca via AJAX a criacao de uma nova entrada
    $.getJSON(url, function(j){
       if (j) {
-        if (opt==1) { //Gerar CSV
+        if (opt2==1) { //Gerar CSV
   	   $("#csv").val(GenerateCSV(j.responses));
 	   $("#name").val("report-blockterm.csv");
 	   document.csv_form.submit();
         }
-        if (opt==2) { //Gerar GOOGLE GRAPH
+        if (opt2==2) { //Gerar GOOGLE GRAPH
 	   total = j.totals.total;
 	   yes = (j.totals.yes / total) * 100; no= (j.totals.no / total) * 100;
 
-	   $graphdlg.html(\'<div align="center"><p><img style="vertical-align:middle;" src="https://chart.googleapis.com/chart?cht=p&chd=t:\'+yes+\',\'+no+\'&chs=300x150&chl=Aceito|NãoAceito"></p><p><b>Amostra: \'+j.totals.total+\' respostas <br><br> Aceito: \'+CstFmt(yes,2)+\' % | \'+j.totals.yes+\' respostas<br>Não Aceito:  \'+CstFmt(no,2)+\' % | \'+j.totals.no+\' respostas</b></p></div>\')
+	   $graphdlg.html(\'<div align="center"><p><img style="vertical-align:middle;" src="https://chart.googleapis.com/chart?cht=p&chd=t:\'+yes+\',\'+no+\'&chs=300x150&chl='.$yes.'|'.$no.'"></p><p><b>Amostra: \'+j.totals.total+\' respostas <br><br> '.$yes.': \'+CstFmt(yes,2)+\' % | \'+j.totals.yes+\' respostas<br>'.$no.':  \'+CstFmt(no,2)+\' % | \'+j.totals.no+\' respostas</b></p></div>\')
 	   $graphdlg.dialog("open");
         }
 	$waitdlg.dialog("close");

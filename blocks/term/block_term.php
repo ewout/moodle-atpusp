@@ -2,7 +2,7 @@
 class block_term extends block_base {
     function init() {
 	$this->title = get_string('titleblock', 'block_term');
-	$this->version = 2011040502;
+	$this->version = 2011041300;
 	$this->config->titleterm = 'TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO – ALUNO REDEFOR';
 	$this->config->moretermtitle = 'SAIBA MAIS';
 	$this->config->oktermtitle = 'Congratulações';
@@ -26,7 +26,7 @@ class block_term extends block_base {
         }
 	
 	// Link para relatorio
-	if (has_capability('block/term:viewreport', $context, NULL, false)) {
+	if (has_capability('block/term:viewreport', $context, NULL, false) || has_capability('block/term:viewreportall', $context, NULL, false)) {
 		$this->content->footer .= '
 <form name="csv_form" id="csv_form" target="_blank" method="post" enctype="application/x-www-form-urlencoded;charset=UTF-8" action="'.$CFG->wwwroot.'/blocks/term/csv_processor.php">
 <input type="hidden" name="csv" id="csv" value="" />
@@ -34,9 +34,16 @@ class block_term extends block_base {
 </form>
 ';
 		include('view_report.php');
-		$this->content->text .='<a href="#" onclick="javascript:searchterm(1);">'.get_string('exportcsv', 'block_term').'</a><br>';
-		$this->content->text .='<a href="#" onclick="javascript:searchterm(2);">'.get_string('exportgraph', 'block_term').'</a>';
-
+		if (has_capability('block/term:viewreport', $context, NULL, false)) {
+		$this->content->text .='<h2>'.get_string('export', 'block_term').'</h2><br>';
+		$this->content->text .='<a href="#" onclick="javascript:searchterm(2,1);">'.get_string('exportcsv', 'block_term').'</a><br>';
+		$this->content->text .='<a href="#" onclick="javascript:searchterm(2,2);">'.get_string('exportgraph', 'block_term').'</a><br>';
+		}
+		if (has_capability('block/term:viewreportall', $context, NULL, false)) {
+		$this->content->text .='<h2>'.get_string('exportall', 'block_term').'</h2><br>';
+		$this->content->text .='<a href="#" onclick="javascript:searchterm(1,1);">'.get_string('exportcsvall', 'block_term').'</a><br>';
+		$this->content->text .='<a href="#" onclick="javascript:searchterm(1,2);">'.get_string('exportgraphall', 'block_term').'</a>';
+		}
 	}
 
 	// Verificar se usuario respondeu

@@ -39,6 +39,7 @@ class libTerm
 		$this->id = $id;
 		$this->instanceid = $instanceid;
 		$this->userid = $userid;
+
 		// Carrega os objetos instância, bloco e contexto de segurança
 		$this->instance=get_record('block_instance', 'id', $this->instanceid);
 		$this->block = block_instance('term', $this->instance);
@@ -91,16 +92,29 @@ class libTerm
 		$ajax = new HTML_AJAX_JSON();
 		$result = array();
 		$yes = 0;$no = 0; //ResponseCounter, response=1 (yes), response=2(no)
+		$stryes = get_string('yes', 'block_term');$strno = get_string('no', 'block_term');
+
+		$optsearch=required_param('optsearch', PARAM_INT);// Opcao de Busca: 1=Busca Global | 2=Busca no contexto do Curso
 
 		// Obtem Respostas
-		if ($records = get_records('block_term', 'course', $this->id, $sort='id ASC')) {
+		$query = 'SELECT t.id AS termid, u.id AS userid, u.firstname, u.lastname, u.email, c.id AS courseid, c.shortname, t.response, t.ip, t.timemodified ';
+		$query .= 'FROM '.$CFG->prefix.'block_term t, '.$CFG->prefix.'user u, '.$CFG->prefix.'course c ';
+		if ($optsearch==1)
+		   $query .= 'WHERE t.user=u.id AND t.course=c.id ORDER BY t.timemodified ASC';
+		elseif ($optsearch==2)
+		   $query .= 'WHERE t.user=u.id AND t.course=c.id AND c.id='.$this->id.' ORDER BY t.timemodified ASC';
+
+		if ($records = get_records_sql($query)) {
 			foreach ($records as $record) {
-			   if ($record->response==1)
+			   if ($record->response==1){
 				$yes++;
-			   elseif ($record->response==2)
+				$response = $stryes;
+			   }elseif ($record->response==2){
 				$no++;
+				$response = $strno;
+			   }
 			   // Preenche entradas na variável de resultados
-			   $result['responses'][]=array('id' => $record->id, 'user' => $record->user, 'course' => $record->course, 'response' => $record->response, 'ip' => $record->ip, 'timemodified' => $record->timemodified); 
+			   $result['responses'][]=array('termid' => $record->termid, 'userid' => $record->userid, 'firstname' => $record->firstname, 'lastname' => $record->lastname, 'email' => $record->email, 'courseid' => $record->courseid, 'shortname' => $record->shortname, 'response' => $response, 'ip' => $record->ip, 'timemodified' => $record->timemodified); 
 			}
 			$result['totals']=array('yes' => $yes, 'no' => $no, 'total' => $yes + $no);
 		}
