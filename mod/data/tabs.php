@@ -44,7 +44,8 @@
     } else {
         $row[] = new tabobject('single', $CFG->wwwroot.'/mod/data/view.php?d='.$data->id.'&amp;mode=single', get_string('single','data'));
     }
-
+    // MyEntry
+    $row[] = new tabobject('myentry', $CFG->wwwroot.'/mod/data/view.php?d='.$data->id.'&amp;mode=myentry', get_string('myentry','data'));
     // Add an advanced search tab.
     $row[] = new tabobject('asearch', $CFG->wwwroot.'/mod/data/view.php?d='.$data->id.'&amp;mode=asearch', get_string('search', 'data'));
 

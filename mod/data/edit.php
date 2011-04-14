@@ -31,6 +31,8 @@
     $rid   = optional_param('rid', 0, PARAM_INT);    //record id
     $import   = optional_param('import', 0, PARAM_INT);    // show import form
     $cancel   = optional_param('cancel', '');    // cancel an add
+    $returntemplate = optional_param('returntemplate', 'add', PARAM_ALPHA);   // Return Template: single/myentry
+    $page   = optional_param('page', 0, PARAM_INT);    // Numero da pagina do item
     $mode ='addtemplate';    //define the mode for this page, only 1 mode available
 
     if ($id) {
@@ -96,7 +98,7 @@
     }
 
     if ($cancel) {
-        redirect('view.php?d='.$data->id);
+        redirect('view.php?d='.$data->id.'&amp;mode='.$returntemplate.'&amp;page='.$page);
     }
 
 /// RSS and CSS and JS meta
@@ -178,7 +180,7 @@
 
             add_to_log($course->id, 'data', 'update', "view.php?d=$data->id&amp;rid=$rid", $data->id, $cm->id);
 
-            redirect($CFG->wwwroot.'/mod/data/view.php?d='.$data->id.'&amp;rid='.$rid);
+            redirect($CFG->wwwroot.'/mod/data/view.php?d='.$data->id.'&amp;mode='.$returntemplate.'&amp;page='.$page);
 
         } else { /// Add some new records
 
@@ -244,7 +246,7 @@
                 notify(get_string('entrysaved','data'));
 
                 if (!empty($datarecord->saveandview)) {
-                    redirect($CFG->wwwroot.'/mod/data/view.php?d='.$data->id.'&amp;rid='.$recordid);
+                    redirect($CFG->wwwroot.'/mod/data/view.php?d='.$data->id.'&amp;mode=myentry');
                 }
             }
         }
@@ -260,6 +262,10 @@
     echo '<div>';
     echo '<input name="d" value="'.$data->id.'" type="hidden" />';
     echo '<input name="rid" value="'.$rid.'" type="hidden" />';
+    if ($returntemplate!='add'){ //campos para guardar informacoes para edicao das entries
+       echo '<input name="returntemplate" value="'.$returntemplate.'" type="hidden" />';
+       echo '<input name="page" value="'.$page.'" type="hidden" />';
+    }
     echo '<input name="sesskey" value="'.sesskey().'" type="hidden" />';
     print_simple_box_start('center','80%');
 

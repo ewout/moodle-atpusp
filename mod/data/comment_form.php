@@ -27,6 +27,9 @@ class mod_data_comment_form extends moodleform {
         $mform->addElement('hidden', 'commentid', 0);
         $mform->setType('commentid', PARAM_INT);
 
+        $mform->addElement('hidden', 'returntemplate', 'single');
+        $mform->setType('returntemplate', PARAM_ALPHA);
+
 //-------------------------------------------------------------------------------
         // buttons
         $this->add_action_buttons();

@@ -10,9 +10,9 @@
 
     //param needed for comment operations
     $mode = optional_param('mode','add',PARAM_ALPHA);
+    $returntemplate = optional_param('returntemplate', 'single', PARAM_ALPHA);   // Return Template: single/myentry
     $commentid = optional_param('commentid','',PARAM_INT);
     $confirm = optional_param('confirm','',PARAM_INT);
-
 
     if (! $record = get_record('data_records', 'id', $rid)) {
         error('Record ID is incorrect');
@@ -47,7 +47,7 @@
 
 
     $mform = new mod_data_comment_form();
-    $mform->set_data(array('mode'=>$mode, 'page'=>$page, 'rid'=>$record->id, 'commentid'=>$commentid));
+    $mform->set_data(array('mode'=>$mode, 'page'=>$page, 'rid'=>$record->id, 'commentid'=>$commentid, 'returntemplate'=>$returntemplate));
     if ($comment) {
         $format = $comment->format;
         $content = $comment->content;
@@ -63,7 +63,7 @@
 
 
     if ($mform->is_cancelled()) {
-        redirect('view.php?d='.$data->id.'&amp;mode=single&amp;page='.$page);
+        redirect('view.php?d='.$data->id.'&amp;mode='.$returntemplate.'&amp;page='.$page);
     }
 
     switch ($mode) {
@@ -79,7 +79,7 @@
             $newcomment->content  = $formadata->content;
             $newcomment->recordid = $formadata->rid;
             if (insert_record('data_comments',$newcomment)) {
-                redirect('view.php?d='.$data->id.'&amp;mode=single&amp;page='.$page);
+                redirect('view.php?d='.$data->id.'&amp;mode='.$returntemplate.'&amp;page='.$page);
             } else {
                 error('Error while saving comment.');
             }
@@ -98,16 +98,16 @@
             $updatedcomment->modified = time();
 
             if (update_record('data_comments',$updatedcomment)) {
-                redirect('view.php?d='.$data->id.'&amp;mode=single&amp;page='.$page);
+                redirect('view.php?d='.$data->id.'&amp;mode='.$returntemplate.'&amp;page='.$page);
             } else {
                 error('Error while saving comment.');
             }
         break;
 
-        case 'delete':    //deletes single comment from db
+        case 'delete':    //deletes single/myentry comment from db
             if ($confirm and confirm_sesskey() and $comment) {
                 delete_records('data_comments','id',$comment->id);
-                redirect('view.php?rid='.$record->id.'&amp;page='.$page, get_string('commentdeleted', 'data'));
+                redirect('view.php?d='.$data->id.'&amp;page='.$page.'&amp;mode='.$returntemplate);
 
             } else {    //print confirm delete form
                 print_header();
@@ -115,8 +115,8 @@
 
                 notice_yesno(get_string('deletecomment','data'),
                   'comment.php?rid='.$record->id.'&amp;commentid='.$comment->id.'&amp;page='.$page.
-                              '&amp;sesskey='.sesskey().'&amp;mode=delete&amp;confirm=1',
-                  'view.php?rid='.$record->id.'&amp;page='.$page);
+                  '&amp;sesskey='.sesskey().'&amp;mode=delete&amp;confirm=1&amp;returntemplate='.$returntemplate,
+                  'view.php?d='.$data->id.'&amp;page='.$page.'&amp;mode='.$returntemplate);
                 print_footer();
             }
             die;

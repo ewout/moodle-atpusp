@@ -918,13 +918,20 @@ function data_get_participants($dataid) {
  *       @param string $template                                        *
  * output null                                                          *
  ************************************************************************/
-function data_print_template($template, $records, $data, $search='', $page=0, $return=false, $nowperpage=0) {
+function data_print_template($template, $records, $data, $search='', $page=0, $return=false, $nowperpage=0, $myentry=false) {
     global $CFG;
     $cm = get_coursemodule_from_instance('data', $data->id);
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
     static $fields = NULL;
     static $isteacher;
     static $dataid = NULL;
+
+    if ($myentry)
+	$mode = 'myentry';
+    elseif ($template=='singletemplate')
+	$mode = 'single';
+    else
+	$mode = '';
 
     $counter=0; //hds-Conta a pagina do post no formato SINGLETEMPLATE.Objetivo:criar links para o post instanciado
     if ($template == 'listtemplate') //lista de $records
@@ -959,9 +966,9 @@ function data_print_template($template, $records, $data, $search='', $page=0, $r
         $patterns[]='##delete##';
         if (has_capability('mod/data:manageentries', $context) or data_isowner($record->id)) {
             $replacement[] = '<a href="'.$CFG->wwwroot.'/mod/data/edit.php?d='
-                             .$data->id.'&amp;rid='.$record->id.'&amp;sesskey='.sesskey().'"><img src="'.$CFG->pixpath.'/t/edit.gif" class="iconsmall" alt="'.get_string('edit').'" title="'.get_string('edit').'" /></a>';
+                             .$data->id.'&amp;rid='.$record->id.'&returntemplate='.$mode.'&amp;page='.$page.'&amp;sesskey='.sesskey().'"><img src="'.$CFG->pixpath.'/t/edit.gif" class="iconsmall" alt="'.get_string('edit').'" title="'.get_string('edit').'" /></a>';
             $replacement[] = '<a href="'.$CFG->wwwroot.'/mod/data/view.php?d='
-                             .$data->id.'&amp;delete='.$record->id.'&amp;sesskey='.sesskey().'"><img src="'.$CFG->pixpath.'/t/delete.gif" class="iconsmall" alt="'.get_string('delete').'" title="'.get_string('delete').'" /></a>';
+                             .$data->id.'&amp;delete='.$record->id.'&mode='.$mode.'&amp;page='.$page.'&amp;sesskey='.sesskey().'"><img src="'.$CFG->pixpath.'/t/delete.gif" class="iconsmall" alt="'.get_string('delete').'" title="'.get_string('delete').'" /></a>';
         } else {
             $replacement[] = '';
             $replacement[] = '';
@@ -997,7 +1004,10 @@ function data_print_template($template, $records, $data, $search='', $page=0, $r
         $patterns[]='##comments##';
         if (($template == 'listtemplate') && ($data->comments)) {
             $comments = count_records('data_comments','recordid',$record->id);
-            $replacement[] = '<a href="view.php?d='.$data->id.'&amp;mode=single&amp;page='.$counter.'#comments">'.get_string('commentsn','data', $comments).'</a>';
+	    if ($search)
+               $replacement[] = '<a href="view.php?d='.$data->id.'&amp;mode=single&amp;filter=1&amp;paging=1&amp;page='.$counter.'#comments">'.get_string('commentsn','data', $comments).'</a>';
+	    else
+	       $replacement[] = '<a href="view.php?d='.$data->id.'&amp;mode=single&amp;page='.$counter.'#comments">'.get_string('commentsn','data', $comments).'</a>';
         } else {
             $replacement[] = '';
         }
@@ -1020,10 +1030,13 @@ function data_print_template($template, $records, $data, $search='', $page=0, $r
                 data_print_ratings($data, $record);
             }
             /**********************************
-             *    Printing Ratings Form       *
+             *    Printing Comments Form       *
              *********************************/
-            if (($template == 'singletemplate') && ($data->comments)) {    //prints ratings options
-                data_print_comments($data, $record, $page);
+            if (($template == 'singletemplate') && ($data->comments)) {    //prints comments
+		if ($myentry)
+                   data_print_comments($data, $record, $page, false, 'myentry');
+		else
+                   data_print_comments($data, $record, $page);
             }
         }
     }
@@ -1344,7 +1357,7 @@ function data_get_ratings($recordid, $sort="u.firstname ASC") {
 
 
 // prints all comments + a text box for adding additional comment
-function data_print_comments($data, $record, $page=0, $mform=false) {
+function data_print_comments($data, $record, $page=0, $mform=false, $returntemplate='single') {
     global $CFG;
     $cm = get_coursemodule_from_instance('data', $data->id);
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
@@ -1352,7 +1365,7 @@ function data_print_comments($data, $record, $page=0, $mform=false) {
     echo '<a name="comments"></a>';
     if ($comments = get_records('data_comments','recordid',$record->id)) {
         foreach ($comments as $comment) {
-            data_print_comment($data, $comment, $page);
+            data_print_comment($data, $comment, $page, $returntemplate);
         }
         echo '<br />';
     }
@@ -1362,13 +1375,13 @@ function data_print_comments($data, $record, $page=0, $mform=false) {
     $editor = optional_param('addcomment', 0, PARAM_BOOL);
     if (!$mform and !$editor) {
         echo '<div class="newcomment" style="text-align:center">';
-        echo '<a href="view.php?d='.$data->id.'&amp;page='.$page.'&amp;mode=single&amp;addcomment=1">'.get_string('addcomment', 'data').'</a>';
+        echo '<a href="view.php?d='.$data->id.'&amp;page='.$page.'&amp;mode='.$returntemplate.'&amp;addcomment=1">'.get_string('addcomment', 'data').'</a>';
         echo '</div>';
     } else {
         if (!$mform) {
             require_once('comment_form.php');
             $mform = new mod_data_comment_form('comment.php');
-            $mform->set_data(array('mode'=>'add', 'page'=>$page, 'rid'=>$record->id));
+            $mform->set_data(array('mode'=>'add', 'page'=>$page, 'rid'=>$record->id, 'returntemplate'=>$returntemplate));
         }
         echo '<div class="newcomment" style="text-align:center">';
         $mform->display();
@@ -1377,7 +1390,7 @@ function data_print_comments($data, $record, $page=0, $mform=false) {
 }
 
 // prints a single comment entry
-function data_print_comment($data, $comment, $page=0) {
+function data_print_comment($data, $comment, $page=0, $returntemplate='single') {
     global $USER, $CFG;
     $cm = get_coursemodule_from_instance('data', $data->id);
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
@@ -1411,8 +1424,8 @@ function data_print_comment($data, $comment, $page=0) {
 // Commands
     echo '<div class="commands">';
     if (data_isowner($comment->recordid) or has_capability('mod/data:managecomments', $context)) {
-            echo '<a href="'.$CFG->wwwroot.'/mod/data/comment.php?rid='.$comment->recordid.'&amp;mode=edit&amp;commentid='.$comment->id.'&amp;page='.$page.'">'.$stredit.'</a>';
-            echo '| <a href="'.$CFG->wwwroot.'/mod/data/comment.php?rid='.$comment->recordid.'&amp;mode=delete&amp;commentid='.$comment->id.'&amp;page='.$page.'">'.$strdelete.'</a>';
+            echo '<a href="'.$CFG->wwwroot.'/mod/data/comment.php?rid='.$comment->recordid.'&amp;mode=edit&amp;commentid='.$comment->id.'&amp;page='.$page.'&amp;returntemplate='.$returntemplate.'">'.$stredit.'</a>';
+            echo '| <a href="'.$CFG->wwwroot.'/mod/data/comment.php?rid='.$comment->recordid.'&amp;mode=delete&amp;commentid='.$comment->id.'&amp;page='.$page.'&amp;returntemplate='.$returntemplate.'">'.$strdelete.'</a>';
     }
 
     echo '</div>';

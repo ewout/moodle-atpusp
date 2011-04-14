@@ -350,8 +350,8 @@
             if ($deleterecord = get_record('data_records', 'id', $delete)) {   // Need to check this is valid
                 if ($deleterecord->dataid == $data->id) {                       // Must be from this database
                     notice_yesno(get_string('confirmdeleterecord','data'),
-                            'view.php?d='.$data->id.'&amp;delete='.$delete.'&amp;confirm=1&amp;sesskey='.sesskey(),
-                            'view.php?d='.$data->id);
+                            'view.php?d='.$data->id.'&amp;mode='.$mode.'&amp;delete='.$delete.'&amp;confirm=1&amp;sesskey='.sesskey(),
+                            'view.php?d='.$data->id.'&amp;mode='.$mode.'&amp;page='.$page);
 
                     $records[] = $deleterecord;
                     echo data_print_template('singletemplate', $records, $data, '', 0, true);
@@ -380,6 +380,8 @@
         // Print the tabs
         if ($record or $mode == 'single') {
             $currenttab = 'single';
+        } elseif($mode == 'myentry') {
+            $currenttab = 'myentry';
         } elseif($mode == 'asearch') {
             $currenttab = 'asearch';
         }
@@ -481,8 +483,8 @@
                 $sortorder = ' ORDER BY '.$ordering.', r.id ASC ';
                 $searchselect = '';
 
-                // If requiredentries is not reached, only show current user's entries
-                if (!$requiredentries_allowed) {
+                // If requiredentries is not reached, only show current user's entries || e selecionar usuario que esta navegando para MYENTRY
+                if (!$requiredentries_allowed || $mode == 'myentry') {
                     $where .= ' AND u.id = ' . $USER->id;
                 }
 
@@ -518,8 +520,8 @@
                 $sortorder = ' ORDER BY _order '.$order.' , r.id ASC ';
                 $searchselect = '';
 
-                // If requiredentries is not reached, only show current user's entries
-                if (!$requiredentries_allowed) {
+                // If requiredentries is not reached, only show current user's entries || e selecionar usuario que esta navegando para MYENTRY
+                if (!$requiredentries_allowed || $mode == 'myentry') {
                     $where .= ' AND u.id = ' . $USER->id;
                 }
 
@@ -568,7 +570,7 @@
                     unset($allrecordids);
                 }
 
-            } else if ($mode == 'single') {  // We rely on ambient $page settings
+            } else if ($mode == 'single' || $mode == 'myentry') {  // We rely on ambient $page settings
                 $nowperpage = 1;
 
             } else {
@@ -616,6 +618,9 @@
                     if (!empty($search)) {
                         $baseurl .= 'filter=1&amp;';
                     }
+                    //pass variable to allow determining whether or not we are paging through results.
+                    $baseurl .= 'paging='.$paging.'&amp;';
+
                     print_paging_bar($totalcount, $page, $nowperpage, $baseurl, $pagevar='page');
 
                     if (empty($data->singletemplate)){
@@ -624,6 +629,23 @@
                     }
 
                     data_print_template('singletemplate', $records, $data, $search, $page);
+
+                    print_paging_bar($totalcount, $page, $nowperpage, $baseurl, $pagevar='page');
+
+               } else if ($mode == 'myentry') {                     // MyEntry
+                    $baseurl = 'view.php?d=' . $data->id . '&amp;mode=myentry&amp;';
+                    if (!empty($search)) {
+                        $baseurl .= 'filter=1&amp;';
+                    }
+                    print_paging_bar($totalcount, $page, $nowperpage, $baseurl, $pagevar='page');
+
+                    if (empty($data->singletemplate)){
+                        notify(get_string('nosingletemplate','data'));
+                        data_generate_default_template($data, 'singletemplate', 0, false, false);
+                    }
+
+		    //hds - utiliza o singletemplate e envia FLAG MYENTRY para montar links de comentarios e numpaginas do rodape
+                    data_print_template('singletemplate', $records, $data, $search, $page, false, 0,true);
 
                     print_paging_bar($totalcount, $page, $nowperpage, $baseurl, $pagevar='page');
 
@@ -659,7 +681,7 @@
         }
 
         //Advanced search form doesn't make sense for single (redirects list view)
-        if (($maxcount || $mode == 'asearch') && $mode != 'single') {
+        if (($maxcount || $mode == 'asearch') && $mode != 'single' && $mode != 'myentry') {
             data_print_preference_form($data, $perpage, $search, $sort, $order, $search_array, $advanced, $mode);
         }
 
