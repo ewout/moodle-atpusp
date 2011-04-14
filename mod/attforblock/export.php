@@ -53,8 +53,12 @@
 			if (isset($fromform->ident['uname'])) {
 				$data->tabhead[] = get_string('username');
 			}
-			$data->tabhead[] = get_string('lastname');
+			if (isset($fromform->ident['idnumber'])) {
+				$data->tabhead[] = get_string('idnumber');
+			}
+
 			$data->tabhead[] = get_string('firstname');
+			$data->tabhead[] = get_string('lastname');
 			
 			$select = "courseid = {$course->id} AND sessdate >= {$course->startdate}";
 			if (isset($fromform->includenottaken)) {
@@ -82,8 +86,9 @@
 				if (isset($fromform->ident['uname'])) {
 					$data->table[$i][] = $student->username;
 				}
-				$data->table[$i][] = $student->lastname;
+				$data->table[$i][] = $student->idnumber;
 				$data->table[$i][] = $student->firstname;
+				$data->table[$i][] = $student->lastname;
 				foreach ($sessions as $sess) {
 					if ($rec = get_record('attendance_log', 'sessionid', $sess->id, 'studentid', $student->id)) {
 						$data->table[$i][] = $statuses[$rec->statusid]->acronym;
