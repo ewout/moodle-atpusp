@@ -47,7 +47,7 @@ class block_term extends block_base {
 	}
 
 	// Verificar se usuario respondeu
-	$termuser = get_record('block_term','user', $USER->id);
+	$termuser = get_records_select('block_term', "user={$USER->id}");
 	if (!$termuser && has_capability('block/term:enableterm', $context, NULL, false)){ //nao respondeu ainda e tem permissao, exibe termo
 	   include('view_term.php'); //Formulario do TERMO (AJAX)
 	}

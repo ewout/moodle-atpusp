@@ -75,11 +75,16 @@ class libTerm
 		$termentry->ip=required_param('ip', PARAM_TEXT);
 		$termentry->timemodified=time();
 
-		// Insere novo registro
-		if (insert_record('block_term', $termentry))
+		// Verifica se o usuario ja respondeu
+		if (!get_records_select('block_term', "user={$this->userid}")) {
+		   // Insere novo registro
+ 		   if (insert_record('block_term', $termentry))
 			$result = true;
-		else
-			$result = false;
+		   else
+			$result = false; //erro conexao banco de dados
+		} else
+			$result = false; // ja respondeu
+
 		// Codifica resultado em JSON
 		echo($ajax->encode($result));
 	}
