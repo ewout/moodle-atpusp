@@ -176,6 +176,7 @@ class user_filtering {
                 }
                 $field = $this->_fields[$fname];
                 foreach($datas as $i=>$data) {
+		    $data['value'] = trim($data['value']);
                     $sqls[] = $field->get_sql_filter($data);
                 }
             }
