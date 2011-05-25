@@ -101,16 +101,20 @@ $tutordiary->canDelete();
 <div id="report">
 </div>
 
-<!--#hds-Utiliza bibliotecas online do JQuery para colocar mascara em TIMEDEVOTED,tempodedicado (utiliza o ID do campo para incluir a mascara)-->
-<script src="http://jquery-joshbush.googlecode.com/files/jquery.maskedinput-1.2.2.min.js" type="text/javascript"></script>
+<!--#hds-permitir somente numeros inteiros em TIMEDEVOTED-->
+<script language=Javascript>
+function isNumberKey(evt)
+{
+ var charCode = (evt.which) ? evt.which : event.keyCode
+ if (charCode > 31 && (charCode < 48 || charCode > 57))
+    return false;
+ return true;
+}
+</script>
+
+
 
 <script>
-// Campo para filtrar tempo dedicado
-jQuery(function($){
-   $("#timedevoted").mask("999",{placeholder:"0"});
-   $("#timedevoted2").mask("999",{placeholder:"0"});
-});
-
 // Prepara bloco que irá apresentar os detalhes das atividades quando se passa o mouse
 var container = $('<div id="personPopupContainer">'
 	+ '<table width="" border="0" cellspacing="0" cellpadding="0" align="center" class="personPopupPopup">'
@@ -137,7 +141,7 @@ var formhtml = '<div><table id="addreporttutor">';
 formhtml+='<tr><td><label><?php print_string('group', 'block_relusp');?>:</label><span id="grp"></span></td>';
 formhtml+='<td align="right"><label><?php print_string('student', 'block_relusp');?>:</label><span id="std"></span></td></tr>';
 formhtml+='<tr><td><label><?php print_string('interaction', 'block_relusp');?>:</label><span id="ite"></span></td>';
-formhtml+='<td align="right"><label><?php print_string('timedevotedadd', 'block_relusp');?>:</label><input type="text" name="timedevoted" id="timedevoted" size="5"></span></td></tr>';
+formhtml+='<td align="right"><label><?php print_string('timedevotedadd', 'block_relusp');?>:</label><input type="text" name="timedevoted" id="timedevoted" size="5" onkeypress="return isNumberKey(event)"></span></td></tr>';
 formhtml+='<tr><td><label><?php print_string('requestdate', 'block_relusp');?>: </label><input type="text" name="reqdate" id="reqdate" size="10"></td>';
 formhtml+='<td align="right"><label><?php print_string('responsedate', 'block_relusp');?>: </label><input type="text" name="respdate" id="respdate" size="10"></td></tr>';
 formhtml+='<tr></tr><tr><td colspan="2"><label><?php print_string('obs', 'block_relusp');?>:</label><br><textarea id="obs" rows="4" cols="80" ></textarea></td></tr>';
@@ -149,7 +153,7 @@ formhtml2+='<tr><td><label><?php print_string('tutor', 'block_relusp');?>:</labe
 formhtml2+='<tr><td><label><?php print_string('group', 'block_relusp');?>:</label><span id="grp2"></span></td>';
 formhtml2+='<td align="right"><label><?php print_string('student', 'block_relusp');?>:</label><span id="std2"></span></td></tr>';
 formhtml2+='<tr><td><label><?php print_string('interaction', 'block_relusp');?>:</label><span id="ite2"></span></td>';
-formhtml2+='<td align="right"><label><?php print_string('timedevotedadd', 'block_relusp');?>:</label><input type="text" name="timedevoted2" id="timedevoted2" size="5"></td></tr>';
+formhtml2+='<td align="right"><label><?php print_string('timedevotedadd', 'block_relusp');?>:</label><input type="text" name="timedevoted2" id="timedevoted2" size="5" onkeypress="return isNumberKey(event)"></td></tr>';
 formhtml2+='<tr><td><label><?php print_string('requestdate', 'block_relusp');?>: </label><input type="text" name="reqdate2" id="reqdate2" size="10"></td>';
 formhtml2+='<td align="right"><label><?php print_string('responsedate', 'block_relusp');?>: </label><input type="text" name="respdate2" id="respdate2" size="10"></td></tr>';
 formhtml2+='<tr></tr><tr><td colspan="2"><label><?php print_string('obs', 'block_relusp');?>:</label><br><textarea id="obs2" rows="4" cols="80" ></textarea></td></tr>';
@@ -183,12 +187,15 @@ function AddTutorDiaryEntry(dlg) {
 		$.getJSON(url, function(j){
 			if (j) {
 				$("#generate").click();
+				$('#timedevoted').val('');
+				$('#reqdate').datepicker( "setDate" , "-1" );
+				$('#respdate').datepicker( "setDate" , "-1" );
 				$('#obs').val('');
-				// Avança aluno na lista
-				if ($('#student').attr('selectedIndex')<$('#student').attr('options').length-1)
-					$('#student').attr('selectedIndex', $('#student').attr('selectedIndex')+1);
-
 				$waitdlg.dialog('close');
+
+				var r=confirm("O registro foi incluído com sucesso! \n Deseja incluir outro registro?");
+				if (r==false)
+				   $dialog.dialog('close');
 			} else
 				alert('<?php print_string('newentryerror', 'block_relusp');?>');	
 		});			

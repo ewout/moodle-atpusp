@@ -89,7 +89,7 @@ $string['newentryerror'] = 'Erro adicionando nova entrada.';
 $string['choosereqdate'] = 'Escolha a data da requisição.';
 $string['insertnewentry'] = 'Adicionar entrada no diário';
 $string['insert'] = 'Inserir';
-$string['cancel'] = 'Cancelar';
+$string['cancel'] = 'Fechar';
 $string['ok'] = 'OK';
 $string['problem'] = 'Alerta';
 $string['editentry'] = 'Editar entrada no diário';
@@ -114,4 +114,13 @@ $string['lesson'] = 'Lição';
 $string['questionnaire'] = 'Enquete';
 $string['all'] = 'Todos';
 $string['noperm'] = 'Você não tem permissão para gerar este relatório!';
+
+
+$string['fda'] = 'FDA(distribuição cumulativa)';
+$string['titlegraphtutor'] = 'Tutores com ';
+$string['titlegraphstd'] = 'Estudantes com ';
+$string['gengraph'] = 'Gerar Gráfico ';
+$string['closeallgraphs'] = 'fechar todos os gráficos';
+$string['errorurldata'] = 'Muitos dados para plotar o gráfico, em breve resolveremos isso.';
+
 ?>

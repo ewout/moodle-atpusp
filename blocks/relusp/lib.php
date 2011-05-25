@@ -401,12 +401,23 @@ class TutorDiary
 	public function getStudents() {
 		$ajax = new HTML_AJAX_JSON();
 		$result = array();
+
+		// Grupo TODOS OS PARTICIPANTES 
+		$rstudents = array();
+		// Obtem estudantes objeto do diário do tutor
+		if ($students = get_users_by_capability($this->context, 'block/relusp:tutordiarysubject', 'u.id, CONCAT(u.firstname, \' \', u.lastname) as name', 'firstname,lastname ASC', '', '', '', '', false)) {
+		   foreach($students as $student)
+			$rstudents[] = array('id' => $student->id, 'name' => $student->name);
+		}
+		// Preenche estudantes
+		$result[]=array('name' => get_string('allparticipants'), 'students'=> $rstudents);
+
 		// Obtem os grupos do tutor
 		if ($groups = groups_get_all_groups($this->id, $this->userid, 0, 'g.id, g.name')) {
 			// Obtem usuários que podem ser objeto de postagens no diário
 			$subjects = get_users_by_capability($this->context, 'block/relusp:tutordiarysubject', 'u.id', '', '', '', '', '', false);
 			foreach($groups as $group) {
-				$rstudents = array();
+				$rstudents2 = array();
 				// Obtem estudantes do grupo
 				if ($students = groups_get_members($group->id, 'u.id, CONCAT(u.firstname, \' \', u.lastname) as name', 'firstname,lastname ASC')) {
 					foreach($students as $student) {
@@ -415,21 +426,12 @@ class TutorDiary
 							if (!array_key_exists($student->id, $subjects))
 								continue;
 						// Preenche estudantes do grupo
-						$rstudents[] = array('id' => $student->id, 'name' => $student->name);
+						$rstudents2[] = array('id' => $student->id, 'name' => $student->name);
 					}
 				}
 				// Armazena estudantes do grupo
-				$result[]=array('name' => $group->name, 'students'=> $rstudents);
+				$result[]=array('name' => $group->name, 'students'=> $rstudents2);
 			}
-		} else {  // Tutor fora de grupo. 
-			$rstudents = array();
-			// Obtem estudantes objeto do diário do tutor
-			if ($students = get_users_by_capability($this->context, 'block/relusp:tutordiarysubject', 'u.id, CONCAT(u.firstname, \' \', u.lastname) as name', 'firstname,lastname ASC', '', '', '', '', false)) {
-				foreach($students as $student)
-					$rstudents[] = array('id' => $student->id, 'name' => $student->name);
-			}
-			// Preenche estudantes
-			$result[]=array('name' => get_string('none'), 'students'=> $rstudents);
 		}
 		// Cria variável Javascript
 		echo('<script>var groups = '.$ajax->encode($result).';</script>');

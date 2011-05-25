@@ -34,3 +34,7 @@ background:red;
 #results .notes{
 	max-width:300px;
 }
+
+#chart{
+	margin-top:10px;
+}
