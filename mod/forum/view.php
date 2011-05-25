@@ -131,8 +131,8 @@
             //helpbutton("subscription", $strallowchoice, "forum");
             echo '&nbsp;<span class="helplink">';
             if (has_capability('mod/forum:managesubscriptions', $context)) {
-                //Retirado pois esta acao nao gera log e nem pede confirmacao (http://redmine.atp.usp.br/issues/270)
-                //echo "<a title=\"$strallowchoice\" href=\"subscribe.php?id=$forum->id&amp;force=no\">$strallowchoice</a>";
+                //Retirado pois esta acao nao gera log e nem pede confirmacao (http://redmine.atp.usp.br/issues/270) - SessKey do MDL-1.9.12
+                //echo "<a title=\"$strallowchoice\" href=\"subscribe.php?id=$forum->id&amp;force=no&amp;sesskey=".sesskey()."\">$strallowchoice</a>";
 		echo '&nbsp;';
             } else {
                 echo $streveryoneisnowsubscribed;
@@ -153,7 +153,7 @@
 
             if (has_capability('mod/forum:managesubscriptions', $context)) {
                 //Retirado pois esta acao nao gera log e nem pede confirmacao (http://redmine.atp.usp.br/issues/270)
-                //echo "<span class=\"helplink\"><a title=\"$strforcesubscribe\" href=\"subscribe.php?id=$forum->id&amp;force=yes\">$strforcesubscribe</a></span>";
+                //echo "<span class=\"helplink\"><a title=\"$strforcesubscribe\" href=\"subscribe.php?id=$forum->id&amp;force=yes&amp;sesskey=".sesskey()."\">$strforcesubscribe</a></span>";
 		echo '&nbsp;';
             } else {
                 echo '<span class="helplink">'.$streveryonecannowchoose.'</span>';

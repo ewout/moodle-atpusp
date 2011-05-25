@@ -567,15 +567,18 @@ function clean_param($param, $type) {
             }
 
         case PARAM_TAG:
+            // Please note it is not safe to use the tag name directly anywhere,
+            // it must be processed with s(), urlencode() before embedding anywhere.
+            // remove some nasties
+            $param = preg_replace('~[[:cntrl:]]|[<>`]~u', '', $param);
             //as long as magic_quotes_gpc is used, a backslash will be a
-            //problem, so remove *all* backslash.
+            //problem, so remove *all* backslash - BUT watch out for SQL injections caused by this sloppy design (skodak)
             $param = str_replace('\\', '', $param);
             //convert many whitespace chars into one
             $param = preg_replace('/\s+/', ' ', $param);
             $textlib = textlib_get_instance();
             $param = $textlib->substr(trim($param), 0, TAG_MAX_LENGTH);
             return $param;
-
 
         case PARAM_TAGLIST:
             $tags = explode(',', $param);
@@ -6420,12 +6423,12 @@ function check_php_version($version='4.1.0') {
           break;
       case 'AppleWebKit': /// Safari, Chrome, Konqueror, Symbiam, Palm, etc --> must be return true;
       case 'Safari':  /// Safari
-          // Look for AppleWebKit, excluding strings with OmniWeb, Shiira and SimbianOS
+          // Look for AppleWebKit, excluding strings with OmniWeb, Shiira and SymbianOS
           if (strpos($agent, 'OmniWeb')) { // Reject OmniWeb
               return false;
           } elseif (strpos($agent, 'Shiira')) { // Reject Shiira
               return false;
-          } elseif (strpos($agent, 'SimbianOS')) { // Reject SimbianOS
+          } elseif (strpos($agent, 'SymbianOS')) { // Reject SymbianOS
               return false;
           }
           if (strpos($agent, 'iPhone') or strpos($agent, 'iPad') or strpos($agent, 'iPod')) {

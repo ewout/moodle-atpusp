@@ -380,6 +380,12 @@ function forum_cron() {
                     continue;
                 }
 
+                // Don't send email if the forum is Q&A and the user has not posted
+                if ($forum->type == 'qanda' && !forum_get_user_posted_time($discussion->id, $userto->id)) {
+                    mtrace('Did not email '.$userto->id.' because user has not posted in discussion');
+                    continue;
+                }
+
                 // Get info about the sending user
                 if (array_key_exists($post->userid, $users)) { // we might know him/her already
                     $userfrom = $users[$post->userid];
@@ -4299,6 +4305,7 @@ function forum_get_subscribe_link($forum, $context, $messages = array(), $cantac
             $backtoindexlink = '';
         }
         $link = '';
+        $sesskeylink = '&amp;sesskey='.sesskey();
 
         if ($fakelink) {
             $link .= <<<EOD
@@ -4306,14 +4313,15 @@ function forum_get_subscribe_link($forum, $context, $messages = array(), $cantac
 //<![CDATA[
 var subs_link = document.getElementById("subscriptionlink");
 if(subs_link){
-    subs_link.innerHTML = "<a title=\"$linktitle\" href='$CFG->wwwroot/mod/forum/subscribe.php?id={$forum->id}{$backtoindexlink}'>$linktext<\/a>";
+    subs_link.innerHTML = "<a title=\"$linktitle\" href='$CFG->wwwroot/mod/forum/subscribe.php?id={$forum->id}{$backtoindexlink}{$sesskeylink}'>$linktext<\/a>";
 }
 //]]>
 </script>
 <noscript>
 EOD;
         }
-        $options ['id'] = $forum->id;
+        $options['id'] = $forum->id;
+        $options['sesskey'] = sesskey();
         $link .= print_single_button($CFG->wwwroot . '/mod/forum/subscribe.php',
                 $options, $linktext, 'post', '_self', true, $linktitle);
         if ($fakelink) {
@@ -4634,7 +4642,7 @@ function forum_user_can_see_discussion($forum, $discussion, $context, $user=NULL
  *
  */
 function forum_user_can_see_post($forum, $discussion, $post, $user=NULL, $cm=NULL) {
-    global $USER;
+    global $CFG, $USER;
 
     // retrieve objects (yuk)
     if (is_numeric($forum)) {
@@ -4695,9 +4703,10 @@ function forum_user_can_see_post($forum, $discussion, $post, $user=NULL, $cm=NUL
     if ($forum->type == 'qanda') {
         $firstpost = forum_get_firstpost_from_discussion($discussion->id);
         $modcontext = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $userfirstpost = forum_get_user_posted_time($discussion->id, $user->id);
 
-        return (forum_user_has_posted($forum->id,$discussion->id,$user->id) ||
-                $firstpost->id == $post->id ||
+        return (($userfirstpost !== false && (time() - $userfirstpost >= $CFG->maxeditingtime)) ||
+                $firstpost->id == $post->id || $post->userid == $user->id || $firstpost->userid == $user->id ||
                 has_capability('mod/forum:viewqandawithoutposting', $modcontext, $user->id, false));
     }
     return true;
@@ -6933,6 +6942,23 @@ function forum_get_open_modes() {
  */
 function forum_get_extra_capabilities() {
     return array('moodle/site:accessallgroups', 'moodle/site:viewfullnames', 'moodle/site:trustcontent');
+}
+
+/**
+ * Returns creation time of the first user's post in given discussion
+ * @global object $DB
+ * @param int $did Discussion id
+ * @param int $userid User id
+ * @return int|bool post creation time stamp or return false
+ */
+function forum_get_user_posted_time($did, $userid) {
+    global $CFG;
+
+    $posttime = get_field('forum_posts', 'MIN(created)', 'userid', $userid, 'discussion', $did);
+    if (empty($posttime)) {
+        return false;
+    }
+    return $posttime;
 }
 
 ?>

@@ -3352,6 +3352,7 @@ function xmldb_main_upgrade($oldversion=0) {
         upgrade_main_savepoint($result, 2007101590.01);
     }
 
+
     // GCC-001. add htmleditorid in _user table
     if ($result && $oldversion < 2007101591.001) {  // valor para pegar outras mudanzas a partir desta data
        $table = new XMLDBTable('user');
@@ -3361,6 +3362,23 @@ function xmldb_main_upgrade($oldversion=0) {
            add_field($table, $field);
        }
        upgrade_main_savepoint($result0, 2007101591.001);
+    }
+
+    if ($result && $oldversion < 2007101591.01) {
+
+    /// Define index userfieldidx (not unique) to be added to user_info_data
+        $table = new XMLDBTable('user_info_data');
+        $index = new XMLDBIndex('userfieldidx');
+        $index->setAttributes(XMLDB_INDEX_NOTUNIQUE, array('userid', 'fieldid'));
+
+    /// Launch add index userfieldidx
+        if (!index_exists($table, $index)) {
+            $result = $result && add_index($table, $index);
+        }
+
+    /// Main savepoint reached
+        upgrade_main_savepoint($result, 2007101591.01);
+
     }
 
     return $result;

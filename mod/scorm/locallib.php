@@ -445,7 +445,7 @@ function scorm_grade_user_attempt($scorm, $userid, $attempt=1, $time=false) {
             if (($userdata->status == 'completed') || ($userdata->status == 'passed')) {
                 $attemptscore->scoes++;
             }
-            if (!empty($userdata->score_raw) || ($scorm->type=='sco' && isset($userdata->score_raw))) {
+            if (!empty($userdata->score_raw) || (isset($scorm->type) && $scorm->type=='sco' && isset($userdata->score_raw))) {
                 $attemptscore->values++;
                 $attemptscore->sum += $userdata->score_raw;
                 $attemptscore->max = ($userdata->score_raw > $attemptscore->max)?$userdata->score_raw:$attemptscore->max;
@@ -730,6 +730,11 @@ function scorm_simple_play($scorm,$user, $context) {
     $result = false;
 
     if ($scorm->updatefreq == UPDATE_EVERYTIME) {
+        if (strpos($scorm->version, 'AICC') !== false) {
+            $scorm->pkgtype = 'AICC';
+        } else {
+            $scorm->pkgtype = 'SCORM';
+        }
         scorm_parse($scorm);
     }
     if (has_capability('mod/scorm:viewreport', $context)) { //if this user can view reports, don't skipview so they can see links to reports. 
