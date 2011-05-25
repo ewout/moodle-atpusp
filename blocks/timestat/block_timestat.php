@@ -4,8 +4,12 @@ class block_timestat extends block_list {
     function init() {
         $this->title = get_string('blocktitle','block_timestat');
         $this->version = 2011050200;
+	$this->config->debugmode = 'no';
     }
-	
+
+    //Settings.php - Configuracao Global do Bloco
+    function has_config() {return true;}
+
     function get_content() {
     	global $CFG,$COURSE, $USER;	
 

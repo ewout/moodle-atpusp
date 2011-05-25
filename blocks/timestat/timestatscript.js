@@ -56,7 +56,8 @@
 			if(device_flag & window_flag){
 				active_time++;
 				popup_window_active=false;
-				//document.getElementById('timer').innerHTML = active_time; //DEBUG TIME
+				if (document.getElementById('timer'))
+				   document.getElementById('timer').innerHTML = active_time; //DEBUG TIME
 			}else{
 				//Jezeli w oknie nie ma ktywnosci to sprawdzane jest czy przypadkiem aktywnosc nie wystepuje
 				//w oknie pochodnym z uruchomionym czat
@@ -93,15 +94,10 @@
 			window_flag=true;
 		}
 		
-		//Funkcja wywolywana jest podczas obslugi zdarzenia blur, poza przestawieniem flagi aktywnosci okna na false,
-		//zostaje dodana procedura obslugi zdarzenia mousemove, aby w momencie stwierdzenia nieaktywnosci uzytkownika
-		//wszystkie zdarzenia, pozwalajace na nowo wykryc aktywnosc, byly nasluchiwane.
+		//Ao sair da janela ONBLUR desativar contador
 		function blur_setflag(evt){
-                   if (evt.explicitOriginalTarget.nodeName=="HTML"){ //Para o tempo somente quando sai da pagina, IFRAME continua contando o tempo
-  			   addMouse();
-		  	   window_flag=false;
-		   }
-
+  		   	addMouse();
+		  	window_flag=false;
 		}
 		
 		//Funkcja odpowiadajaca za dodanie procedury obslugi zdarzenia mousemove

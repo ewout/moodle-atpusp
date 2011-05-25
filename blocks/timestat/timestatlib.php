@@ -1,7 +1,7 @@
 <?php
-//PLIK odpowiedzialny za osadzenie skryptu w portalu Moodle
-if(isloggedin()){	//skrypt dolaczany jest wylacznie w przypadku zalogowanych uzytkowników
-      
+//Carregar Javascript temporizador do BlockTimeStat
+if(isloggedin() && $CFG->block_timestat_enable){	//Apenas usuarios logados e se o bloco estiver ativado
+
 	  require_once($CFG->libdir.'/ddllib.php');
 	  require_once($CFG->libdir.'/dmllib.php');
 	  require_js($CFG->wwwroot.'/blocks/timestat/ajax_connection.js',2);//plik zawierajacy fukncje odpowiadajace za polaczenie synchroniczne AJAX
@@ -14,7 +14,8 @@ if(isloggedin()){	//skrypt dolaczany jest wylacznie w przypadku zalogowanych uzy
 	 //obliczonej wartosci czasu
 	 //Drugi parametr isPopup informuje czy skrypt ma byc uruchomiony w wersji standardowej czy w wersji
 	 //dla czas uruchomionego w wersji z ramkami i JavaScript
-	  //echo "<h1 id=\"timer\">DEBUG TIME</h1>";
+	  if ($CFG->block_timestat_debug)
+	      echo '<h1 id="timer">DEBUG TIME</h1>';
 	  echo "<script type='text/javascript'>
 	           var start_of_url='$CFG->wwwroot/blocks/timestat/update_register.php?id=$register_id&time=';
 		   var isPopup=".isPopupWindow().";
