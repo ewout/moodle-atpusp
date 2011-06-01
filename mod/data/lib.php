@@ -959,7 +959,7 @@ function data_print_template($template, $records, $data, $search='', $page=0, $r
     // Then we generate strings to replace for normal tags
         foreach ($fields as $field) {
             $patterns[]='[['.$field->field->name.']]';
-            $replacement[] = highlight($search, $field->display_browse_field($record->id, $template));
+            $replacement[] = highlight($search, $field->display_browse_field($record->id, 'singletemplate')); //sempre singletemplate para nao quebrar links de arquivos/imagens no modo lista
         }
     // Replacing special tags (##Edit##, ##Delete##, ##More##)
         $patterns[]='##edit##';
@@ -979,7 +979,7 @@ function data_print_template($template, $records, $data, $search='', $page=0, $r
             $moreurl .= '&amp;filter=1';
         }
         $patterns[]='##more##';
-        $replacement[] = '<a href="' . $moreurl . '"><img src="' . $CFG->pixpath . '/i/search.gif" class="iconsmall" alt="' . get_string('more', 'data') . '" title="' . get_string('more', 'data') . '" /></a>';
+        $replacement[] = '<a href="view.php?d='.$data->id.'&amp;mode=single&amp;filter=1&amp;paging=1&amp;page='.$counter.'"><img src="' . $CFG->pixpath . '/i/search.gif" class="iconsmall" alt="' . get_string('more', 'data') . '" title="' . get_string('more', 'data') . '" /></a>';
 
         $patterns[]='##moreurl##';
         $replacement[] = $moreurl;

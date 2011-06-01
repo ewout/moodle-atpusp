@@ -74,8 +74,16 @@ if($mform->is_cancelled()) {
 
 $exportdata = array();
 
+//Exportar dados dos usuarios/grupos/tempo...
+$exportdata[0][] = get_string('group', 'data'); //Grupo pertencente
+$exportdata[0][] = get_string('user', 'data');  //Nome completo
+$exportdata[0][] = get_string('nusp', 'data');  //NumUSP
+$exportdata[0][] = get_string('timecreated', 'data'); //DataCriacao
+$exportdata[0][] = get_string('lastmodified', 'data'); //UltimaModificacao
+$exportdata[0][] = get_string('approved', 'data'); //Aprovado?
+
 // populate the header in first row of export
-foreach($fields as $key => $field) {
+foreach($fields as $key => $field) { //Exportar dados dos campos criados na base de dados
     if(empty($formdata['field_'.$field->field->id])) {
         // ignore values we aren't exporting
         unset($fields[$key]);
@@ -90,6 +98,26 @@ $line = 1;
 foreach($datarecords as $record) {
     // get content indexed by fieldid
     if( $content = get_records('data_content', 'recordid', $record->id, 'fieldid', 'fieldid, content, content1, content2, content3, content4') ) {
+	$groupres = '';
+	if ($groups=groups_get_all_groups($cm->course,$record->userid))
+	  foreach ($groups as $group) {
+	    if ($groupres) $groupres .= ', ';
+            $groupres .= $group->name;
+	  }
+	else
+	  $groupres .= '---';
+
+	$exportdata[$line][] = $groupres; //grupo do usuario
+	$user= get_record('user','id',$record->userid);
+        $exportdata[$line][] = $user->firstname.' '.$user->lastname; //nome completo do usuario
+        $exportdata[$line][] = $user->idnumber; //NumUSP
+        $exportdata[$line][] = strftime("%Y/%m/%d-%H:%M",$record->timecreated); //data criacao
+        $exportdata[$line][] = strftime("%Y/%m/%d-%H:%M",$record->timemodified); //ultima modificacao
+	if ($record->approved) //aprovado?
+           $exportdata[$line][] = get_string('yes', 'data');
+	else
+           $exportdata[$line][] = get_string('no', 'data');
+
         foreach($fields as $field) {
             $contents = '';
             if(isset($content[$field->field->id])) {
