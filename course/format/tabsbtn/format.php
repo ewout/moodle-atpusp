@@ -103,6 +103,7 @@
     $sectionmenu = array();
 	$pestanas = array();
 
+    $tagtab = ''; //TAGs incluidas nas abas serao reproduzidas nos demais topicos
     while ($section <= $course->numsections) {
         if (!empty($sections[$section])) {
             $thissection = $sections[$section];
@@ -112,12 +113,23 @@
 			if (isset($displaysection)) {
 				if ($showsection) {
 					$strsummary = strip_tags(format_string($thissection->summary,true));
-					if (strlen($strsummary) == 0) { /*se sumario nao conter caracteres*/
+
+					$res = explode('#',$strsummary); //identifica TAG
+					if (isset($res[1])) { //quando houver a primeira TAG na aba, substituir
+						$tagtab = $res[1];
+						$strsummary = '';
+					}
+					if ($tagtab && (!$strsummary)) { //inclui TAG somente se aba estiver vazia
+						$tagtabok = true;
+					} elseif (strlen($strsummary) == 0) { //se sumario nao conter caracteres
 						$strsummary = $section.' ';
-					} elseif (strlen($strsummary) <= 20) { /*se sumario conter mais de 19 caracteres, delimita-se*/
+						$tagtabok = false;
+					} elseif (strlen($strsummary) <= 20) { //se sumario conter mais de 19 caracteres, delimita-se
 						$strsummary = ' '.$strsummary;
+						$tagtabok = false;
 					} else {
-						$strsummary = ' '.substr($strsummary, 0, 20).'...'; /*exibe 19 caracteres + ...*/
+						$strsummary = ' '.substr($strsummary, 0, 20).'...'; //exibe 19 caracteres + ...
+						$tagtabok = false;
 					}
 
 					if ($displaysection != $section) {
@@ -129,8 +141,13 @@ $btneditsummary='';
 if (isediting($course->id) && has_capability('moodle/course:update', get_context_instance(CONTEXT_COURSE, $course->id)))
    $btneditsummary='<a id="notab" title="'.get_string('edittab','format_tabsbtn').' '.$section.'" href="editsection.php?id='.$thissection->id.'"><img src="'.$CFG->pixpath.'/t/edit.gif" alt="'.$streditsummary.'" /></a>';
 
-					$pestanas[] = new tabobject("tab_topic_" . $section, $CFG->wwwroot.'/course/view.php?id='.$course->id . '&topic='.$section,
-                    '<font style="white-space:nowrap">'. s($strsummary).'</font>'.$btneditsummary.'', s($strsummary));
+if ($tagtabok) //Separar TAG em classe distinta
+   $pestanas[] = new tabobject("tab_topic_" . $section, $CFG->wwwroot.'/course/view.php?id='.$course->id . '&topic='.$section,
+                '<font style="white-space:nowrap"><span class="tagtab">'. s($tagtab).'</span> '. s($section).'</font>'.$btneditsummary.'', s($tagtab.' '.$section));
+else
+   $pestanas[] = new tabobject("tab_topic_" . $section, $CFG->wwwroot.'/course/view.php?id='.$course->id . '&topic='.$section,
+                '<font style="white-space:nowrap">'. s($strsummary).'</font>'.$btneditsummary.'', s($strsummary));
+
 				}
 				$section++;
 				continue;
