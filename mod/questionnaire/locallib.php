@@ -2337,7 +2337,7 @@ class questionnaire {
             $groupid = -1;
         }
         $output = array();
-        $nbinfocols = 9; // change this if you want more info columns
+        $nbinfocols = 10; // change this if you want more info columns
         $stringother = get_string('other', 'questionnaire');
         $columns = array(
                 get_string('response','questionnaire'),
@@ -2348,7 +2348,8 @@ class questionnaire {
                 get_string('group'),
                 get_string('id','questionnaire'),
                 get_string('fullname'),
-                get_string('username')
+                get_string('username'),
+                get_string('idnumber','questionnaire')
             );
 
         $types = array(
@@ -2607,6 +2608,7 @@ class questionnaire {
                     $uid = $username;
                     $fullname = fullname($user);
                     $username = $user->username;
+		    $idnumber = $user->idnumber; //NumUSP
                 }
             }
 
@@ -2630,9 +2632,10 @@ class questionnaire {
                 }
             }
             if ($isanonymous) {
-                $fullname =  get_string('anonymous', 'questionnaire');
-                $username = '';
-                $uid = '';
+                $fullname = get_string('anonymous', 'questionnaire');
+                $username = get_string('anonymous', 'questionnaire');
+                $uid = get_string('anonymous', 'questionnaire');
+		$idnumber = get_string('anonymous', 'questionnaire');
             }
             $arr = array();
             array_push($arr, $qid);
@@ -2644,6 +2647,7 @@ class questionnaire {
             array_push($arr, $uid);
             array_push($arr, $fullname);
             array_push($arr, $username);
+            array_push($arr, $idnumber);
 
             // merge it
             for($i = $nbinfocols; $i < $numcols; $i++) {

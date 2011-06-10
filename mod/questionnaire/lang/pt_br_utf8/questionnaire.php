@@ -59,6 +59,7 @@ $string['grade'] = 'Escala de notas';
 $string['headingtext'] = 'Texto do cabeçalho';
 $string['horizontal'] = 'Horizontal';
 $string['id'] = 'ID';
+$string['idnumber'] = 'NumeroUSP';
 $string['includechoicecodes'] = 'Incluir códigos de escolhas';
 $string['includechoicetext'] = 'Incluir textos de escolhas';
 $string['incorrectcourseid'] = 'ID do curso é incorreto';
