@@ -1,6 +1,6 @@
 
 #unassigned {
-    border:1px solid #CCC;
+    border:2px solid #CCCCCC;
     background-color:#F9F9F9;
     margin:5px;
     padding:5px;
@@ -8,19 +8,22 @@
 }
 
 .student {
+    border: 2px solid #CCCCCC;
     display: inline-block;
     padding: 10px;
     margin: 5px;
     cursor: default;
+    max-width: 130px; 
 }
 
 .team {
     margin: 5px;
     padding: 5px;
-    border: 1px solid #CCC;
+    border: 2px solid #CCCCCC;
     background-color: #F9F9F9;
     display: inline-block;
     vertical-align: top;
+    width: 170px;
 }
 
 .team h2 {
@@ -48,7 +51,8 @@
 
 .sortable {
     min-height: 100px;
-    border: 1px;
+    min-width: 150px; 
+    border: 0px;
 }
 
 
@@ -69,7 +73,7 @@
 }
 
 .ui-stepper-up {
-    background-image:url('../../blocks/groups/css/up.png');
+        background-image:url([[pix:t/up]]);
     background-color:#EEE;
     background-position: center center;
     background-repeat: no-repeat;
@@ -80,7 +84,7 @@
 }
 
 .ui-stepper-down {
-    background-image:url('../../blocks/groups/css/down.png');
+    background-image:url([[pix:t/down]]);
     background-position: center center;
     background-repeat: no-repeat;
     width:17px;
