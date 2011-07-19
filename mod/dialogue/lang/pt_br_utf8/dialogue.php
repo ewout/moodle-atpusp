@@ -54,8 +54,8 @@ $string['opendialogue'] = 'Iniciar Diálogo';
 $string['opendialogueentries'] = 'Abrir mensagens do diálogo';
 $string['opendialogues'] = 'Iniciar Diálogos';
 $string['pane0'] = 'Iniciar um diálogo';
-$string['pane1'] = '$a Diálogos aguardando as suas respostas';
-$string['pane1one'] = '1 Diálogo aguardando a sua resposta';
+$string['pane1'] = '$a Diálogos em andamento';
+$string['pane1one'] = '1 Diálogo em andamento';
 $string['pane2'] = '$a Diálogos aguardando respostas da outra pessoa';
 $string['pane2one'] = '1 Diálogo aguardando resposta da outra pessoa';
 $string['pane3'] = '$a Diálogos encerrados';
@@ -72,5 +72,6 @@ $string['typefollowup'] = 'Digite aqui a nova mensagem';
 $string['typeofdialogue'] = 'Tipo de Diálogo';
 $string['typereply'] = 'Digite aqui a resposta';
 $string['viewallentries'] = 'Veja $a mensagens de diálogo';
+$string['unread'] = 'Mensagens não lidas';
 
 ?>
