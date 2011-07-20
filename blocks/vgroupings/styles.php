@@ -73,7 +73,7 @@
 }
 
 .ui-stepper-up {
-        background-image:url([[pix:t/up]]);
+    background-image:url('../../blocks/vgroupings/css/up.png');
     background-color:#EEE;
     background-position: center center;
     background-repeat: no-repeat;
@@ -84,7 +84,7 @@
 }
 
 .ui-stepper-down {
-    background-image:url([[pix:t/down]]);
+    background-image:url('../../blocks/vgroupings/css/down.png');
     background-position: center center;
     background-repeat: no-repeat;
     width:17px;
