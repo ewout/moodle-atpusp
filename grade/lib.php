@@ -25,6 +25,7 @@ class graded_users_iterator {
     var $course;
     var $grade_items;
     var $groupid;
+    var $export_groups;
     var $users_rs;
     var $grades_rs;
     var $gradestack;
@@ -43,10 +44,11 @@ class graded_users_iterator {
      * @param string $sortfield2 The second field of the users table by which the array of users will be sorted
      * @param string $sortorder2 The order in which the second sorting field will be sorted (ASC or DESC)
      */
-    function graded_users_iterator($course, $grade_items=null, $groupid=0, $sortfield1='lastname', $sortorder1='ASC', $sortfield2='firstname', $sortorder2='ASC') {
+    function graded_users_iterator($course, $grade_items=null, $groupid=0, $export_groups=null, $sortfield1='lastname', $sortorder1='ASC', $sortfield2='firstname', $sortorder2='ASC') {
         $this->course      = $course;
         $this->grade_items = $grade_items;
         $this->groupid     = $groupid;
+	$this->export_groups = $export_groups;
         $this->sortfield1  = $sortfield1;
         $this->sortorder1  = $sortorder1;
         $this->sortfield2  = $sortfield2;
@@ -79,9 +81,15 @@ class graded_users_iterator {
 
         $relatedcontexts = get_related_contexts_string(get_context_instance(CONTEXT_COURSE, $this->course->id));
 
+        $groupsql2 = "";  //obter nome do grupo
         if ($this->groupid) {
             $groupsql = "INNER JOIN {$CFG->prefix}groups_members gm ON gm.userid = u.id";
+            $groupsql2 = "INNER JOIN {$CFG->prefix}groups grp ON grp.id = gm.groupid"; // obter nome do grupo
             $groupwheresql = "AND gm.groupid = {$this->groupid}";
+        } elseif ($this->export_groups) {
+            $groupsql = "INNER JOIN {$CFG->prefix}groups_members gm ON gm.userid = u.id"; //incluir campo grupo para cada aluno, independente se o grupo for selecionado.
+            $groupsql2 = "INNER JOIN {$CFG->prefix}groups grp ON grp.id = gm.groupid"; // obter nome do grupo
+            $groupwheresql = "AND grp.courseid = {$this->course->id}"; //somente alunos que estao em algum grupo
         } else {
             $groupsql = "";
             $groupwheresql = "";
@@ -91,7 +99,6 @@ class graded_users_iterator {
             // we must do some sorting even if not specified
             $ofields = ", u.id AS usrt";
             $order   = "usrt ASC";
-
         } else {
             $ofields = ", u.$this->sortfield1 AS usrt1";
             $order   = "usrt1 $this->sortorder1";
@@ -106,9 +113,16 @@ class graded_users_iterator {
             }
         }
 
+	//Campo para Grupo do Aluno        
+	if ($this->export_groups) {
+	   $ofields .= ", gm.groupid AS groupid, grp.name AS groupname";
+           $order   .= ", groupname ASC";
+	}
+
         $users_sql = "SELECT u.* $ofields
                         FROM {$CFG->prefix}user u
                              $groupsql
+                             $groupsql2
                         JOIN (
                                  SELECT DISTINCT ra.userid
                                    FROM {$CFG->prefix}role_assignments ra
@@ -129,6 +143,7 @@ class graded_users_iterator {
                              FROM {$CFG->prefix}grade_grades g
                              JOIN {$CFG->prefix}user u ON g.userid = u.id
                                   $groupsql
+	                          $groupsql2
                              JOIN (
                                       SELECT DISTINCT ra.userid
                                         FROM {$CFG->prefix}role_assignments ra

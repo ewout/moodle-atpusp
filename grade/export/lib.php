@@ -35,6 +35,7 @@ class grade_export {
     var $previewrows;     // number of rows in preview
     var $export_letters;  // export letters
     var $export_feedback; // export feedback
+    var $export_groups; // export groups
     var $userkey;         // export using private user key
 
     var $updatedgradesonly; // only export updated grades
@@ -49,7 +50,7 @@ class grade_export {
      * @param boolean $export_letters
      * @note Exporting as letters will lead to data loss if that exported set it re-imported.
      */
-    function grade_export($course, $groupid=0, $itemlist='', $export_feedback=false, $updatedgradesonly = false, $displaytype = GRADE_DISPLAY_TYPE_REAL, $decimalpoints = 2) {
+    function grade_export($course, $groupid=0, $itemlist='', $export_feedback=false, $export_groups=false, $updatedgradesonly = false, $displaytype = GRADE_DISPLAY_TYPE_REAL, $decimalpoints = 2) {
         $this->course = $course;
         $this->groupid = $groupid;
         $this->grade_items = grade_item::fetch_all(array('courseid'=>$this->course->id));
@@ -77,6 +78,7 @@ class grade_export {
         }
 
         $this->export_feedback = $export_feedback;
+        $this->export_groups = $export_groups;
         $this->userkey         = '';
         $this->previewrows     = false;
         $this->updatedgradesonly = $updatedgradesonly;
@@ -121,8 +123,8 @@ class grade_export {
             $this->export_letters = $formdata->export_letters;
         }
 
-        if (isset($formdata->export_feedback)) {
-            $this->export_feedback = $formdata->export_feedback;
+        if (isset($formdata->export_groups)) { //obtendo dados do formulario, opcao INFORMACAO DO GRUPO DO ESTUDANTE
+            $this->export_groups = $formdata->export_groups;
         }
 
         if (isset($formdata->previewrows)) {
@@ -203,8 +205,14 @@ class grade_export {
 
         echo '<table>';
         echo '<tr>';
+
+	$grouptitle = '';
+	if ($this->export_groups) //verifica se opcao GRUPOS esta ativada
+	   $grouptitle = '<th>'.get_string("group")."</th>";
+
         echo '<th>'.get_string("firstname")."</th>".
              '<th>'.get_string("lastname")."</th>".
+             $grouptitle.
              '<th>'.get_string("idnumber")."</th>".
              '<th>'.get_string("institution")."</th>".
              '<th>'.get_string("department")."</th>".
@@ -221,7 +229,7 @@ class grade_export {
         /// Print all the lines of data.
 
         $i = 0;
-        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid);
+        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid, $this->export_groups);
         $gui->init();
         while ($userdata = $gui->next_user()) {
             // number of preview rows
@@ -261,8 +269,12 @@ class grade_export {
                 continue; 
             }
 
+ 	    $groupdata = '';
+	    if ($this->export_groups) //verifica se opcao GRUPOS esta ativada
+		$groupdata = "<td>$user->groupname</td>";
+
             echo '<tr>';
-            echo "<td>$user->firstname</td><td>$user->lastname</td><td>$user->idnumber</td><td>$user->institution</td><td>$user->department</td><td>$user->email</td>";           
+            echo "<td>$user->firstname</td><td>$user->lastname</td>$groupdata<td>$user->idnumber</td><td>$user->institution</td><td>$user->department</td><td>$user->email</td>";           
             echo $rowstr;
             echo "</tr>";
             
@@ -288,6 +300,7 @@ class grade_export {
                         'itemids'           =>$itemidsparam,
                         'export_letters'    =>$this->export_letters,
                         'export_feedback'   =>$this->export_feedback,
+                        'export_groups'     =>$this->export_groups,
                         'updatedgradesonly' =>$this->updatedgradesonly,
                         'displaytype'       =>$this->displaytype,
                         'decimalpoints'     =>$this->decimalpoints);

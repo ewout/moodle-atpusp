@@ -37,6 +37,9 @@ class grade_export_form extends moodleform {
         $mform->addElement('advcheckbox', 'export_feedback', get_string('exportfeedback', 'grades'));
         $mform->setDefault('export_feedback', 0);
 
+	//Opcao para exportar alunos em grupos
+        $mform->addElement('advcheckbox', 'export_groups', get_string('exportgroups', 'grades'));
+
         $options = array('10'=>10, '20'=>20, '100'=>100, '1000'=>1000, '100000'=>100000);
         $mform->addElement('select', 'previewrows', get_string('previewrows', 'grades'), $options); 
         
