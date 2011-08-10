@@ -1,7 +1,7 @@
 <?PHP // $Id$
       // grades.php - created with Moodle 1.7 beta + (2006101003)
 
-
+$string['exportgroups'] = 'Export Info Groups';
 $string['activities'] = 'Activities';
 $string['addcategory'] = 'Add category';
 $string['addcategoryerror'] = 'Could not add category.';

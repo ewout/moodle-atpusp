@@ -72,8 +72,10 @@ class grade_export_txt extends grade_export {
         header("Content-Disposition: attachment; filename=\"$downloadfilename.txt\"");
 
 /// Print names of all the fields
+	$grouptitle = ($this->export_groups) ? get_string("groups").$separator : ''; //Opcao ExportGroups
         echo get_string("firstname").$separator.
              get_string("lastname").$separator.
+	     $grouptitle.
              get_string("idnumber").$separator.
              get_string("institution").$separator.
              get_string("department").$separator.
@@ -91,13 +93,14 @@ class grade_export_txt extends grade_export {
 
 /// Print all the lines of data.
         $geub = new grade_export_update_buffer();
-        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid);
+        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid, $this->export_groups);
         $gui->init();
         while ($userdata = $gui->next_user()) {
 
             $user = $userdata->user;
+	    $groupdata = ($this->export_groups) ? $user->groupname.$separator : ''; //Opcao ExportGroups
 
-            echo $user->firstname.$separator.$user->lastname.$separator.$user->idnumber.$separator.$user->institution.$separator.$user->department.$separator.$user->email;
+            echo $user->firstname.$separator.$user->lastname.$separator.$user->idnumber.$separator.$groupdata.$user->institution.$separator.$user->department.$separator.$user->email;
 
             foreach ($userdata->grades as $itemid => $grade) {
                 if ($export_tracking) {

@@ -23,6 +23,7 @@ $id                = required_param('id', PARAM_INT); // course id
 $groupid           = optional_param('groupid', 0, PARAM_INT);
 $itemids           = required_param('itemids', PARAM_RAW);
 $export_feedback   = optional_param('export_feedback', 0, PARAM_BOOL);
+$export_groups     = optional_param('export_groups', 0, PARAM_BOOL);
 $separator         = optional_param('separator', 'comma', PARAM_ALPHA);
 $updatedgradesonly = optional_param('updatedgradesonly', false, PARAM_BOOL);
 $displaytype       = optional_param('displaytype', $CFG->grade_export_displaytype, PARAM_INT);
@@ -45,7 +46,7 @@ if (groups_get_course_groupmode($COURSE) == SEPARATEGROUPS and !has_capability('
 }
 
 // print all the exported data here
-$export = new grade_export_txt($course, $groupid, $itemids, $export_feedback, $updatedgradesonly, $displaytype, $decimalpoints, $separator);
+$export = new grade_export_txt($course, $groupid, $itemids, $export_feedback, $export_groups, $updatedgradesonly, $displaytype, $decimalpoints, $separator);
 $export->print_grades();
 
 ?>

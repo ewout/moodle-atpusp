@@ -44,11 +44,17 @@ class grade_export_ods extends grade_export {
     /// Print names of all the fields
         $myxls->write_string(0,0,get_string("firstname"));
         $myxls->write_string(0,1,get_string("lastname"));
-        $myxls->write_string(0,2,get_string("idnumber"));
-        $myxls->write_string(0,3,get_string("institution"));
-        $myxls->write_string(0,4,get_string("department"));
-        $myxls->write_string(0,5,get_string("email"));
-        $pos=6;
+	$line = 2; //variavel para alinhar colunas
+	if ($this->export_groups){
+           $myxls->write_string(0,$line,get_string("groupname"));
+	   $line = $line + 1;
+	}
+        $myxls->write_string(0,$line,get_string("idnumber"));
+        $myxls->write_string(0,$line+1,get_string("institution"));
+        $myxls->write_string(0,$line+2,get_string("department"));
+        $myxls->write_string(0,$line+3,get_string("email"));
+        $pos=$line+4;
+
         foreach ($this->columns as $grade_item) {
             $myxls->write_string(0, $pos++, $this->format_column_name($grade_item));
 
@@ -61,7 +67,7 @@ class grade_export_ods extends grade_export {
     /// Print all the lines of data.
         $i = 0;
         $geub = new grade_export_update_buffer();
-        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid);
+        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid, $this->export_groups);
         $gui->init();
         while ($userdata = $gui->next_user()) {
             $i++;
@@ -69,11 +75,17 @@ class grade_export_ods extends grade_export {
 
             $myxls->write_string($i,0,$user->firstname);
             $myxls->write_string($i,1,$user->lastname);
-            $myxls->write_string($i,2,$user->idnumber);
-            $myxls->write_string($i,3,$user->institution);
-            $myxls->write_string($i,4,$user->department);
-            $myxls->write_string($i,5,$user->email);
-            $j=6;
+	    $line = 2; //variavel para alinhar colunas
+   	    if ($this->export_groups){
+               $myxls->write_string($i,$line,$user->groupname);
+	       $line = $line + 1;
+	    }
+            $myxls->write_string($i,$line,$user->idnumber);
+            $myxls->write_string($i,$line+1,$user->institution);
+            $myxls->write_string($i,$line+2,$user->department);
+            $myxls->write_string($i,$line+3,$user->email);
+            $j=$line+4;
+
             foreach ($userdata->grades as $itemid => $grade) {
                 if ($export_tracking) {
                     $status = $geub->track($grade);

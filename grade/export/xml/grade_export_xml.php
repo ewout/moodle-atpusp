@@ -52,7 +52,7 @@ class grade_export_xml extends grade_export {
         $export_buffer = array();
 
         $geub = new grade_export_update_buffer();
-        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid);
+        $gui = new graded_users_iterator($this->course, $this->columns, $this->groupid, $this->export_groups);
         $gui->init();
         while ($userdata = $gui->next_user()) {
             $user = $userdata->user;
@@ -86,6 +86,9 @@ class grade_export_xml extends grade_export {
                 fwrite($handle,  "\t\t<assignment>{$grade_item->idnumber}</assignment>\n");
                 // this column should be customizable to use either student id, idnumber, uesrname or email.
                 fwrite($handle,  "\t\t<student>{$user->idnumber}</student>\n");
+		if ($this->export_groups) //mostrar grupos
+                   fwrite($handle,  "\t\t<student>{$user->groupname}</student>\n");
+
                 fwrite($handle,  "\t\t<score>$gradestr</score>\n");
                 if ($this->export_feedback) {
                     $feedbackstr = $this->format_feedback($userdata->feedbacks[$itemid]);
