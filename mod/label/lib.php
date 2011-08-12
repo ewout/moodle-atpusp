@@ -127,7 +127,7 @@ function label_reset_userdata($data) {
  * Returns all other caps used in module
  */
 function label_get_extra_capabilities() {
-    return array('moodle/site:accessallgroups');
+    return array('moodle/site:accessallgroups','mod/label:viewlabel');
 }
 
 ?>
