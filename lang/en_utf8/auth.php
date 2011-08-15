@@ -125,7 +125,7 @@ $string['auth_emailnowexists'] = 'The email address you tried to assign to your 
 $string['auth_emailtitle'] = 'Email-based self-registration';
 $string['auth_emailnoinsert'] = 'Could not add your record to the database!';
 $string['auth_emailnoemail'] = 'Tried to send you an email but failed!';
-$string['auth_emailrecaptcha'] = 'Adds a visual/audio confirmation form element to the signup page for email self-registering users. This protects your site against spammers and contributes to a worthwhile cause. See http://recaptcha.net/learnmore.html for more details. <br /><em>PHP cURL extension is required.</em>';
+$string['auth_emailrecaptcha'] = 'Adds a visual/audio confirmation form element to the signup page for email self-registering users. This protects your site against spammers and contributes to a worthwhile cause. See http://www.google.com/recaptcha/learnmore for more details. <br /><em>PHP cURL extension is required.</em>';
 $string['auth_emailrecaptcha_key'] = 'Enable reCAPTCHA element';
 $string['auth_emailsettings'] = 'Settings';
 $string['auth_emailupdatemessage'] = 'Dear $a->fullname,
@@ -256,7 +256,7 @@ $string['auth_ldaptitle'] = 'LDAP server';
 $string['auth_ldapnotinstalled'] = 'Cannot use LDAP authentication. The PHP LDAP module is not installed.';
 $string['auth_ntlmsso'] = 'NTLM SSO';
 $string['auth_ntlmsso_enabled_key'] = 'Enable';
-$string['auth_ntlmsso_enabled'] = 'Set to yes to attempt Single Sign On with the NTLM domain. <strong>Note:</strong> this requires additional setup on the webserver to work, see <a href=\"http://docs.moodle.org/en/NTLM_authentication\">http://docs.moodle.org/en/NTLM_authentication</a>';
+$string['auth_ntlmsso_enabled'] = 'Set to yes to attempt Single Sign On with the NTLM domain. <strong>Note:</strong> this requires additional setup on the webserver to work, see <a href=\"http://docs.moodle.org/19/en/NTLM_authentication\">http://docs.moodle.org/19/en/NTLM_authentication</a>';
 $string['auth_ntlmsso_ie_fastpath'] = 'Set to yes to enable the NTLM SSO fast path (bypasses certain steps and only works if the client\'s browser is MS Internet Explorer).';
 $string['auth_ntlmsso_ie_fastpath_key'] = 'MS IE fast path?';
 $string['auth_ntlmsso_subnet_key'] = 'Subnet';
