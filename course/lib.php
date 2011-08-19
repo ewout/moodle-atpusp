@@ -1387,7 +1387,7 @@ function print_section($course, $section, $mods, $modnamesused, $absolute=false,
                     echo 'label';
                 }
                 echo '">';
-		if (has_capability('mod/label:viewlabel', get_context_instance(CONTEXT_COURSE, $course->id))) //Verificar permissao de visualizacao
+		if (has_capability('mod/label:viewlabel', get_context_instance(CONTEXT_MODULE, $mod->id))) //Verificar permissao de visualizacao do rotulo. default=1
                    echo format_text($extra, FORMAT_HTML, $labelformatoptions);
                 echo "</span>";
                 if (!empty($CFG->enablegroupings) && !empty($mod->groupingid) && has_capability('moodle/course:managegroups', get_context_instance(CONTEXT_COURSE, $course->id))) {
