@@ -130,6 +130,14 @@ $modules = array(
             'viewed'       => 'SELECT id FROM '.$CFG->prefix.'log WHERE course=\'#COURSEID#\' AND module=\'wiki\' AND action=\'view\' AND cmid=\'#CMID#\' AND userid=\'#USERID#\''
         ),
         'defaultAction' => 'viewed'
+    ),
+    'oublog' => array(
+        'actions' => array(
+            'viewed' => 'SELECT id FROM '.$CFG->prefix.'log WHERE course=\'#COURSEID#\' AND module=\'oublog\' AND action=\'view\' AND cmid=\'#CMID#\' AND userid=\'#USERID#\'',
+            'posted_to' => 'SELECT id FROM '.$CFG->prefix.'log WHERE course=\'#COURSEID#\' AND module=\'oublog\' AND action=\'add post\' AND cmid=\'#CMID#\' AND userid=\'#USERID#\'',
+            'commented' => 'SELECT id FROM '.$CFG->prefix.'log WHERE course=\'#COURSEID#\' AND module=\'oublog\' AND action=\'add comment\' AND cmid=\'#CMID#\' AND userid=\'#USERID#\'',
+        ),
+        'defaultAction' => 'viewed'
     )
 );
 

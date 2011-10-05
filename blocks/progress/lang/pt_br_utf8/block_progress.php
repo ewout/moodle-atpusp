@@ -17,6 +17,7 @@ $string['quiz'] = 'Questionário';
 $string['resource'] = 'Recurso';
 $string['scorm'] = 'Scorm';
 $string['wiki'] = 'Wiki';
+$string['oublog'] = 'Blog';
 
 // Actions
 $string['answered'] = 'realizada';
@@ -31,6 +32,7 @@ $string['posted_to'] = 'postado em';
 $string['responded_to'] = 'respondido';
 $string['submitted'] = 'submetida';
 $string['viewed'] = 'visualizado';
+$string['commented'] = 'commentado';
 
 // Other terms
 $string['activity'] = 'Atividade';

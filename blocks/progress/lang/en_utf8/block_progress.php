@@ -17,6 +17,7 @@ $string['quiz'] = 'Quiz';
 $string['resource'] = 'Resource';
 $string['scorm'] = 'SCORM';
 $string['wiki'] = 'Wiki';
+$string['oublog'] = 'Blog';
 
 // Actions
 $string['answered'] = 'answered'; 
@@ -30,7 +31,8 @@ $string['passed'] = 'passed';
 $string['posted_to'] = 'posted to'; 
 $string['responded_to'] = 'responded to'; 
 $string['submitted'] = 'submitted';
-$string['viewed'] = 'viewed'; 
+$string['viewed'] = 'viewed';
+$string['commented'] = 'commented';
 
 // Other terms
 $string['activity'] = 'activity'; 
